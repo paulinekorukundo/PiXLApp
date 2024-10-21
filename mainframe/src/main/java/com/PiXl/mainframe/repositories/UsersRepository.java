@@ -1,0 +1,20 @@
+package com.PiXl.mainframe.repositories;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.repository.CrudRepository;
+
+import com.PiXl.mainframe.entities.UserEntity;
+import com.PiXl.mainframe.entities.UserEntityId;
+
+public interface UsersRepository extends CrudRepository<UserEntity, UserEntityId> {
+    Optional<UserEntity> findByEmail(String email);
+
+    // Optional<User> findByUsername(String username);
+
+    // Optional<User> findByEmailAndPassword(String email, String password);
+
+    // Optional<User> findByUsernameAndPassword(String username, String password);
+
+}

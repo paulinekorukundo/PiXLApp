@@ -1,8 +1,11 @@
 package com.PiXl.mainframe.controllers;
 
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.NoArgsConstructor;
 
-import com.PiXl.mainframe.Models.Users;
+import com.PiXl.mainframe.Models.User;
+import com.PiXl.mainframe.dto.LoginRequest;
+import com.PiXl.mainframe.dto.AuthResponse;
+import com.PiXl.mainframe.dto.RegisterRequest;
+import com.PiXl.mainframe.handler.ResponseHandler;
 import com.PiXl.mainframe.services.AuthService;
 
 @RestController()
@@ -25,21 +32,39 @@ public class AuthController {
     /**
      * Login user with email and password
      * 
-     * @param email
-     * @param password
+     * @param loginRequest - email and password
      * 
-     * @return boolean - true if login is successful else false
+     * @return ResponseEntity<Boolean,UserEntity> - true if login is successful and
+     *         user details otherwise false and empty
      */
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody String email, @RequestBody String password) {
-        System.out.println("email: " + email + " password: " + password);
-        // authService.login(email, password);
-        return ResponseEntity.ok(true);
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+        AuthResponse loginResponse = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (loginResponse.isAuthenticated()) {
+            return ResponseHandler.generateResponse(loginResponse.getMessage(), HttpStatus.OK, loginResponse);
+        } else {
+            return ResponseHandler.generateResponse(loginResponse.getMessage(), HttpStatus.UNAUTHORIZED, loginResponse);
+        }
+
     }
 
+    /**
+     * Register user with username, email and password
+     * 
+     * @param registerRequest - username, email and password
+     * 
+     * @return ResponseEntity<Optional<Users>> - user details if registration is
+     *         successful otherwise empty
+     */
     @PostMapping("/register")
-    public ResponseEntity<Optional<Users>> register(@RequestBody String username, @RequestBody String email,
-            @RequestBody String password) {
-        return ResponseEntity.ok(authService.register("username", "email", "password"));
+    public ResponseEntity<Object> register(@RequestBody RegisterRequest registerRequest) {
+        AuthResponse registerResponse = authService.register(registerRequest.getUsername(), registerRequest.getEmail(),
+                registerRequest.getPassword());
+        if (registerResponse.isAuthenticated()) {
+            return ResponseHandler.generateResponse(registerResponse.getMessage(), HttpStatus.OK, registerResponse);
+        } else {
+            return ResponseHandler.generateResponse(registerResponse.getMessage(), HttpStatus.BAD_REQUEST,
+                    registerResponse);
+        }
     }
 }

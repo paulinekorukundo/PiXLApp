@@ -2,7 +2,8 @@ package com.PiXl.mainframe.services;
 
 import java.util.Optional;
 
-import com.PiXl.mainframe.Models.Users;
+import com.PiXl.mainframe.Models.User;
+import com.PiXl.mainframe.dto.AuthResponse;
 
 public interface AuthService {
 
@@ -11,9 +12,9 @@ public interface AuthService {
      * 
      * @param email
      * @param password
-     * @return boolean - true if login is successful else false
+     * @return AuthResponse - User object if login is successful else empty
      */
-    boolean login(String email, String password);
+    AuthResponse login(String email, String password);
 
     /**
      * Register user with username, email and password
@@ -21,8 +22,7 @@ public interface AuthService {
      * @param username
      * @param email
      * @param password
-     * @return Optional<Users> - User object if registration is successful else
-     *         empty
+     * @return AuthResponse - User object if registration is successful else empty
      */
-    Optional<Users> register(String username, String email, String password);
+    AuthResponse register(String username, String email, String password);
 }
