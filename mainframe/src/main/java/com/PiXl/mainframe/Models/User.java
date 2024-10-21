@@ -21,9 +21,9 @@ public class User implements Comparable<User> {
 	private String username;
 	private String email;
 	private String password;
-	private String profilePicture;
+	private String profile_picture;
 	private String bio;
-	private Boolean loggedInStatus;
+	private Boolean logged_in_status;
 
 	@Override
 	public int hashCode() {
@@ -32,7 +32,7 @@ public class User implements Comparable<User> {
 
 	public User(UserEntity user) {
 		this(user.getUserId().getUser_id(), user.getUsername(), user.getEmail(), user.getPassword(),
-				user.getProfilePicture(), user.getBio(), user.getLoggedInStatus());
+				user.getProfile_picture(), user.getBio(), user.getLogged_in_status());
 	}
 
 	@Override

@@ -25,10 +25,10 @@ public class UserEntity {
     private String email;
     @JsonIgnore
     private String password;
-    private String profilePicture;
+    private String profile_picture;
     private String bio;
     @JsonIgnore
-    private Boolean loggedInStatus;
+    private Boolean logged_in_status;
 
     public UserEntityId getUserId() {
         return id;
@@ -36,6 +36,6 @@ public class UserEntity {
 
     public UserEntity(User user) {
         this(new UserEntityId(user.getUserId()), user.getUsername(), user.getEmail(), user.getPassword(),
-                user.getProfilePicture(), user.getBio(), user.getLoggedInStatus());
+                user.getProfile_picture(), user.getBio(), user.getLogged_in_status());
     }
 }

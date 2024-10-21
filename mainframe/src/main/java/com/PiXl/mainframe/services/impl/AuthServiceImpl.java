@@ -57,8 +57,8 @@ public class AuthServiceImpl implements AuthService {
 
         User newUser = new User("u3", username, email, password, "", "", false);
         UserEntity newUserEntity = new UserEntity(new UserEntityId(newUser.getUserId()), newUser.getUsername(),
-                newUser.getEmail(), newUser.getPassword(), newUser.getProfilePicture(), newUser.getBio(),
-                newUser.getLoggedInStatus());
+                newUser.getEmail(), newUser.getPassword(), newUser.getProfile_picture(), newUser.getBio(),
+                newUser.getLogged_in_status());
         usersRepository.save(newUserEntity);
         data.setAuthenticated(true);
         data.setMessage("Registration successful");
