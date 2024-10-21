@@ -1,8 +1,5 @@
 package com.PiXl.mainframe.services;
 
-import java.util.Optional;
-
-import com.PiXl.mainframe.Models.User;
 import com.PiXl.mainframe.dto.AuthResponse;
 
 public interface AuthService {

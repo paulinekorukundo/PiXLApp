@@ -1,6 +1,6 @@
 package com.PiXl.mainframe.entities;
 
-import com.PiXl.mainframe.Models.Profile;
+import com.PiXl.mainframe.models.Profile;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
