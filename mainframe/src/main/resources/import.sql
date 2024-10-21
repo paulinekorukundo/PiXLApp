@@ -11,8 +11,11 @@ INSERT INTO Following (followingId, userId, followerId) VALUES ('f1', 'u1', 'u2'
 INSERT INTO Following (followingId, userId, followerId) VALUES ('f2', 'u2', 'u1');
 
 -- Post Table
-INSERT INTO Post (postId, authorId, content, media, likesCount, commentsCount) VALUES ('p1', 'u1', 'Delicious Vegan Pasta Recipe', 'media link', 45, 10);
-INSERT INTO Post (postId, authorId, content, media, likesCount, commentsCount) VALUES ('p2', 'u2', 'Keto Brownies Recipe', 'media link', 120, 20);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user123', 'This is my first post!', 'https://example.com/media1.jpg', 10, 5);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user456', 'Loving the weather today!', NULL, 25, 8);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user789', 'Check out my new blog post!', 'https://example.com/media2.png', 15, 3);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user101', 'Happy Monday, everyone!', NULL, 5, 1);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user202', 'Traveling to Japan tomorrow, super excited!', 'https://example.com/media3.jpg', 100, 50);
 
 -- Tag Table
 INSERT INTO Tag (tagId, name, description) VALUES ('t1', 'vegan', 'Recipes without animal products');

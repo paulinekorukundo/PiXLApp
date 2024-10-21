@@ -1,4 +1,4 @@
-package com.PiXl.mainframe.entities;
+package com.PiXl.mainframe.Entities;
 
 import com.PiXl.mainframe.Models.Profile;
 

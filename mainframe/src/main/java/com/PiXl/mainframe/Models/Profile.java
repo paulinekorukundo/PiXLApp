@@ -1,7 +1,7 @@
 package com.PiXl.mainframe.Models;
 
 
-import com.PiXl.mainframe.entities.ProfileEntity;
+import com.PiXl.mainframe.Entities.ProfileEntity;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
