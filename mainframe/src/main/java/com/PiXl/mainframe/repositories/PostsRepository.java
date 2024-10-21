@@ -1,11 +1,11 @@
-package com.PiXl.mainframe.Repositories;
+package com.PiXl.mainframe.repositories;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.PiXl.mainframe.Entities.PostsEntity;
-import com.PiXl.mainframe.Models.Posts;
+import com.PiXl.mainframe.entities.PostsEntity;
+import com.PiXl.mainframe.models.Posts;
 
 public interface PostsRepository extends CrudRepository<PostsEntity, Long> {
 	List<PostsEntity> findAll();

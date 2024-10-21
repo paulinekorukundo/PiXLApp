@@ -1,4 +1,4 @@
-package com.PiXl.mainframe.Models;
+package com.PiXl.mainframe.models;
 
 import java.util.Objects;
 

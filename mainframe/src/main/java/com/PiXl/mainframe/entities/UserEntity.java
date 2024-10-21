@@ -1,6 +1,6 @@
 package com.PiXl.mainframe.entities;
 
-import com.PiXl.mainframe.Models.User;
+import com.PiXl.mainframe.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;

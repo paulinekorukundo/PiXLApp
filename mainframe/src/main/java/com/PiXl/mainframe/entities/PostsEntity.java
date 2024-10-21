@@ -1,4 +1,4 @@
-package com.PiXl.mainframe.Entities;
+package com.PiXl.mainframe.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

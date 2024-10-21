@@ -1,9 +1,9 @@
-package com.PiXl.mainframe.Services;
+package com.PiXl.mainframe.services;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.PiXl.mainframe.Entities.PostsEntity;
+import com.PiXl.mainframe.entities.PostsEntity;
 
 
 public interface PostsService {

@@ -1,4 +1,4 @@
-package com.PiXl.mainframe.Exceptions;
+package com.PiXl.mainframe.exceptions;
 
 import java.util.NoSuchElementException;
 
