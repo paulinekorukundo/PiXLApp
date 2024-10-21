@@ -1,6 +1,6 @@
 -- User Table
-INSERT INTO User (userId, username, email, password, profilePicture, bio, foodPreferences, loggedInStatus) VALUES ('u1', 'johndoe', 'johndoe@example.com', 'password123', 'pic1.jpg', 'Love cooking and exploring new cuisines', TRUE);
-INSERT INTO User (userId, username, email, password, profilePicture, bio, foodPreferences, loggedInStatus) VALUES ('u2', 'janedoe', 'janedoe@example.com', 'password456', 'pic2.jpg', 'Food blogger and chef', FALSE);
+INSERT INTO user (email, password, logged_in_status) VALUES ('johndoe@example.com', 'password123', TRUE);
+INSERT INTO user (email, password, logged_in_status) VALUES ('janedoe@example.com', 'password456', FALSE);
 
 -- AchievementBadge Table
 INSERT INTO AchievementBadge (badgeId, name, description, criteria) VALUES ('b1', 'Top Chef', 'Awarded for sharing 50 recipes', 'Share 50 recipes');
