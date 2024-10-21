@@ -6,9 +6,8 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 import com.PiXl.mainframe.entities.UserEntity;
-import com.PiXl.mainframe.entities.UserEntityId;
 
-public interface UsersRepository extends CrudRepository<UserEntity, UserEntityId> {
+public interface UsersRepository extends CrudRepository<UserEntity, String> {
     Optional<UserEntity> findByEmail(String email);
 
     // Optional<User> findByUsername(String username);

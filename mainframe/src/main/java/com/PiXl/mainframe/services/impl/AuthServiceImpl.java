@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.PiXl.mainframe.Models.User;
 import com.PiXl.mainframe.dto.AuthResponse;
 import com.PiXl.mainframe.entities.UserEntity;
-import com.PiXl.mainframe.entities.UserEntityId;
 import com.PiXl.mainframe.repositories.UsersRepository;
 import com.PiXl.mainframe.services.AuthService;
 
@@ -56,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User newUser = new User("u3", username, email, password, "", "", false);
-        UserEntity newUserEntity = new UserEntity(new UserEntityId(newUser.getUserId()), newUser.getUsername(),
+        UserEntity newUserEntity = new UserEntity(newUser.getUser_id(), newUser.getUsername(),
                 newUser.getEmail(), newUser.getPassword(), newUser.getProfile_picture(), newUser.getBio(),
                 newUser.getLogged_in_status());
         usersRepository.save(newUserEntity);

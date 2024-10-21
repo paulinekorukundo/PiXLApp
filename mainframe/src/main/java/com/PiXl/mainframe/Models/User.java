@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 public class User implements Comparable<User> {
 
-	private String userId;
+	private String user_id;
 	private String username;
 	private String email;
 	private String password;
@@ -27,11 +27,11 @@ public class User implements Comparable<User> {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userId);
+		return Objects.hash(user_id);
 	}
 
 	public User(UserEntity user) {
-		this(user.getUserId().getUser_id(), user.getUsername(), user.getEmail(), user.getPassword(),
+		this(user.getUser_id(), user.getUsername(), user.getEmail(), user.getPassword(),
 				user.getProfile_picture(), user.getBio(), user.getLogged_in_status());
 	}
 
