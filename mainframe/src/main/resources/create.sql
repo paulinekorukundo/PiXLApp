@@ -6,12 +6,12 @@ USE pixl;
 
 -- User Table
 CREATE TABLE user (
-    user_id VARCHAR(36) PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
+    -- user_id VARCHAR(36) PRIMARY KEY,
+    -- username VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
-    profile_picture TEXT,
-    bio TEXT,
+    -- profile_picture TEXT,
+    -- bio TEXT,
 --    foodPreferences TEXT[],	Decide how to store this field (List of Strings, Map, etc?)
     logged_in_status BOOLEAN DEFAULT FALSE
 );

@@ -17,22 +17,17 @@ import lombok.ToString;
 @ToString
 public class User implements Comparable<User> {
 
-	private String user_id;
-	private String username;
 	private String email;
 	private String password;
-	private String profile_picture;
-	private String bio;
 	private Boolean logged_in_status;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user_id);
+		return Objects.hash(email);
 	}
 
 	public User(UserEntity user) {
-		this(user.getUser_id(), user.getUsername(), user.getEmail(), user.getPassword(),
-				user.getProfile_picture(), user.getBio(), user.getLogged_in_status());
+		this(user.getEmail(), user.getPassword(), user.getLogged_in_status());
 	}
 
 	@Override

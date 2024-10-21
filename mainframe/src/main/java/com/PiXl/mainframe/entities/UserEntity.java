@@ -19,18 +19,13 @@ import lombok.ToString;
 @ToString
 public class UserEntity {
     @Id
-    private String user_id;
-    private String username;
     private String email;
     @JsonIgnore
     private String password;
-    private String profile_picture;
-    private String bio;
     @JsonIgnore
     private Boolean logged_in_status;
 
     public UserEntity(User user) {
-        this(user.getUser_id(), user.getUsername(), user.getEmail(), user.getPassword(),
-                user.getProfile_picture(), user.getBio(), user.getLogged_in_status());
+        this(user.getEmail(), user.getPassword(), user.getLogged_in_status());
     }
 }

@@ -1,10 +1,6 @@
 package com.PiXl.mainframe.services.impl;
 
 import java.util.Optional;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +50,8 @@ public class AuthServiceImpl implements AuthService {
             return data;
         }
 
-        User newUser = new User("u3", username, email, password, "", "", false);
-        UserEntity newUserEntity = new UserEntity(newUser.getUser_id(), newUser.getUsername(),
-                newUser.getEmail(), newUser.getPassword(), newUser.getProfile_picture(), newUser.getBio(),
+        User newUser = new User(email, password, false);
+        UserEntity newUserEntity = new UserEntity(newUser.getEmail(), newUser.getPassword(),
                 newUser.getLogged_in_status());
         usersRepository.save(newUserEntity);
         data.setAuthenticated(true);
