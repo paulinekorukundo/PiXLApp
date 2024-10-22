@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.PiXl.mainframe.entities.ProfileEntity;
 import com.PiXl.mainframe.services.ProfileService;
 
-@RestController
-@RequestMapping("/v1/api/profiles")
+import lombok.NoArgsConstructor;
+
+//@RestController
+//@RequestMapping("/api/v1/profiles")
+//@NoArgsConstructor
 public class ProfileController {
 
     @Autowired
