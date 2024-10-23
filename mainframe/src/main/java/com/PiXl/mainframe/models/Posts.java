@@ -2,6 +2,8 @@ package com.PiXl.mainframe.models;
 
 import java.util.Objects;
 
+import com.PiXl.mainframe.entities.PostsEntity;
+
 public class Posts {
 	private Long post_id;
 	private String user_id;
@@ -116,5 +118,10 @@ public class Posts {
 		return Objects.equals(user_id, other.user_id) && Objects.equals(post_id, other.post_id);
 	}
 	
-	
+	public Posts(PostsEntity post) {
+		this(post.getPost_id(), post.getUser_id(),
+				post.getContent(), post.getMedia(),
+				post.getLikes_count(), post.getComments_count());
+	}
+
 }

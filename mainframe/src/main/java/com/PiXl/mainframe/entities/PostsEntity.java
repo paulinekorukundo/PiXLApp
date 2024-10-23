@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @Table(name = "posts")
 public class PostsEntity {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long post_id;
 
     @Column(name = "user_id", nullable = false)
@@ -30,7 +30,11 @@ public class PostsEntity {
     private Long comments_count = 0L;
 
     
-    public PostsEntity(Long postId, String user_id, String content, String media, Long likes_count,
+    
+    public PostsEntity() {
+	}
+
+	public PostsEntity(Long postId, String user_id, String content, String media, Long likes_count,
 			Long comments_count) {
 		super();
 		this.post_id = postId;
