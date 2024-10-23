@@ -16,12 +16,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "User")
+@Table(name = "Profile")
 public class ProfileEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long profileId;
 	
+	//TODO: Add FK constraint
 	private String userId;
 		
 	private String firstName;

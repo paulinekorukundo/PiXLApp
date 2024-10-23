@@ -18,6 +18,7 @@ public class Profile {
 
 	private Long profileId;
 	
+	//TODO: Add FK constraint
 	private String userId;
 	
 	@Setter
