@@ -16,25 +16,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "User")
+@Table(name = "Profile")
 public class ProfileEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long profileId;
-	
-	private String userId;
-		
-	private String firstName;
-	
-	private String lastName;
-	
-	@Column(length = 500)
-	private String bio;
-	
-	private String foodPreferences;
-	
-	private String profilePicture;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long profileId;
+    
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+    
+    private String firstName;
+    private String lastName;
+    
+    @Column(length = 500)
+    private String bio;
+    
+    private String foodPreferences;
+    
+    private String profilePicture;
 
 	public ProfileEntity(String firstName, String lastName, String bio, String foodPreferences,
 			String profilePicture) {

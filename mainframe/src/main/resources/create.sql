@@ -16,6 +16,18 @@ CREATE TABLE user (
     logged_in_status BOOLEAN DEFAULT FALSE
 );
 
+-- Profile Table
+CREATE TABLE Profile (
+    profile_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    bio VARCHAR(500),
+    food_preferences VARCHAR(255),
+    profile_picture VARCHAR(255)
+);
+
+
 -- AchievementBadge Table
 CREATE TABLE AchievementBadge (
     badgeId VARCHAR(36) PRIMARY KEY,
