@@ -33,7 +33,7 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
      * @param lastName the last name to search for
      * @return a list of ProfileEntity objects containing specified first name or last name
      */
-    List<ProfileEntity> findByFirstNameContainingIgnoreCaseOfLastNameContainingIgnoreCase(String firstName, String lastName);
+    List<ProfileEntity> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
     
     /**
      * Find all profile with a specific bio
