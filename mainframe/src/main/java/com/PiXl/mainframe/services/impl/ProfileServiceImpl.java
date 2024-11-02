@@ -38,7 +38,7 @@ public class ProfileServiceImpl implements ProfileService {
 	 */
 	private List<Profile> from(List<ProfileEntity> profileEntities){
 		
-		var profiles = profileEntities.stream()
+		lombok.var profiles = profileEntities.stream()
 				.map(pe -> new Profile(pe))
 				.collect(Collectors.toList());
 		if(profiles.isEmpty()) {
@@ -46,5 +46,7 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		return profiles;
 	}
+	
+	
 	
 }

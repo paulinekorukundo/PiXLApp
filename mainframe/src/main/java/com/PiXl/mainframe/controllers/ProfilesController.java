@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.PiXl.mainframe.models.Profile;
@@ -18,9 +17,9 @@ import lombok.NoArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/profiles")
 @NoArgsConstructor
-public class ProfileController {
-
-    @Autowired
+public class ProfilesController {
+	
+	@Autowired
     private ProfileService profileService;
 
     /**
@@ -29,16 +28,9 @@ public class ProfileController {
      * @param searchTerm The search term to check against both first and last names
      * @return A list of matching profiles
      */
-    @GetMapping("/search")
-    public ResponseEntity<List<Profile>> searchProfilesByName(@RequestParam("name") String name) {
+    @GetMapping("/{name}")
+    public ResponseEntity<List<Profile>> searchProfilesByName(@PathVariable String name) {
         return ResponseEntity.ok(profileService.searchProfilesByName(name));
     }
 
-    @GetMapping("/test")
-    public String display() {
-        return "Welcome";
-    }
-    
-    
 }
-
