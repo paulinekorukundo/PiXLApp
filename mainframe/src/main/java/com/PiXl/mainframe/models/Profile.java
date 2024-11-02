@@ -16,16 +16,16 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Profile {
 
-	private Long id;
+	private Long profileId;
+	
+	//TODO: Add FK constraint
+	private String userId;
 	
 	@Setter
 	private String firstName;
 	
 	@Setter
-	private String secondName;
-	
-	@Column(unique = true)
-	private String username;
+	private String lastName;
 	
 	@Setter
 	@Column(length = 500)
@@ -35,7 +35,7 @@ public class Profile {
 	private String foodPreference;
 	
 	@Setter
-	private String profilePicUrl;
+	private String profilePicture;
 	
 
 	/**
@@ -43,7 +43,7 @@ public class Profile {
 	 */
 	@Override
 	public String toString() {
-		return "Username: " + username + ", fistname: " + firstName + ", secondname: " + secondName;
+		return "fistname: " + firstName + ", lastname: " + lastName;
 	}
 	
 	/**
@@ -51,13 +51,14 @@ public class Profile {
 	 * @param pe Profile Entity
 	 */
 	public Profile(ProfileEntity pe) {
-		this(pe.getId(),
-				pe.getUsername(),
-				pe.getBio(),
+		this(
+				pe.getProfileId(),
+				pe.getUserId(),
 				pe.getFirstName(),
-				pe.getSecondName(),
-				pe.getFoodPreference(),
-				pe.getProfilePicUrl()
+				pe.getLastName(),
+				pe.getBio(),
+				pe.getFoodPreferences(),
+				pe.getProfilePicture()
 				);
 	}
 

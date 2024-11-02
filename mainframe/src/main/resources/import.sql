@@ -2,6 +2,15 @@
 INSERT INTO user (email, password, logged_in_status) VALUES ('johndoe@example.com', 'password123', TRUE);
 INSERT INTO user (email, password, logged_in_status) VALUES ('janedoe@example.com', 'password456', FALSE);
 
+
+-- Profile Table
+INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, profile_picture)
+VALUES ('test1234', 'John', 'Doe', 'I love Italian and Mexican food.', 'Italian, Mexican', 'john_doe_profile.jpg');
+
+INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, profile_picture)
+VALUES ('test567', 'Jane', 'Smith', 'Vegetarian foodie and baker.', 'Vegetarian, Desserts', 'jane_smith_profile.jpg');
+
+
 -- AchievementBadge Table
 INSERT INTO AchievementBadge (badgeId, name, description, criteria) VALUES ('b1', 'Top Chef', 'Awarded for sharing 50 recipes', 'Share 50 recipes');
 INSERT INTO AchievementBadge (badgeId, name, description, criteria) VALUES ('b2', 'Popular Post', 'Awarded for getting 100 likes on a post', 'Get 100 likes on any post');
