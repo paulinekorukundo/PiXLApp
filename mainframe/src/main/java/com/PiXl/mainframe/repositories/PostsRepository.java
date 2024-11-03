@@ -21,4 +21,7 @@ public interface PostsRepository extends CrudRepository<PostsEntity, Long> {
 	void deleteById(Long postId);
     boolean existsById(Long postId);
     long count();
+    
+    @Query("SELECT p FROM PostsEntity p ORDER BY p.likes_count DESC LIMIT :maxNum OFFSET :off")
+    List<PostsEntity> getTopNLikedPosts(@Param("maxNum") Long maxNum, @Param("off") Long off);
 }
