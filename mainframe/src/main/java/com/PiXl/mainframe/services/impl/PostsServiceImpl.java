@@ -19,6 +19,8 @@ public class PostsServiceImpl implements PostsService {
 	@Autowired
 	private PostsRepository postRepo;
 	
+	private static long offset = 0;
+	
 	@Override
 	public List<Posts> getAllPosts() {
 		List<PostsEntity> postEntities = postRepo.findAll();
@@ -43,15 +45,18 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public PostsEntity saveNewPost(PostsEntity post) {
-		// TODO Auto-generated method stub
-		return null;
+	public Posts saveNewPost(Posts post) {
+		PostsEntity savedPost = postRepo.save(of(post));
+		return of(savedPost);
 	}
 
 	@Override
-	public PostsEntity editExistingPost(PostsEntity post) {
-		// TODO Auto-generated method stub
-		return null;
+	public Posts editExistingPost(Posts post) {
+		if(!postRepo.existsById(post.getPost_id())) {
+			throw new IllegalArgumentException("Post does not exist!");
+		}
+		PostsEntity savedPost = postRepo.save(of(post));
+		return of(savedPost);
 	}
 
 	@Override
@@ -69,12 +74,32 @@ public class PostsServiceImpl implements PostsService {
 
 	@Override
 	public void deletePost(Long postId) {
-		// TODO Auto-generated method stub
-
+		if(!postRepo.existsById(postId)) {
+			throw new IllegalArgumentException("Post does not exist!");
+		}
+		postRepo.deleteById(postId);
 	}
 	
 	private Posts of(PostsEntity post) {
 		return new Posts(post);
+	}
+	
+	private PostsEntity of(Posts post) {
+		return new PostsEntity(post);
+	}
+
+	@Override
+	public List<Posts> getPostByMostLikes(long numOfPosts) {
+		if(numOfPosts < 0) {
+			throw new IllegalArgumentException("Value cannot be less than 0!");
+		}
+		List<PostsEntity> postEntities = postRepo.getTopNLikedPosts(numOfPosts, offset);
+		List<Posts> posts= new ArrayList<>();
+		for(PostsEntity p : postEntities) {
+			posts.add(of(p));
+		}
+		offset = offset + numOfPosts;
+		return posts;
 	}
 
 }
