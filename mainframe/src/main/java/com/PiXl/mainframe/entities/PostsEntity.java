@@ -1,5 +1,7 @@
 package com.PiXl.mainframe.entities;
 
+import com.PiXl.mainframe.models.Posts;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -127,5 +129,11 @@ public class PostsEntity {
 	 */
 	public void setComments_count(Long comments_count) {
 		this.comments_count = comments_count;
+	}
+	
+	public PostsEntity(Posts post) {
+		this(post.getPost_id(), post.getUser_id(),
+				post.getContent(), post.getMedia(),
+				post.getLikes_count(), post.getComments_count());
 	}
 }
