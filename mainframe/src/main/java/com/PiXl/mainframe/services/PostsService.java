@@ -18,4 +18,19 @@ public interface PostsService {
     
     // POSTS UTILITY
     List<Posts> getPostByMostLikes(long numOfPosts);
+    List<Posts> getPostsByIdList(List<Long> ids);
+    
+    // POST INTERACTION
+    void likePost(Long postId, String userId);
+    void unLikePost(Long postId, String userId);
+    
+    /*
+     * void commentPost(Long postId, Comment commentData);
+     * void deleteComment(Long postId, Long commentId);
+     * List<Comment> getCommentsOnPost(Long postId);
+     * */
+    
+    // CONTENT DISCOVERY
+    List<Posts> getAllPostsWithTag(String tagName);
+    public List<Posts> searchPosts(String query);
 }

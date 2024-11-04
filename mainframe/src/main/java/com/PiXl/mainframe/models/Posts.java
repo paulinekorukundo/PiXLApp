@@ -1,6 +1,7 @@
 package com.PiXl.mainframe.models;
 
 import java.util.Objects;
+import java.util.Set;
 
 import com.PiXl.mainframe.entities.PostsEntity;
 
@@ -11,8 +12,10 @@ public class Posts {
 	private String media;
 	private Long likes_count;
 	private Long comments_count;
+	private Set<Tags> tags;
 	
-	public Posts(Long post_id, String user_id, String content, String media, Long likes_count, Long comments_count) {
+	public Posts(Long post_id, String user_id, String content, String media, 
+			Long likes_count, Long comments_count, Set<Tags> tags) {
 		super();
 		this.post_id = post_id;
 		this.user_id = user_id;
@@ -20,6 +23,7 @@ public class Posts {
 		this.media = media;
 		this.likes_count = likes_count;
 		this.comments_count = comments_count;
+		this.setTags(tags);
 	}
 	
 	/**
@@ -94,6 +98,14 @@ public class Posts {
 	public void setComments_count(Long comments_count) {
 		this.comments_count = comments_count;
 	}
+	
+	public Set<Tags> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tags> tags) {
+		this.tags = tags;
+	}
 
 	@Override
 	public String toString() {
@@ -121,7 +133,7 @@ public class Posts {
 	public Posts(PostsEntity post) {
 		this(post.getPost_id(), post.getUser_id(),
 				post.getContent(), post.getMedia(),
-				post.getLikes_count(), post.getComments_count());
+				post.getLikes_count(), post.getComments_count(), null);
 	}
 
 }
