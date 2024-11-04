@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.PiXl.mainframe.models.Profile;
 
+import jakarta.validation.Valid;
+
 public interface ProfileService {
 
     /**
@@ -21,7 +23,14 @@ public interface ProfileService {
 	 * @param profileId The ID of the profile to retrieve.
 	 * @return Optional containing Profile object if found, otherwise empty.
 	 */
-	Optional<Profile> findByProfileId(Long profileId);
+	Optional<Profile> getProfile(Long profileId);
+	
+	/**
+     * Get all profiles
+     * @return a list of all profiles
+     */
+	List<Profile> getProfiles();
+	
 
 	/**
 	 * Finds all profiles that contain a specified food preference.
@@ -46,8 +55,27 @@ public interface ProfileService {
 	 * @return true if a profile with the specified ID exists, false otherwise.
 	 */
 	boolean existsByProfileId(Long profileId);
-    
-    
+
+    /**
+     * Adds a new profile object
+     * @param profile - the profile to be added 
+     * @return profile - the added profile object
+     */
+	Profile add(Profile profile);
+
+	/**
+	 * Updates an existing profile in the repository
+	 * @param profile - The profile to be updated
+	 * @return profile - the updated profile object
+	 */
+	Profile update(@Valid Profile profile);
+
+	/**
+	 * Deletes an existing profile from the repository
+	 * @param profile - The profile to be deleted
+	 * @return true - the profile is successfully deleted
+	 */
+	boolean delete(@Valid Profile profile);   
     
     
 
