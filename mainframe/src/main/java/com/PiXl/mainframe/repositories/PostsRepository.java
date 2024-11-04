@@ -11,6 +11,7 @@ import com.PiXl.mainframe.entities.PostsEntity;
 
 public interface PostsRepository extends CrudRepository<PostsEntity, Long> {
 	List<PostsEntity> findAll();
+	List<PostsEntity> findAll(List<Long> postIDsList);
 	Optional<PostsEntity> findById(Long postId);
 	
 	@Query("SELECT p FROM PostsEntity p WHERE p.user_id = :userId")
@@ -24,4 +25,5 @@ public interface PostsRepository extends CrudRepository<PostsEntity, Long> {
     
     @Query("SELECT p FROM PostsEntity p ORDER BY p.likes_count DESC LIMIT :maxNum OFFSET :off")
     List<PostsEntity> getTopNLikedPosts(@Param("maxNum") Long maxNum, @Param("off") Long off);
+
 }

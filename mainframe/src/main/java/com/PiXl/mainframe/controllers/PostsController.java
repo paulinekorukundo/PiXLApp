@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,8 @@ public class PostsController {
 	private PostsService postService;
 	
 	
-	@GetMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@ResponseBody
 	private ResponseEntity<Object> getAllPosts(){
 		List<Posts> allPosts = postService.getAllPosts();
 		if(allPosts.isEmpty()) {
@@ -36,7 +36,19 @@ public class PostsController {
 		}
 	}
 	
-	@GetMapping("/{userid}")
+	@RequestMapping(value = "/byIdList", method = RequestMethod.GET)
+	@ResponseBody
+	private ResponseEntity<Object> getAllPosts(@RequestBody List<Long> ids){
+		List<Posts> allPosts = postService.getPostsByIdList(ids);
+		if(allPosts.isEmpty()) {
+			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
+		}else {
+			return ResponseHandler.generateResponse("All Posts by IDs", HttpStatus.OK, allPosts);
+		}
+	}
+	
+	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+	@ResponseBody
 	private ResponseEntity<Object> getAllPostsForUser(@PathVariable String userid){
 		List<Posts> allPosts = postService.getAllPostForUser(userid);
 		if(allPosts.isEmpty()) {

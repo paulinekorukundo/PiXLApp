@@ -3,6 +3,7 @@ package com.PiXl.mainframe.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,6 +101,53 @@ public class PostsServiceImpl implements PostsService {
 		}
 		offset = offset + numOfPosts;
 		return posts;
+	}
+
+	@Override
+	public List<Posts> getPostsByIdList(List<Long> ids) {
+		if(ids.isEmpty()) {
+			return null;
+		}
+		List<PostsEntity> postEntities = postRepo.findAll(ids);
+		List<Posts> posts= new ArrayList<>();
+		for(PostsEntity p : postEntities) {
+			posts.add(of(p));
+		}
+		return posts;
+	}
+
+	// Can we not store User based Liked? Just Likes in total.
+	@Override
+	public void likePost(Long postId, String userId) {
+		postRepo.findById(postId).get().incrementLikes();
+	}
+
+	@Override
+	public void unLikePost(Long postId, String userId) {
+		postRepo.findById(postId).get().decrementLikes();
+	}
+
+	@Override
+	public List<Posts> getAllPostsWithTag(String tagName) {
+		List<PostsEntity> postEntities = postRepo.findAll();
+		List<PostsEntity> filteredPosts = postEntities.stream()
+			    .filter(post -> post.getTags()
+			        .stream()
+			        .anyMatch(tag -> tag.getName().contains(tagName)))
+			    .collect(Collectors.toList());
+		
+		List<Posts> posts = new ArrayList<>();
+		for(PostsEntity p: filteredPosts) {
+			posts.add(of(p));
+		}
+		
+		return posts;
+	}
+
+	@Override
+	public List<Posts> searchPosts(String query) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
