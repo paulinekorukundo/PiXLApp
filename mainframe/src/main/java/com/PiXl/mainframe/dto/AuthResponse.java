@@ -1,8 +1,8 @@
 package com.PiXl.mainframe.dto;
 
-import com.PiXl.mainframe.entities.UserEntity;
-
 import java.util.Optional;
+
+import com.PiXl.mainframe.entities.UserEntity;
 
 import lombok.Getter;
 import lombok.Setter;

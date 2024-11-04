@@ -1,12 +1,13 @@
 package com.PiXl.mainframe.entities;
 
-import com.PiXl.mainframe.Models.Profile;
+import com.PiXl.mainframe.models.Profile;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,31 +16,32 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-
+@Table(name = "Profile")
 public class ProfileEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-		
-	@Column(unique = true)
-	private String username;
-	
-	private String firstName;
-	
-	private String secondName;
-	
-	@Column(length = 500)
-	private String bio;
-	
-	private String foodPreference;
-	
-	private String profilePicUrl;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long profileId;
+    
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+    
+    private String firstName;
+    private String lastName;
+    
+    @Column(length = 500)
+    private String bio;
+    
+    private String foodPreferences;
+    
+    private String profilePicture;
 
-	public ProfileEntity(String username, String bio, String foodPreference, String profilePicUrl) {
-		this.username = username;
+	public ProfileEntity(String firstName, String lastName, String bio, String foodPreferences,
+			String profilePicture) {
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.bio = bio;
-		this.foodPreference = foodPreference;
-		this.profilePicUrl = profilePicUrl;
+		this.foodPreferences = foodPreferences;
+		this.profilePicture = profilePicture;
 	}
 	
 	
@@ -49,14 +51,13 @@ public class ProfileEntity {
      * @param profile Profile DTO
      */
 	public ProfileEntity(Profile profile) {
-		this.id = profile.getId();
-		this.username = profile.getUsername();
+		this.profileId = profile.getProfileId();
+		this.userId = profile.getUserId();
 		this.firstName = profile.getFirstName();
-		this.secondName = profile.getSecondName();
+		this.lastName = profile.getLastName();
 		this.bio = profile.getBio();
-		this.foodPreference = profile.getFoodPreference();
-		this.profilePicUrl = profile.getProfilePicUrl();
+		this.foodPreferences = profile.getFoodPreference();
+		this.profilePicture = profile.getProfilePicture();
 	}
-	
 
 }

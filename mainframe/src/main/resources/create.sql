@@ -16,6 +16,18 @@ CREATE TABLE user (
     logged_in_status BOOLEAN DEFAULT FALSE
 );
 
+-- Profile Table
+CREATE TABLE Profile (
+    profile_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    bio VARCHAR(500),
+    food_preferences VARCHAR(255),
+    profile_picture VARCHAR(255)
+);
+
+
 -- AchievementBadge Table
 CREATE TABLE AchievementBadge (
     badgeId VARCHAR(36) PRIMARY KEY,
@@ -32,13 +44,13 @@ CREATE TABLE Following (
 );
 
 -- Post Table
-CREATE TABLE Post (
-    postId VARCHAR(36) PRIMARY KEY,
-    authorId VARCHAR(36) REFERENCES User(userId) ON DELETE CASCADE,
-    content TEXT,
-	-- media TEXT[],	Do we want to store a Link?
-    likesCount INT DEFAULT 0,
-    commentsCount INT DEFAULT 0
+CREATE TABLE posts (
+    post_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    content VARCHAR(2000),
+    media VARCHAR(4000),
+    likes_count BIGINT DEFAULT 0,
+    comments_count BIGINT DEFAULT 0
 );
 
 -- Tag Table
