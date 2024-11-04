@@ -21,8 +21,8 @@ public interface PostsService {
     List<Posts> getPostsByIdList(List<Long> ids);
     
     // POST INTERACTION
-    void likePost(Long postId, String userId);
-    void unLikePost(Long postId, String userId);
+    void likePost(Long postId);
+    void unLikePost(Long postId);
     
     /*
      * void commentPost(Long postId, Comment commentData);
