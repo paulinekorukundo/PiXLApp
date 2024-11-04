@@ -6,49 +6,49 @@ import java.util.Set;
 import com.PiXl.mainframe.entities.PostsEntity;
 
 public class Posts {
-	private Long post_id;
-	private String user_id;
+	private Long postId;
+	private String userId;
 	private String content;
 	private String media;
-	private Long likes_count;
-	private Long comments_count;
+	private Long likesCount;
+	private Long commentsCount;
 	private Set<Tags> tags;
 	
 	public Posts(Long post_id, String user_id, String content, String media, 
 			Long likes_count, Long comments_count, Set<Tags> tags) {
 		super();
-		this.post_id = post_id;
-		this.user_id = user_id;
+		this.postId = post_id;
+		this.userId = user_id;
 		this.content = content;
 		this.media = media;
-		this.likes_count = likes_count;
-		this.comments_count = comments_count;
+		this.likesCount = likes_count;
+		this.commentsCount = comments_count;
 		this.setTags(tags);
 	}
 	
 	/**
 	 * @return the post_id
 	 */
-	public Long getPost_id() {
-		return post_id;
+	public Long getPostId() {
+		return postId;
 	}
 	/**
 	 * @param post_id the post_id to set
 	 */
-	public void setPost_id(Long post_id) {
-		this.post_id = post_id;
+	public void setPostId(Long post_id) {
+		this.postId = post_id;
 	}
 	/**
 	 * @return the user_id
 	 */
-	public String getUser_id() {
-		return user_id;
+	public String getUserId() {
+		return userId;
 	}
 	/**
 	 * @param user_id the user_id to set
 	 */
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public void setUserId(String user_id) {
+		this.userId = user_id;
 	}
 	/**
 	 * @return the content
@@ -77,26 +77,26 @@ public class Posts {
 	/**
 	 * @return the likes_count
 	 */
-	public Long getLikes_count() {
-		return likes_count;
+	public Long getLikesCount() {
+		return likesCount;
 	}
 	/**
 	 * @param likes_count the likes_count to set
 	 */
-	public void setLikes_count(Long likes_count) {
-		this.likes_count = likes_count;
+	public void setLikesCount(Long likes_count) {
+		this.likesCount = likes_count;
 	}
 	/**
 	 * @return the comments_count
 	 */
-	public Long getComments_count() {
-		return comments_count;
+	public Long getCommentsCount() {
+		return commentsCount;
 	}
 	/**
 	 * @param comments_count the comments_count to set
 	 */
-	public void setComments_count(Long comments_count) {
-		this.comments_count = comments_count;
+	public void setCommentsCount(Long comments_count) {
+		this.commentsCount = comments_count;
 	}
 	
 	public Set<Tags> getTags() {
@@ -109,13 +109,13 @@ public class Posts {
 
 	@Override
 	public String toString() {
-		return "Posts [post_id=" + post_id + ", user_id=" + user_id + ", content=" + content + ", media=" + media
-				+ ", likes_count=" + likes_count + ", comments_count=" + comments_count + "]";
+		return "Posts [post_id=" + postId + ", user_id=" + userId + ", content=" + content + ", media=" + media
+				+ ", likes_count=" + likesCount + ", comments_count=" + commentsCount + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user_id, comments_count, content, likes_count, media, post_id);
+		return Objects.hash(userId, commentsCount, content, likesCount, media, postId);
 	}
 
 	@Override
@@ -127,13 +127,13 @@ public class Posts {
 		if (getClass() != obj.getClass())
 			return false;
 		Posts other = (Posts) obj;
-		return Objects.equals(user_id, other.user_id) && Objects.equals(post_id, other.post_id);
+		return Objects.equals(userId, other.userId) && Objects.equals(postId, other.postId);
 	}
 	
 	public Posts(PostsEntity post) {
-		this(post.getPost_id(), post.getUser_id(),
+		this(post.getPostId(), post.getUserId(),
 				post.getContent(), post.getMedia(),
-				post.getLikes_count(), post.getComments_count(), null);
+				post.getLikesCount(), post.getCommentsCount(), null);
 	}
 
 }

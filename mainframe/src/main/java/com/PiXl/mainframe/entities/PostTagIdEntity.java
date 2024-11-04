@@ -10,7 +10,7 @@ public class PostTagIdEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private Long postId;
     private Long tagId;
-	
+
     public PostTagIdEntity(Long postId, Long tagId) {
 		super();
 		this.postId = postId;
@@ -54,9 +54,7 @@ public class PostTagIdEntity implements Serializable{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+		if ((obj == null) || (getClass() != obj.getClass()))
 			return false;
 		PostTagIdEntity other = (PostTagIdEntity) obj;
 		return Objects.equals(postId, other.postId) && Objects.equals(tagId, other.tagId);

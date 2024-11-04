@@ -49,12 +49,12 @@ public class PostsController {
 	
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	private ResponseEntity<Object> getAllPostsForUser(@PathVariable String userid){
-		List<Posts> allPosts = postService.getAllPostForUser(userid);
+	private ResponseEntity<Object> getAllPostsForUser(@PathVariable String userId){
+		List<Posts> allPosts = postService.getAllPostForUser(userId);
 		if(allPosts.isEmpty()) {
 			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
 		}else {
-			return ResponseHandler.generateResponse("All Posts for UserId: " + userid, HttpStatus.OK, allPosts);
+			return ResponseHandler.generateResponse("All Posts for UserId: " + userId, HttpStatus.OK, allPosts);
 		}
 	}
 	
@@ -81,11 +81,22 @@ public class PostsController {
 		}
 	}
 	
+	@RequestMapping(value = "/likePost", method = RequestMethod.POST)
+	private ResponseEntity<Object> likePost(@RequestBody Map<String, Long> post){
+		postService.likePost(post.get("postId"));
+		return ResponseHandler.generateResponse("Post Liked!", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/unlikePost", method = RequestMethod.POST)
+	private ResponseEntity<Object> unlikePost(@RequestBody Map<String, Long> post){
+		postService.unLikePost(post.get("postId"));
+		return ResponseHandler.generateResponse("Post Unliked!", HttpStatus.OK);
+	}
 	
 	// Method to show the top k liked posts for pagination.
 	// When a user reaches the end of a page scroll, we call this method to get us the 
 	// next k posts to show to the user. It is a basic implementation of LAZY LOADING.
-	@RequestMapping(value = "/likedPosts", method = RequestMethod.GET)
+	@RequestMapping(value = "/topPosts", method = RequestMethod.GET)
 	@ResponseBody
 	private ResponseEntity<Object> getTopLikedPosts(@RequestBody Map<String, Long> json){
 		List<Posts> topPosts = postService.getPostByMostLikes(json.get("numPosts"));

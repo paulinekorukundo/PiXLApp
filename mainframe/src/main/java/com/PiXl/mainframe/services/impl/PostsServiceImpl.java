@@ -3,7 +3,6 @@ package com.PiXl.mainframe.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +52,7 @@ public class PostsServiceImpl implements PostsService {
 
 	@Override
 	public Posts editExistingPost(Posts post) {
-		if(!postRepo.existsById(post.getPost_id())) {
+		if(!postRepo.existsById(post.getPostId())) {
 			throw new IllegalArgumentException("Post does not exist!");
 		}
 		PostsEntity savedPost = postRepo.save(of(post));
@@ -108,7 +107,7 @@ public class PostsServiceImpl implements PostsService {
 		if(ids.isEmpty()) {
 			return null;
 		}
-		List<PostsEntity> postEntities = postRepo.findAll(ids);
+		List<PostsEntity> postEntities = postRepo.findByPostIdIn(ids);
 		List<Posts> posts= new ArrayList<>();
 		for(PostsEntity p : postEntities) {
 			posts.add(of(p));
@@ -118,30 +117,38 @@ public class PostsServiceImpl implements PostsService {
 
 	// Can we not store User based Liked? Just Likes in total.
 	@Override
-	public void likePost(Long postId, String userId) {
-		postRepo.findById(postId).get().incrementLikes();
+	public void likePost(Long postId) {
+		PostsEntity post = postRepo.findById(postId).get();
+		changeLikes(post, 1);
 	}
 
 	@Override
-	public void unLikePost(Long postId, String userId) {
-		postRepo.findById(postId).get().decrementLikes();
+	public void unLikePost(Long postId) {
+		PostsEntity post = postRepo.findById(postId).get();
+		changeLikes(post, -1);
+	}
+	
+	private void changeLikes(PostsEntity post, long changeVal) {
+		post.setLikesCount(post.getLikesCount() + changeVal);
+		postRepo.save(post);
 	}
 
 	@Override
 	public List<Posts> getAllPostsWithTag(String tagName) {
-		List<PostsEntity> postEntities = postRepo.findAll();
-		List<PostsEntity> filteredPosts = postEntities.stream()
-			    .filter(post -> post.getTags()
-			        .stream()
-			        .anyMatch(tag -> tag.getName().contains(tagName)))
-			    .collect(Collectors.toList());
-		
-		List<Posts> posts = new ArrayList<>();
-		for(PostsEntity p: filteredPosts) {
-			posts.add(of(p));
-		}
-		
-		return posts;
+//		List<PostsEntity> postEntities = postRepo.findAll();
+//		List<PostsEntity> filteredPosts = postEntities.stream()
+//			    .filter(post -> post.getTags()
+//			        .stream()
+//			        .anyMatch(tag -> tag.getName().contains(tagName)))
+//			    .collect(Collectors.toList());
+//		
+//		List<Posts> posts = new ArrayList<>();
+//		for(PostsEntity p: filteredPosts) {
+//			posts.add(of(p));
+//		}
+//		
+//		return posts;
+		return new ArrayList<Posts>();
 	}
 
 	@Override

@@ -29,14 +29,14 @@ public class PostTagEntity {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    
+
     public PostTagEntity() {}
 
-    public PostTagEntity(PostsEntity post, TagsEntity tag) {
-        this.post = post;
-        this.tag = tag;
-        this.id = new PostTagIdEntity(post.getPost_id(), tag.getTagId());
-        this.createdAt = LocalDateTime.now();
-    }
-    
+//    public PostTagEntity(PostsEntity post, TagsEntity tag) {
+//        this.post = post;
+//        this.tag = tag;
+//        this.id = new PostTagIdEntity(post.getPost_id(), tag.getTagId());
+//        this.createdAt = LocalDateTime.now();
+//    }
+
 }
