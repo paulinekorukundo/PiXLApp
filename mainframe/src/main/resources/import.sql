@@ -7,12 +7,20 @@ INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, prof
 INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('janesmith@example.com', 'Jane', 'Smith', 'Vegetarian foodie and baker.', 'Vegetarian, Desserts', 'jane_smith_profile.jpg');
 INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('testuser@example.com', 'Test', 'User', 'Non Vegetarian foodie and connoisseur of vintage wine.', 'Non-Vegetarian, Drunk', 'test_user_profile.jpg');
 
+-- Tag Table
+INSERT INTO tag (name) VALUES ('Healthy Eating');
+INSERT INTO tag (name) VALUES ('Vegan');
+INSERT INTO tag (name) VALUES ('Keto');
+INSERT INTO tag (name) VALUES ('Desserts');
+
+
 -- Post Table
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'This is my first post!', 'https://example.com/media1.jpg', 10, 5);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Loving the weather today!', NULL, 25, 8);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Check out my new blog post!', 'https://example.com/media2.png', 15, 3);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Happy Monday, everyone!', NULL, 5, 1);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Traveling to Japan tomorrow, super excited!', 'https://example.com/media3.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count, tag_id) VALUES ('user123', 'This is my first post!', 'https://example.com/media1.jpg', 10, 5, 1);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count, tag_id) VALUES ('user456', 'Loving the weather today!', NULL, 25, 8, 2);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count, tag_id) VALUES ('user789', 'Check out my new blog post!', 'https://example.com/media2.png', 15, 3, 4);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count, tag_id) VALUES ('user101', 'Happy Monday, everyone!', NULL, 5, 1, 3);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count, tag_id) VALUES ('user202', 'Traveling to Japan tomorrow, super excited!', 'https://example.com/media3.jpg', 100, 50, 2);
+
 
 -- Recipe Table
 INSERT INTO recipes (profile_id, ingredients, instructions, cusine_type, vegan, vegetarian, lactose_free, gluten_free, prep_time) VALUES (1, 'Flour, Sugar, Eggs', 'Mix ingredients and bake at 350°F for 25 minutes', 'Dessert', false, true, false, true, 25.5);
