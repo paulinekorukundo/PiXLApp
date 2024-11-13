@@ -89,13 +89,9 @@ public class TagsServiceImpl implements TagsService{
      */
 	@Override
 	public Tags add(@Valid Tags tags) {
-		Tags addedTags = null;
 		TagsEntity tagsEntityToAdd = new TagsEntity(tags);
-		if(!tagsRepository.existsById(tagsEntityToAdd.getTagId())) {
-			lombok.var addedTagsEntity = tagsRepository.save(new TagsEntity(tags));
-			addedTags = new Tags(addedTagsEntity);
-		}
-		return addedTags;
+		TagsEntity addedTagsEntity = tagsRepository.save(tagsEntityToAdd);
+		return new Tags(addedTagsEntity);
 	}
 	
 	
@@ -108,8 +104,8 @@ public class TagsServiceImpl implements TagsService{
 	public Tags update(@Valid Tags tags) {
 		Tags updatedTags = null;
 		TagsEntity tagsEntityToUpdate = new TagsEntity(tags);
-		if(tagsRepository.existsById(tagsEntityToUpdate.getTagId())) {
-			lombok.var updatedTagsEntity = tagsRepository.save(new TagsEntity(tags));
+		if(tagsRepository.existsById(tags.getTagId())) {
+			lombok.var updatedTagsEntity = tagsRepository.save(tagsEntityToUpdate);
 			updatedTags = new Tags(updatedTagsEntity);
 		}
 		return updatedTags;

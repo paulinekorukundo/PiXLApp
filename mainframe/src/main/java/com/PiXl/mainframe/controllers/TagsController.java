@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,43 +29,80 @@ public class TagsController {
 	@Autowired
 	private TagsService tagsService;
 	
+	/**
+     * Retrieves all tags.
+     *
+     * @return A ResponseEntity containing a List of Tags
+     */
 	@GetMapping()
 	public ResponseEntity<List<Tags>> getTags(){
 		return ResponseEntity.ok(tagsService.getAllTags());
 	}
 	
+	/**
+     * Retrieves the most frequent tags.
+     *
+     * @return A ResponseEntity containing a List of Tags sorted by frequency.
+     */
 	@GetMapping("/popular")
 	public ResponseEntity<List<Tags>> getMostFreqTags(){
 		return ResponseEntity.ok(tagsService.getMostFreqTags());
 	}
 	
+	/**
+     * Retrieves all tags associated with the given posts.
+     *
+     * @param posts A Set of PostsEntity objects.
+     * @return A ResponseEntity containing a List of Tags associated with the posts.
+     */
 	@GetMapping("/posts/{posts}")
 	public ResponseEntity<List<Tags>> getTagsForPost(@PathVariable Set<PostsEntity> posts){
 		return ResponseEntity.ok(tagsService.getAllTagsForPost(posts));
 	}
 	
+	/**
+     * Retrieves a tag by its ID.
+     *
+     * @param id The ID of the tag to retrieve.
+     * @return A ResponseEntity containing the Tag if found, or a 404 response if not found.
+     */
 	@GetMapping("/id/{id}")
 	public ResponseEntity<Tags> getTag(@PathVariable Long id){
 		Optional<Tags> tag = tagsService.getTagsById(id);
 		return tag.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
 	
+	 /**
+     * Retrieves all tags whose name matches the given name.
+     *
+     * @param name The partial name to match tags against.
+     * @return A ResponseEntity containing a List of matching Tags.
+     */
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<Tags>> getTagsByName(@PathVariable String name){
 		return ResponseEntity.ok(tagsService.getTags(name));
 	}
 	
+	/**
+     * Adds a new tag to the system.
+     *
+     * @param tag The new tag to be added.
+     * @return A ResponseEntity containing the newly created Tag.
+     */
 	@PostMapping()
-	public ResponseEntity<Tags> add(@PathVariable Tags tag){
+	public ResponseEntity<Tags> add(@RequestBody Tags tag){
 		Tags tagToAddTags = tagsService.add(tag);
-		if(tagToAddTags == null) {
-			return ResponseEntity.badRequest().build();
-		}
 		return ResponseEntity.ok(tagToAddTags);
 	}
 	
+	/**
+     * Updates an existing tag in the system.
+     *
+     * @param tag The updated tag details.
+     * @return A ResponseEntity containing the updated Tag if successful, or a 404 response if not found.
+     */
 	@PutMapping()
-	public ResponseEntity<Tags> update(@PathVariable Tags tag){
+	public ResponseEntity<Tags> update(@RequestBody Tags tag){
 		Tags tagToUpdateTags = tagsService.update(tag);
 		if(tagToUpdateTags == null) {
 			return ResponseEntity.notFound().build();
@@ -72,8 +110,14 @@ public class TagsController {
 		return ResponseEntity.ok(tagToUpdateTags);
 	}
 	
+	/**
+     * Deletes a tag from the system.
+     *
+     * @param tag The tag details to delete.
+     * @return A ResponseEntity containing a boolean indicating success or failure.
+     */
 	@DeleteMapping()
-	public ResponseEntity<Boolean> delete(@PathVariable Tags tag){
+	public ResponseEntity<Boolean> delete(@RequestBody Tags tag){
 		boolean tagToDelete = tagsService.delete(tag);
 		if(tagToDelete == false) {
 			return ResponseEntity.notFound().build();

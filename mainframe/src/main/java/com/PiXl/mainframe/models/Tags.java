@@ -26,50 +26,6 @@ public class Tags {
 		this.name = name;
 	}
 	
-//	public Tags(Long id, String name, Set<Posts> posts) {
-//		super();
-//		this.tagId = id;
-//		this.name = name;
-//		this.posts = posts;
-//	}
-//	/**
-//	 * @return the id
-//	 */
-//	public Long getTagId() {
-//		return tagId;
-//	}
-//	/**
-//	 * @param id the id to set
-//	 */
-//	public void setTagId(Long id) {
-//		this.tagId = id;
-//	}
-//	/**
-//	 * @return the name of the tag
-//	 */
-//	public String getName() {
-//		return name;
-//	}
-//	/**
-//	 * @param name the name to set
-//	 */
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-//	/**
-//	 * @return the posts
-//	 */
-//	public Posts getPosts() {
-//		return posts;
-//	}
-//	/**
-//	 * @param posts the posts to set
-//	 */
-//	public void setPosts(Posts posts) {
-//		this.posts = posts;
-//	}
-
-	
 	
 	@Override
 	public int hashCode() {
