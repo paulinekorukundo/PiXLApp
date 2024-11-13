@@ -1,7 +1,5 @@
 package com.PiXl.mainframe.entities;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import com.PiXl.mainframe.models.Posts;
 
@@ -11,8 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,13 +35,9 @@ public class PostsEntity {
     private Long commentsCount = 0L;
     
     
-    @ManyToMany
-    @JoinTable(
-        name = "post_tags",
-        joinColumns = @JoinColumn(name = "post_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private Set<TagsEntity> tags = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
+    private TagsEntity tags; // = new HashSet<>();
 
     
     public PostsEntity() {
