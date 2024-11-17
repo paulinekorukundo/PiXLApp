@@ -35,10 +35,12 @@ public class PostsEntity {
     @Column(name = "commentsCount")
     private Long commentsCount = 0L;
     
+
     @ManyToOne
     @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
     private TagsEntity tags; // = new HashSet<>();
    
+
     
     public PostsEntity() {
 	}

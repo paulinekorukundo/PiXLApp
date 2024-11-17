@@ -1,0 +1,9 @@
+diff a/mainframe/src/main/java/com/PiXl/mainframe/services/impl/TagsServiceImpl.java b/mainframe/src/main/java/com/PiXl/mainframe/services/impl/TagsServiceImpl.java	(rejected hunks)
+@@ -104,6 +104,7 @@
+ 	public Tags update(@Valid Tags tags) {
+ 		Tags updatedTags = null;
+ 		TagsEntity tagsEntityToUpdate = new TagsEntity(tags);
++		if(tagsRepository.existsById(tags.getTagId())) {
+ 			lombok.var updatedTagsEntity = tagsRepository.save(tagsEntityToUpdate);
+ 			updatedTags = new Tags(updatedTagsEntity);
+ 		}
