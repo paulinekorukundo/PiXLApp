@@ -33,3 +33,4 @@ INSERT INTO recipes (profile_id, ingredients, instructions, cusine_type, vegan, 
 INSERT INTO recipes (profile_id, ingredients, instructions, cusine_type, vegan, vegetarian, lactose_free, gluten_free, prep_time) VALUES (2, 'Beef, Potatoes, Carrots', 'Cook beef and add vegetables', 'American', false, false, true, true, 35.0);
 INSERT INTO recipes (profile_id, ingredients, instructions, cusine_type, vegan, vegetarian, lactose_free, gluten_free, prep_time) VALUES (3, 'Bread, Cheese, Butter', 'Grill cheese between slices of bread', 'Sandwich', false, true, false, false, 10.0);
 INSERT INTO recipes (profile_id, ingredients, instructions, cusine_type, vegan, vegetarian, lactose_free, gluten_free, prep_time) VALUES (1, 'Quinoa, Black Beans, Corn', 'Cook quinoa and mix with beans and corn', 'Southwestern', true, true, true, true, 25.0);
+

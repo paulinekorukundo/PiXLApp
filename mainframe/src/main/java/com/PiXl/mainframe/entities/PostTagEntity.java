@@ -10,11 +10,11 @@ import jakarta.persistence.MapsId;
 
 
 //@Entity
-//@Table(name = "post_tags")
+// @Table(name = "post_tag")
 public class PostTagEntity {
 	@EmbeddedId
     private PostTagIdEntity id;
-
+	
     @ManyToOne
     @MapsId("postId")
     @JoinColumn(name = "post_id")
