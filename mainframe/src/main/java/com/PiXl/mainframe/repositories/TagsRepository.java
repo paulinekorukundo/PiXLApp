@@ -46,10 +46,13 @@ public interface TagsRepository extends JpaRepository<TagsEntity, Long>  {
 	 */
 	List<TagsEntity> findByPostsContainingIgnoreCase(Set<PostsEntity> posts);
 	
-	
-	@Query("SELECT t FROM TagsEntity t GROUP BY t.name ORDER BY COUNT(t) DESC")
+	/**
+	 * Finds the most frequent tags and lists them in descending order
+	 * 
+	 * @return a list of TagsEntity objects with the highest frequency
+	 */
+	@Query("SELECT t FROM TagsEntity t ORDER BY SIZE(t.posts) DESC")
 	List<TagsEntity> findMostFrequentTags();
-
 	
 	
 }

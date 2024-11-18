@@ -45,6 +45,10 @@ public class Tags {
 				&& Objects.equals(tagId, other.tagId);
 	}
 
+	/**
+	 * Converts a tags entity into a tags object
+	 * @param te - the tags entity to convert
+	 */
 	public Tags(TagsEntity te) {
 		this.tagId = te.getTagId();
 		this.name = te.getName();
