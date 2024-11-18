@@ -6,7 +6,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.PiXl.mainframe.models.Tags;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,9 +40,12 @@ public class TagsEntity {
     /**
      * Set of posts associated with this tag.
      */
-    @OneToMany(mappedBy = "tags")
+    @OneToMany(mappedBy = "tags", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @Getter
     private Set<PostsEntity> posts = new HashSet<>();
 	
+    
     /**
      * Constructs a new TagsEntity with the given id and name.
      *
@@ -67,6 +72,10 @@ public class TagsEntity {
 		this.posts = postsEntity;
 	}
 
+    public void addPost(PostsEntity post) {
+        posts.add(post);
+        post.setTags(this);
+    }
 
 	@Override
 	public int hashCode() {
