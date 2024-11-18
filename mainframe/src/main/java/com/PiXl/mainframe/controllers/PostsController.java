@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,14 +28,23 @@ public class PostsController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@ResponseBody
-	private ResponseEntity<Object> getAllPosts(){
-		List<Posts> allPosts = postService.getAllPosts();
-		if(allPosts.isEmpty()) {
-			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
-		}else {
-			return ResponseHandler.generateResponse("All Posts", HttpStatus.OK, allPosts);
-		}
+	@CrossOrigin(origins = "http://localhost:5173")
+	private ResponseEntity<List<Posts>> getAllPosts() {
+	    List<Posts> allPosts = postService.getAllPosts();
+	    if (allPosts.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    } else {
+	        return ResponseEntity.ok(allPosts); // Return the list directly
+	    }
 	}
+//	private ResponseEntity<Object> getAllPosts(){
+//		List<Posts> allPosts = postService.getAllPosts();
+//		if(allPosts.isEmpty()) {
+//			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
+//		}else {
+//			return ResponseHandler.generateResponse("All Posts", HttpStatus.OK, allPosts);
+//		}
+//	}
 	
 	@RequestMapping(value = "/byIdList", method = RequestMethod.GET)
 	@ResponseBody
