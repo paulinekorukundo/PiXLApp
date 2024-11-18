@@ -32,7 +32,7 @@ function PostForm({ opened, onClose, post, isEditing }) {
       />
       <TextInput
         label="Content"
-        placeholder="What's on your mind?"
+        placeholder="What food is on your mind?"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Card, Text, Loader, Grid, Group, Image } from "@mantine/core";
-import { fetchAllPosts } from "./api";
 import PostActions from "./PostsActions";
 import axios from "axios";
 
@@ -13,7 +12,6 @@ function PostsList() {
     const loadPosts = async () => {
       try {
         const response = await axios.get("http://localhost:8080/api/v1/posts/");
-        //const response = await fetchAllPosts;
         console.log("Response: ", response.data);
         setPosts(response.data || []); 
         
@@ -39,7 +37,7 @@ function PostsList() {
               shadow="sm" 
               padding="lg"
               component="a"
-              href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+              // href=""
               target="_blank"
             >
               <Card.Section>

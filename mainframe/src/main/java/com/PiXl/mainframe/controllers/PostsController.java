@@ -20,6 +20,7 @@ import com.PiXl.mainframe.services.PostsService;
 
 @RestController
 @RequestMapping("/api/v1/posts")
+@CrossOrigin(origins = "http://localhost:5173")
 public class PostsController {
 	
 	@Autowired
@@ -28,13 +29,13 @@ public class PostsController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@ResponseBody
-	@CrossOrigin(origins = "http://localhost:5173")
+	
 	private ResponseEntity<List<Posts>> getAllPosts() {
 	    List<Posts> allPosts = postService.getAllPosts();
 	    if (allPosts.isEmpty()) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	    } else {
-	        return ResponseEntity.ok(allPosts); // Return the list directly
+	        return ResponseEntity.ok(allPosts); 
 	    }
 	}
 //	private ResponseEntity<Object> getAllPosts(){

@@ -1,13 +1,15 @@
 import React from "react";
-import { likePost, unlikePost } from "./api";
 import { IconHeart, IconEdit, IconMessageChatbot} from '@tabler/icons-react';
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { ActionIcon, Text } from "@mantine/core";
+import axios from "axios";
 
 function PostActions({ postId, likes, comments}) {
 
-  
+  const likePost = async (postId) => axios.post("http://localhost:8080/api/v1/posts/likePost", { postId });
+  const unlikePost = async (postId) => axios.post("http://localhost:8080/api/v1/posts/unlikePost", { postId });
+
   const handleLike = async () => {
     try {
       await likePost(postId);
