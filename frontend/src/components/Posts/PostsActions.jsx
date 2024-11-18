@@ -29,7 +29,7 @@ function PostActions({ postId, likes, comments}) {
   };
 
   return (
-    <div>
+    <div >
       <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
         <IconHeart className={classes.like} stroke={1.5} />
       </ActionIcon>
