@@ -24,6 +24,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="/posts" element={<PostsList />} />
+            <Route path="/add-post" element={<PostForm />} />
           </Route>
           <Route path="auth">
             <Route path="login" element={<Auth />} />
@@ -31,8 +33,6 @@ function App() {
           </Route>
           <Route path="*" element={<PageNotFound />} />
           {/* <Container> */}
-          <Route path="/posts" element={<PostsList />} />
-          <Route path="/add-post" element={<PostForm />} />
           {/* </Container> */}
         </Routes>
       </AppProvider>

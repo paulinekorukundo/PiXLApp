@@ -9,13 +9,14 @@ import jakarta.validation.Valid;
 
 public interface ProfileService {
 
-    /**
-     * Searches for profiles where the first name or last name contains the search term.
-     *
-     * @param name The search term to check against both first and last names
-     * @return A list of matching profiles
-     */
-    List<Profile> searchProfilesByName(String name);
+	/**
+	 * Searches for profiles where the first name or last name contains the search
+	 * term.
+	 *
+	 * @param name The search term to check against both first and last names
+	 * @return A list of matching profiles
+	 */
+	List<Profile> searchProfilesByName(String name);
 
 	/**
 	 * Finds a profile by its profileId.
@@ -24,13 +25,21 @@ public interface ProfileService {
 	 * @return Optional containing Profile object if found, otherwise empty.
 	 */
 	Optional<Profile> getProfile(Long profileId);
-	
+
 	/**
-     * Get all profiles
-     * @return a list of all profiles
-     */
+	 * Finds a profile by its userId.
+	 *
+	 * @param userId The ID of the profile to retrieve.
+	 * @return Optional containing Profile object if found, otherwise empty.
+	 */
+	Optional<Profile> getProfile(String userId);
+
+	/**
+	 * Get all profiles
+	 * 
+	 * @return a list of all profiles
+	 */
 	List<Profile> getProfiles();
-	
 
 	/**
 	 * Finds all profiles that contain a specified food preference.
@@ -56,15 +65,17 @@ public interface ProfileService {
 	 */
 	boolean existsByProfileId(Long profileId);
 
-    /**
-     * Adds a new profile object
-     * @param profile - the profile to be added 
-     * @return profile - the added profile object
-     */
+	/**
+	 * Adds a new profile object
+	 * 
+	 * @param profile - the profile to be added
+	 * @return profile - the added profile object
+	 */
 	Profile add(Profile profile);
 
 	/**
 	 * Updates an existing profile in the repository
+	 * 
 	 * @param profile - The profile to be updated
 	 * @return profile - the updated profile object
 	 */
@@ -72,11 +83,10 @@ public interface ProfileService {
 
 	/**
 	 * Deletes an existing profile from the repository
+	 * 
 	 * @param profile - The profile to be deleted
 	 * @return true - the profile is successfully deleted
 	 */
-	boolean delete(@Valid Profile profile);   
-    
-    
+	boolean delete(@Valid Profile profile);
 
 }

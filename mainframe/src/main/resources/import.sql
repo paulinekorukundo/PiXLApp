@@ -3,9 +3,9 @@ INSERT INTO user (email, password, logged_in_status) VALUES ('johndoe@example.co
 INSERT INTO user (email, password, logged_in_status) VALUES ('janedoe@example.com', 'password456', FALSE);
 
 -- Profile Table
-INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('johndoe@example.com', 'John', 'Doe', 'I love Italian and Mexican food.', 'Italian, Mexican', 'john_doe_profile.jpg');
-INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('janesmith@example.com', 'Jane', 'Smith', 'Vegetarian foodie and baker.', 'Vegetarian, Desserts', 'jane_smith_profile.jpg');
-INSERT INTO Profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('testuser@example.com', 'Test', 'User', 'Non Vegetarian foodie and connoisseur of vintage wine.', 'Non-Vegetarian, Drunk', 'test_user_profile.jpg');
+INSERT INTO profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('johndoe@example.com', 'John', 'Doe', 'I love Italian and Mexican food.', 'Italian, Mexican', 'john_doe_profile.jpg');
+INSERT INTO profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('janesmith@example.com', 'Jane', 'Smith', 'Vegetarian foodie and baker.', 'Vegetarian, Desserts', 'jane_smith_profile.jpg');
+INSERT INTO profile (user_id, first_name, last_name, bio, food_preferences, profile_picture) VALUES ('testuser@example.com', 'Test', 'User', 'Non Vegetarian foodie and connoisseur of vintage wine.', 'Non-Vegetarian, Drunk', 'test_user_profile.jpg');
 
 -- Tag Table
 INSERT INTO tag (name) VALUES ('Healthy Eating');
