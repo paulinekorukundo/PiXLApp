@@ -5,14 +5,12 @@ import "../../assets/General.css";
 import { ActionIcon, Text } from "@mantine/core";
 import axios from "axios";
 
-function PostActions({ postId, likes, comments}) {
-
-  const likePost = async (postId) => axios.post("http://localhost:8080/api/v1/posts/likePost", { postId });
-  const unlikePost = async (postId) => axios.post("http://localhost:8080/api/v1/posts/unlikePost", { postId });
+function PostActions({ postId, likes, comments, onLike}) {
 
   const handleLike = async () => {
     try {
-      await likePost(postId);
+      const response = await axios.post("http://localhost:8080/api/v1/posts/likePost", { postId })
+      onLike(postId, response.data.likesCount); 
       alert("Post liked!");
     } catch (error) {
       console.error("Error liking post:", error);
@@ -21,7 +19,8 @@ function PostActions({ postId, likes, comments}) {
 
   const handleUnlike = async () => {
     try {
-      await unlikePost(postId);
+      const response = await axios.post("http://localhost:8080/api/v1/posts/unlikePost", { postId });
+      // onLike(postId, response.data.likesCount); 
       alert("Post unliked!");
     } catch (error) {
       console.error("Error unliking post:", error);
@@ -31,8 +30,12 @@ function PostActions({ postId, likes, comments}) {
   return (
     <div className={classes.actionsContainer}>
       <div className={classes.iconTextWrapper}>
-        <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
-          <IconHeart className={classes.like} stroke={1.5} />
+        <ActionIcon variant="light" radius="md" size={36} >
+          <IconHeart 
+          className={classes.like} 
+          stroke={1.5} 
+          onClick={handleLike}
+          />
         </ActionIcon>
         <Text className={classes.countText} size="sm" c="dimmed">
           {likes} 
@@ -40,7 +43,7 @@ function PostActions({ postId, likes, comments}) {
       </div>
 
       <div className={classes.iconTextWrapper}>
-        <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
+        <ActionIcon variant="light" radius="md" size={36}>
           <IconHeartBroken
             size={48}
             strokeWidth={1.5}
@@ -51,7 +54,11 @@ function PostActions({ postId, likes, comments}) {
       </div>
 
       <div className={classes.iconTextWrapper}>
-        <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
+        <ActionIcon 
+          variant="light" 
+          radius="md" 
+          size={36} 
+          >
           <IconMessageChatbot
             size={48}
             strokeWidth={1.5}
@@ -63,8 +70,9 @@ function PostActions({ postId, likes, comments}) {
           </Text>
       </div>
 
+      {/* TODO PK: Add comment on click */}
       <div className={classes.iconTextWrapper}>
-        <ActionIcon className="item" variant="light" radius="md" size={36} onClick={handleUnlike}>
+        <ActionIcon className="item" variant="light" radius="md" size={36} >
           <IconEdit className={classes.like} stroke={1.5} />
         </ActionIcon>
       </div>

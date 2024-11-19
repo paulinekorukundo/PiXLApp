@@ -10,7 +10,6 @@
   }
   
   .like {
-    /* color: var(--mantine-color-red-6); */
     width: rem(20px);
     height: rem(20px);
     transition: transform 0.3s ease-in-out;
@@ -23,14 +22,14 @@
   }
 
   .like:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
   }
 
   .actionsContainer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px; /* Space between each icon-text pair */
+    gap: 16px; 
   }
   
   .iconTextWrapper {
