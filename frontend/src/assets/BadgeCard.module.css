@@ -10,7 +10,6 @@
   }
   
   .like {
-    /* color: var(--mantine-color-red-6); */
     width: rem(20px);
     height: rem(20px);
     transition: transform 0.3s ease-in-out;
@@ -23,14 +22,27 @@
   }
 
   .like:hover {
-    transform: scale(1.1);
+    transform: scale(1.2);
   }
 
-  count-text {
+  .actionsContainer {
     display: flex;
-    align-items: left;
+    align-items: center;
     justify-content: space-between;
-    gap: 10px
+    gap: 16px; 
+  }
+  
+  .iconTextWrapper {
+    display: flex;
+    align-items: center; 
+    gap: 6px; 
+  }
+
+  .countText {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    color: var(--mantine-color-gray-6);
   }
 
   .edit {
