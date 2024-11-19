@@ -1,6 +1,7 @@
 package com.PiXl.mainframe.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,17 @@ public class RecipeController {
     	return ResponseEntity.ok(recServ.getRecipesByProfileId(profile_id));
     }
 	
+	@RequestMapping(value = "/ingredients", method = RequestMethod.GET)
+	@ResponseBody
+    public ResponseEntity<List<Recipe>> filterRecipesByIngredients(@RequestBody Map<String, String> json){
+    	return ResponseEntity.ok(recServ.getRecipesBasedOnIngredients(json.get("ingredients")));
+    }
+	
+	@RequestMapping(value = "/preptime/{minTime}/{maxTime}", method = RequestMethod.GET)
+	@ResponseBody
+    public ResponseEntity<List<Recipe>> filterRecipesByIngredients(@PathVariable Long minTime, @PathVariable Long maxTime){
+    	return ResponseEntity.ok(recServ.getRecipesFilteredByPrepTime(minTime, maxTime));
+    }
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	@ResponseBody
@@ -50,7 +62,6 @@ public class RecipeController {
 			return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, savedPost);
 		}
 	}
-	
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody

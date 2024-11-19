@@ -28,7 +28,7 @@ public class PostsController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@ResponseBody
-	@CrossOrigin(origins = "http://localhost:5173")
+	// @CrossOrigin(origins = "http://localhost:5173")
 	private ResponseEntity<List<Posts>> getAllPosts() {
 	    List<Posts> allPosts = postService.getAllPosts();
 	    if (allPosts.isEmpty()) {

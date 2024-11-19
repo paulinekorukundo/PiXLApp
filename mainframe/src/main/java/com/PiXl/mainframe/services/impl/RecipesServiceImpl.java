@@ -76,14 +76,14 @@ public class RecipesServiceImpl implements RecipesService {
 
 	@Override
 	public List<Recipe> getRecipesBasedOnIngredients(String ingredients) {
-		// TODO Auto-generated method stub
-		return null;
+		List<RecipeEntity> recipes = recRepo.findByRecipeIngredientsContainingIgnoreCase(ingredients);
+		return recipes.stream().map(this::convertToRecipeModel).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Recipe> getRecipesFilteredByPrepTime(long minTime, long maxTime) {
-		// TODO Auto-generated method stub
-		return null;
+		List<RecipeEntity> recipes = recRepo.findAllByPrepTimeGreaterThanAndPrepTimeLessThan(minTime, maxTime);
+		return recipes.stream().map(this::convertToRecipeModel).collect(Collectors.toList());
 	}
 	
 	private Recipe convertToRecipeModel(RecipeEntity re) {

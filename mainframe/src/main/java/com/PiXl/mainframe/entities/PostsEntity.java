@@ -42,7 +42,7 @@ public class PostsEntity {
     private Long commentsCount = 0L;
     
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
     @JsonBackReference
     private TagsEntity tags; 

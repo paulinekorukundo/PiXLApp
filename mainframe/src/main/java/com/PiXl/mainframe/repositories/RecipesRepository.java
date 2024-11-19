@@ -17,6 +17,7 @@ public interface RecipesRepository extends JpaRepository<RecipeEntity, Long>{
 	List<RecipeEntity> findByIsVegan(Boolean isVegan);
 	List<RecipeEntity> findByIsVegetarian(Boolean isVegetarian);
 	List<RecipeEntity> findByIsLactoseFree(Boolean isLactoseFree);
+	List<RecipeEntity> findAllByPrepTimeGreaterThanAndPrepTimeLessThan(long minTime, long maxTime);
 
 	
 	@SuppressWarnings("unchecked")
