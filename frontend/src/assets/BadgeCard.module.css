@@ -26,11 +26,24 @@
     transform: scale(1.1);
   }
 
-  count-text {
+  .actionsContainer {
     display: flex;
-    align-items: left;
+    align-items: center;
     justify-content: space-between;
-    gap: 10px
+    gap: 16px; /* Space between each icon-text pair */
+  }
+  
+  .iconTextWrapper {
+    display: flex;
+    align-items: center; 
+    gap: 6px; 
+  }
+
+  .countText {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    color: var(--mantine-color-gray-6);
   }
 
   .edit {

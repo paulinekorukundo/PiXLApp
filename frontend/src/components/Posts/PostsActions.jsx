@@ -1,5 +1,5 @@
 import React from "react";
-import { IconHeart, IconEdit, IconMessageChatbot} from '@tabler/icons-react';
+import { IconHeart, IconEdit, IconMessageChatbot, IconHeartBroken} from '@tabler/icons-react';
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { ActionIcon, Text } from "@mantine/core";
@@ -29,26 +29,45 @@ function PostActions({ postId, likes, comments}) {
   };
 
   return (
-    <div >
-      <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
-        <IconHeart className={classes.like} stroke={1.5} />
-      </ActionIcon>
-      <Text className="item" size="sm" c="dimmed">
+    <div className={classes.actionsContainer}>
+      <div className={classes.iconTextWrapper}>
+        <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
+          <IconHeart className={classes.like} stroke={1.5} />
+        </ActionIcon>
+        <Text className={classes.countText} size="sm" c="dimmed">
           {likes} 
         </Text>
-      <ActionIcon className="count-text"  variant="light" radius="md" size={36} onClick={handleLike}>
-        <IconMessageChatbot
-          size={48}
-          strokeWidth={1.5}
-          className={classes.like}
-        />
-      </ActionIcon>
-      <div className="item count-text" >
-         <Text size="sm" c="dimmed"> {comments}</Text>
       </div>
-        <ActionIcon className="count-text item" variant="light" radius="md" size={36} onClick={handleUnlike}>
+
+      <div className={classes.iconTextWrapper}>
+        <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
+          <IconHeartBroken
+            size={48}
+            strokeWidth={1.5}
+            className={classes.like}
+            onClick={handleUnlike}
+          />
+        </ActionIcon>
+      </div>
+
+      <div className={classes.iconTextWrapper}>
+        <ActionIcon variant="light" radius="md" size={36} onClick={handleLike}>
+          <IconMessageChatbot
+            size={48}
+            strokeWidth={1.5}
+            className={classes.like}
+          />
+        </ActionIcon>
+          <Text className={classes.countText} size="sm" c="dimmed"> 
+            {comments}
+          </Text>
+      </div>
+
+      <div className={classes.iconTextWrapper}>
+        <ActionIcon className="item" variant="light" radius="md" size={36} onClick={handleUnlike}>
           <IconEdit className={classes.like} stroke={1.5} />
         </ActionIcon>
+      </div>
 
     </div>
   );

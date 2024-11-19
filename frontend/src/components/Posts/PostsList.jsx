@@ -40,7 +40,6 @@ function PostsList() {
               component="a"
               // href=""
               target="_blank"
-              
             >
               <Card.Section>
                 <Image
@@ -50,11 +49,11 @@ function PostsList() {
                   alt="Food!"
                 />
               </Card.Section>
-
-              <Group mt="md" position="apart">
-                <PostActions postId={post.postId} likes={post.likesCount} comments={post.commentsCount} />
-              </Group>
-
+              {/* <Card.Section className="count-text"> */}
+                <Group mt="md" position="apart">
+                  <PostActions postId={post.postId} likes={post.likesCount} comments={post.commentsCount} />
+                </Group>
+              {/* </Card.Section> */}
               <Card.Section className={classes.section}>
                 <Group gap={7} mt={5}>
                   <Text fw={500} fz='sm' mt='xs'>{post.userId}</Text>
