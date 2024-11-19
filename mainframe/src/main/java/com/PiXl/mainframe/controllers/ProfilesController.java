@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +21,12 @@ import com.PiXl.mainframe.services.ProfileService;
 import lombok.NoArgsConstructor;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/profiles")
 @NoArgsConstructor
 public class ProfilesController {
-	
-	@Autowired
+
+    @Autowired
     private ProfileService profileService;
 
     /**
@@ -37,12 +39,12 @@ public class ProfilesController {
     public ResponseEntity<List<Profile>> searchProfilesByName(@PathVariable String name) {
         return ResponseEntity.ok(profileService.searchProfilesByName(name));
     }
-    
+
     @GetMapping
-    public ResponseEntity<List<Profile>> getProfiles(){
-    	return ResponseEntity.ok(profileService.getProfiles());
+    public ResponseEntity<List<Profile>> getProfiles() {
+        return ResponseEntity.ok(profileService.getProfiles());
     }
-    
+
     /**
      * Gets a profile by profile ID.
      *
@@ -56,6 +58,19 @@ public class ProfilesController {
     }
 
     /**
+     * Gets a profile by User ID.
+     *
+     * @param userId The ID of the profile.
+     * @return The profile if found, or 404 Not Found.
+     */
+    @GetMapping("/userid/{userId}")
+    public ResponseEntity<Profile> getProfileByUserId(@PathVariable String userId) {
+        System.out.println("User ID: " + userId);
+        Optional<Profile> profile = profileService.getProfile(userId);
+        return profile.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    /**
      * Gets profiles by food preferences
      *
      * @param foodPreference The food preference to search for.
@@ -63,7 +78,7 @@ public class ProfilesController {
      */
     @GetMapping("/food/{foodPreference}")
     public ResponseEntity<List<Profile>> searchProfilesByFoodPreference(@PathVariable String foodPreference) {
-    	return ResponseEntity.ok(profileService.findByFoodPreferencesContaining(foodPreference));
+        return ResponseEntity.ok(profileService.findByFoodPreferencesContaining(foodPreference));
     }
 
     /**
@@ -74,7 +89,7 @@ public class ProfilesController {
      */
     @GetMapping("/search/bio/{bio}")
     public ResponseEntity<List<Profile>> searchProfilesByBio(@PathVariable String bio) {
-    	return ResponseEntity.ok(profileService.findByBioContaining(bio));
+        return ResponseEntity.ok(profileService.findByBioContaining(bio));
 
     }
 
@@ -86,50 +101,53 @@ public class ProfilesController {
      */
     @GetMapping("/exists/{profileId}")
     public ResponseEntity<Boolean> checkIfProfileExists(@PathVariable Long profileId) {
-    	return ResponseEntity.ok(profileService.existsByProfileId(profileId));
+        return ResponseEntity.ok(profileService.existsByProfileId(profileId));
     }
-    
+
     /**
      * Creates a new profile and returns a response entity object
+     * 
      * @param profile - the profile object to be added
-     * @return A ResponseEntity indicating creation of the profile 
+     * @return A ResponseEntity indicating creation of the profile
      */
     @PostMapping()
     public ResponseEntity<Profile> add(@RequestBody Profile profile) {
-    	Profile profileToAdd = profileService.add(profile);
-    	if(profileToAdd == null) {
-    		return ResponseEntity.badRequest().build();
-    	}
+        Profile profileToAdd = profileService.add(profile);
+        if (profileToAdd == null) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.created(null).build();
     }
-    
+
     /**
-     * Updates an existing profile and 
+     * Updates an existing profile and
      * returns a ResponseEntity object
+     * 
      * @param profile - the profile object with the updated information
-     * @return A ResponseEntity indicating the successful update 
+     * @return A ResponseEntity indicating the successful update
      */
     @PutMapping()
-    public ResponseEntity<Profile> update(@RequestBody Profile profile){
-    	Profile updatedProfile = profileService.update(profile);
-    	if (updatedProfile == null) {
+    public ResponseEntity<Profile> update(@RequestBody Profile profile) {
+        Profile updatedProfile = profileService.update(profile);
+        if (updatedProfile == null) {
             return ResponseEntity.notFound().build();
         }
-    	return ResponseEntity.ok(updatedProfile);
+        return ResponseEntity.ok(updatedProfile);
     }
- 
+
     /**
-     * Deletes a profile resource and 
+     * Deletes a profile resource and
      * returns a ResponseEntity object
+     * 
      * @param profile - The profile object to be deleted
-     * @return  A ResponseEntity indicating that the resource has been deleted
+     * @return A ResponseEntity indicating that the resource has been deleted
      */
     @DeleteMapping()
-    public ResponseEntity<Boolean> delete(@RequestBody Profile profile){
-    	boolean deletedProfile = profileService.delete(profile);
-    	if(deletedProfile == false) {
-    		return ResponseEntity.notFound().build();
-    	}
-    	return ResponseEntity.ok(deletedProfile);
+    public ResponseEntity<Boolean> delete(@RequestBody Profile profile) {
+        boolean deletedProfile = profileService.delete(profile);
+        if (deletedProfile == false) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(deletedProfile);
     }
 }

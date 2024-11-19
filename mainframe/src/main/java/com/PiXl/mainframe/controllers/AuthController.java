@@ -3,6 +3,7 @@ package com.PiXl.mainframe.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,7 @@ public class AuthController {
      * @return ResponseEntity<Boolean,UserEntity> - true if login is successful and
      *         user details otherwise false and empty
      */
+    @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
         AuthResponse loginResponse = authService.login(loginRequest.getEmail(), loginRequest.getPassword());
@@ -57,6 +59,7 @@ public class AuthController {
      * @return ResponseEntity<Optional<Users>> - user details if registration is
      *         successful otherwise empty
      */
+    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody RegisterRequest registerRequest) {
         AuthResponse registerResponse = authService.register(registerRequest.getUsername(), registerRequest.getEmail(),
