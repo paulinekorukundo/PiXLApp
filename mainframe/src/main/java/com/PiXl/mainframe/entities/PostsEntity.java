@@ -1,28 +1,32 @@
 package com.PiXl.mainframe.entities;
 
-import java.util.HashSet;
-import java.util.Set;
 
 import com.PiXl.mainframe.models.Posts;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "posts")
+@Getter
+@Setter
 public class PostsEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long postId;
 
-    @Column(name = "userId", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
     @Column(name = "content", length = 2000)
@@ -37,16 +41,12 @@ public class PostsEntity {
     @Column(name = "commentsCount")
     private Long commentsCount = 0L;
     
-    
-    @ManyToMany
-    @JoinTable(
-        name = "post_tags",
-        joinColumns = @JoinColumn(name = "post_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-    private Set<TagsEntity> tags = new HashSet<>();
 
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
+    @JsonBackReference
+    private TagsEntity tags; 
+       
     public PostsEntity() {
 	}
 
@@ -62,93 +62,47 @@ public class PostsEntity {
 	}
     
 	/**
-	 * @return the postId
+	 * All Arguments Constructor to include Tags
+	 * @param postId
+	 * @param userId
+	 * @param content
+	 * @param media
+	 * @param likesCount
+	 * @param commentsCount
+	 * @param tags
 	 */
-	public Long getPostId() {
-		return postId;
-	}
-
-	/**
-	 * @param postId the postId to set
-	 */
-	public void setPostId(Long postId) {
+	public PostsEntity(Long postId, String userId, String content, String media, Long likesCount, Long commentsCount,
+			TagsEntity tags) {
+		super();
 		this.postId = postId;
-	}
-
-	/**
-	 * @return the user_id
-	 */
-	public String getUserId() {
-		return userId;
-	}
-
-	/**
-	 * @param user_id the user_id to set
-	 */
-	public void setUserId(String user_id) {
-		this.userId = user_id;
-	}
-
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return content;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(String content) {
+		this.userId = userId;
 		this.content = content;
-	}
-
-	/**
-	 * @return the media
-	 */
-	public String getMedia() {
-		return media;
-	}
-
-	/**
-	 * @param media the media to set
-	 */
-	public void setMedia(String media) {
 		this.media = media;
-	}
-
-	/**
-	 * @return the likes_count
-	 */
-	public Long getLikesCount() {
-		return likesCount;
-	}
-
-	/**
-	 * @param likes_count the likes_count to set
-	 */
-	public void setLikesCount(Long likes_count) {
-		this.likesCount = likes_count;
-	}
-
-	/**
-	 * @return the comments_count
-	 */
-	public Long getCommentsCount() {
-		return commentsCount;
-	}
-
-	/**
-	 * @param comments_count the comments_count to set
-	 */
-	public void setComments_count(Long comments_count) {
-		this.commentsCount = comments_count;
+		this.likesCount = likesCount;
+		this.commentsCount = commentsCount;
+		this.tags = tags;
 	}
 	
-	// TODO: Need to fix the tags in the constructor
-	public PostsEntity(Posts post) {
-		this(post.getPostId(), post.getUserId(),
-				post.getContent(), post.getMedia(),
-				post.getLikesCount(), post.getCommentsCount());
+
+	
+	public PostsEntity(TagsEntity tags) {
+		this.tags = tags;
 	}
+	
+	
+	/**
+	 * Converts a posts objects into a posts entity
+	 * @param post
+	 */
+	public PostsEntity(Posts post) {
+        this(post.getPostId(), 
+             post.getUserId(),
+             post.getContent(), 
+             post.getMedia(),
+             post.getLikesCount(), 
+             post.getCommentsCount());
+        	post.getTagName();
+
+    }
+	
 }

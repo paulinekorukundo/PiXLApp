@@ -12,8 +12,11 @@ import Home from "./components/Home";
 
 import Auth from "./components/Auth";
 import Profile from "./components/Profile";
+import PostsList from "./components/Posts/PostsList";
+import PostForm from "./components/Posts/PostForm";
 
 function App() {
+  // const [formOpened, setFormOpened] = useState(false);
   return (
     <MantineProvider>
       <AppProvider>
@@ -27,6 +30,10 @@ function App() {
             <Route path="register" element={<Auth isRegister />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
+          {/* <Container> */}
+          <Route path="/posts" element={<PostsList />} />
+          <Route path="/add-post" element={<PostForm />} />
+          {/* </Container> */}
         </Routes>
       </AppProvider>
     </MantineProvider>

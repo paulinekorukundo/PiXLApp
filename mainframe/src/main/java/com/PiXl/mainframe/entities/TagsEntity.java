@@ -3,77 +3,79 @@ package com.PiXl.mainframe.entities;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.PiXl.mainframe.models.Tags;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name = "tags")
+@Table(name = "tag")
+@NoArgsConstructor
+@Setter
+@Getter
 public class TagsEntity {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_id")
     private Long tagId;
 
-    @Column(name = "name", nullable = false, unique = true, length = 100)
+	/**
+     * The name of the tag.
+     */
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-	@ManyToMany(mappedBy = "tags")
+    /**
+     * Set of posts associated with this tag.
+     */
+    @OneToMany(mappedBy = "tags", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @Getter
     private Set<PostsEntity> posts = new HashSet<>();
 	
-    public TagsEntity(Long id, String name, Set<PostsEntity> posts) {
+    
+    /**
+     * Constructs a new TagsEntity with the given id and name.
+     *
+     * @param id The ID of the tag.
+     * @param name The name of the tag.
+     */
+	public TagsEntity(Long id, String name) {
 		super();
 		this.tagId = id;
 		this.name = name;
-		this.posts = posts;
 	}
-
+	
 	/**
-	 * @return the id
-	 */
-	public Long getTagId() {
-		return tagId;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setTagId(Long id) {
+     * Constructs a new TagsEntity with the given id, name, and associated posts.
+     *
+     * @param id The ID of the tag.
+     * @param name The name of the tag.
+     * @param postsEntity Set of posts associated with this tag.
+     */
+    public TagsEntity(Long id, String name, Set<PostsEntity> postsEntity) {
+		super();
 		this.tagId = id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
 		this.name = name;
+		this.posts = postsEntity;
 	}
 
-	/**
-	 * @return the posts
-	 */
-	public Set<PostsEntity> getPosts() {
-		return posts;
-	}
-
-	/**
-	 * @param posts the posts to set
-	 */
-	public void setPosts(Set<PostsEntity> posts) {
-		this.posts = posts;
-	}
+    public void addPost(PostsEntity post) {
+        posts.add(post);
+        post.setTags(this);
+    }
 
 	@Override
 	public int hashCode() {
@@ -92,7 +94,16 @@ public class TagsEntity {
 		return Objects.equals(tagId, other.tagId) && Objects.equals(name, other.name) && Objects.equals(posts, other.posts);
 	}
     
-//	public TagsEntity(Tags tag) {
-//		this(tag.getId(), tag.getName());
-//	}
+	 /**
+     * Constructs a new TagsEntity from an existing Tags object.
+     *
+     * @param tag The Tags object to copy from.
+     */
+	public TagsEntity(Tags tag) {
+		this.tagId = tag.getTagId();
+		this.name = tag.getName();
+		this.posts = tag.getPosts().stream()
+				.map(PostsEntity::new)
+				.collect(Collectors.toSet());
+	}
 }

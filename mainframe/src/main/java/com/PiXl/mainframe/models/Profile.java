@@ -52,14 +52,14 @@ public class Profile {
 	 */
 	public Profile(ProfileEntity pe) {
 		this(
-				pe.getProfileId(),
-				pe.getUserId(),
-				pe.getFirstName(),
-				pe.getLastName(),
-				pe.getBio(),
-				pe.getFoodPreferences(),
-				pe.getProfilePicture()
-				);
+			pe.getProfileId(),
+			pe.getUserId(),
+			pe.getFirstName(),
+			pe.getLastName(),
+			pe.getBio(),
+			pe.getFoodPreferences(),
+			pe.getProfilePicture()
+			);
 	}
 
 }

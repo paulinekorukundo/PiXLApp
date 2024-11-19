@@ -1,5 +1,7 @@
 package com.PiXl.mainframe.entities;
 
+import java.util.Objects;
+
 import com.PiXl.mainframe.models.Profile;
 
 import jakarta.persistence.Column;
@@ -58,6 +60,25 @@ public class ProfileEntity {
 		this.bio = profile.getBio();
 		this.foodPreferences = profile.getFoodPreference();
 		this.profilePicture = profile.getProfilePicture();
+	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(bio, firstName, foodPreferences, lastName, profileId, profilePicture, userId);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProfileEntity other = (ProfileEntity) obj;
+		return Objects.equals(profileId, other.profileId) && Objects.equals(userId, other.userId);
 	}
 
 }
