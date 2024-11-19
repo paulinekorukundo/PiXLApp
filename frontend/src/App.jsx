@@ -11,6 +11,7 @@ import Layout from "./components/Layout";
 import Home from "./components/Home";
 
 import Auth from "./components/Auth";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
           <Route path="auth">
             <Route path="login" element={<Auth />} />

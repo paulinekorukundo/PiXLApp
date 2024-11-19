@@ -10,7 +10,7 @@ export default function Auth({ isRegister }) {
 
   const form = useForm({
     mode: "controlled",
-    initialValues: { email: "", password: "" },
+    initialValues: { username:"",email: "", password: "" },
     validate: {
       email: isEmail("Invalid email"),
       password: hasLength({ min: 6, error: "Password is too short" }),
@@ -33,7 +33,12 @@ export default function Auth({ isRegister }) {
               appState.login(form.values);
             }
           })}
-        >
+        >{ isRegister         &&  <TextInput
+        {...form.getInputProps("username")}
+        mt="md"
+        label="Username"
+        placeholder="Username"
+      />}
           <TextInput
             {...form.getInputProps("email")}
             mt="md"
@@ -42,6 +47,7 @@ export default function Auth({ isRegister }) {
           />
           <TextInput
             {...form.getInputProps("password")}
+            mt="md"
             label="Password"
             placeholder="password"
             type="password"
