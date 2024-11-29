@@ -2,4 +2,7 @@
     display: inline-block;
   }
 
-  
+  .image-icon{
+    width: rem(18);
+    height: rem(18);
+  }

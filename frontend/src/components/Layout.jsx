@@ -18,6 +18,9 @@ export default function Layout() {
           <Flex justify="space-between">
             <Link to="/">PiXL</Link>
             <Group gap={5} visibleFrom="sm">
+            <Link className="menu-item" to="/posts">
+                Timeline
+              </Link>
               <Link className="menu-item" to="/profile">
                 Profile
               </Link>

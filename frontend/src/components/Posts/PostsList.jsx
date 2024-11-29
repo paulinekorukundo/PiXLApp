@@ -1,13 +1,48 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Card, Text, Loader, Group, Image } from "@mantine/core";
+import { Card, Text, Loader, Group, Image, Button, ActionIcon, Modal, TextInput, FileInput } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
+import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import "../../assets/General.css";
+import { useAppContext } from "../../context/AppContext";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
- 
+  
+  // User
+  const { userDetails } = useAppContext();
+
+  // Create a post
+  const [opened, { open, close }] = useDisclosure(false);
+  const [content, setContent] = useState("");
+  const [tag, setTag] = useState("");
+  const [media, setMedia] = useState("");
+
+  const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
+
+  const handleSubmit = async () => {
+    try {
+      const formData = new FormData();
+        formData.append("media", media);
+        formData.append("userId", userId);
+        formData.append("content", content);
+        if (tag) formData.append("tag", tag);
+
+      await axios.post("http://localhost:8080/api/v1/posts/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      alert("Post created!");
+      close();
+    } catch (error) {
+      console.error("Error saving post:", error);
+    }
+  };
+
+
+  //View posts
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -53,6 +88,7 @@ function PostsList() {
   if (loading) return <Loader />;
 
   return (
+    <>
     <Card>
       {posts?.length > 0 ? (
         posts.map((post) => (
@@ -97,6 +133,55 @@ function PostsList() {
         <Text>No posts available</Text>
       )}
     </Card>
+
+    {/* <Button fullWidth radius="md" mt="sm" size="md" variant="default"
+    onClick={open}
+    >
+      Create Post
+    </Button> */}
+    <ActionIcon size={42} 
+      variant="default" 
+      aria-label="Add Post"
+      onClick={open}
+      >
+        
+      <IconPlus 
+      className={classes.like} stroke={1.5} 
+       />
+    </ActionIcon>
+    
+
+    <Modal opened={opened} onClose={close} title="Add Post">
+      <TextInput
+        disabled
+        label="Username"
+        value={userDetails.email}
+      />
+      <TextInput
+        label="Content"
+        placeholder="Post Description"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <FileInput
+        clearable
+        rightSection={icon}
+        label="Upload Media"
+        placeholder="Add Media"
+        accept="image/png,image/jpeg"
+        onChange={(media) => setMedia(media)} 
+      />
+      <TextInput
+        label="Tag"
+        placeholder="Add Tag to Post"
+        value={tag}
+        onChange={(e) => setTag(e.target.value)}
+      />
+      <Group position="right" mt="md">
+        <Button onClick={handleSubmit}>Save</Button>
+      </Group>
+    </Modal>
+    </>
   );
 }
 
