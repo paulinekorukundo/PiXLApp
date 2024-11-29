@@ -1,15 +1,25 @@
 package com.PiXl.mainframe.services.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.PiXl.mainframe.entities.PostsEntity;
+import com.PiXl.mainframe.entities.TagsEntity;
+import com.PiXl.mainframe.exceptions.FileStorageException;
 import com.PiXl.mainframe.models.Posts;
 import com.PiXl.mainframe.repositories.PostsRepository;
+import com.PiXl.mainframe.repositories.TagsRepository;
 import com.PiXl.mainframe.services.PostsService;
 
 
@@ -18,6 +28,9 @@ public class PostsServiceImpl implements PostsService {
 	
 	@Autowired
 	private PostsRepository postRepo;
+	
+	@Autowired
+	private TagsRepository tagsRepo;
 	
 	private static long offset = 0;
 	
@@ -44,10 +57,72 @@ public class PostsServiceImpl implements PostsService {
 		
 	}
 
-	@Override
-	public Posts saveNewPost(Posts post) {
-		PostsEntity savedPost = postRepo.save(of(post));
-		return of(savedPost);
+	private final Path fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
+
+    public void PostService() {
+        try {
+            Files.createDirectories(this.fileStorageLocation);
+        } catch (Exception ex) {
+            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+        }
+    }
+
+    @Override
+    public Posts saveNewPost(MultipartFile file, String userId, String content, String tagName) {
+        try {
+
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            
+            if (fileName.contains("..")) {
+                throw new FileStorageException("Invalid path sequence in filename: " + fileName);
+            }
+            String newFileName = System.currentTimeMillis() + "_" + fileName;
+            Path targetLocation = this.fileStorageLocation.resolve(newFileName);
+            Files.createDirectories(targetLocation.getParent());
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            PostsEntity postEntity = new PostsEntity();
+            postEntity.setUserId(userId);
+            postEntity.setContent(content);
+            postEntity.setMedia(newFileName); 
+
+            if (tagName != null && !tagName.isEmpty()) {
+                TagsEntity tag = tagsRepo.findByName(tagName)
+                    .orElseGet(() -> {
+                        TagsEntity newTag = new TagsEntity();
+                        newTag.setName(tagName);
+                        return tagsRepo.save(newTag);
+                    });
+                postEntity.setTags(tag);
+            }
+
+            PostsEntity savedPostEntity = postRepo.save(postEntity);
+
+            return new Posts(savedPostEntity);
+
+        } catch (IOException ex) {
+            throw new FileStorageException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
+        }
+    }
+    
+    // PK Comment: Creates post with new tag but no media url
+    @Override
+	public Posts savePost(Posts post) {
+	    PostsEntity postEntity = of(post);
+
+	    if (post.getTagName() != null) {
+	        TagsEntity tag = tagsRepo.findByName(post.getTagName())
+	            .orElseGet(() -> {
+
+	                TagsEntity newTag = new TagsEntity();
+	                newTag.setName(post.getTagName());
+	                return tagsRepo.save(newTag);
+	            });
+	        postEntity.setTags(tag);
+	    }
+
+	    PostsEntity savedPost = postRepo.save(postEntity);
+	    return of(savedPost);
 	}
 
 	@Override

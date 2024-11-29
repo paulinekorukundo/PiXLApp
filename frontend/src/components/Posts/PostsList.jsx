@@ -23,21 +23,34 @@ function PostsList() {
 
   const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
 
+  const [message, setMessage] = useState("");
+
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
-        formData.append("media", media);
-        formData.append("userId", userId);
-        formData.append("content", content);
-        if (tag) formData.append("tag", tag);
+      formData.append("media", media);
+      formData.append("userId", userDetails.email);
+      formData.append("content", content);
+      if (tag) formData.append("tag", tag);
 
-      await axios.post("http://localhost:8080/api/v1/posts/", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      alert("Post created!");
+      await axios.post(
+        "http://localhost:8080/api/v1/posts/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setMessage("Post created successfully!");
       close();
     } catch (error) {
       console.error("Error saving post:", error);
+      if (error.response) {
+        setMessage(`Error: ${error.response.data.message}`);
+      } else {
+        setMessage("An unexpected error occurred");
+      }
     }
   };
 
@@ -103,10 +116,10 @@ function PostsList() {
             >
               <Card.Section>
                 <Image
-                  src="https://images.unsplash.com/photo-1447078806655-40579c2520d6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  // src={post.media} || placeholder_image
+                  // src="https://images.unsplash.com/photo-1447078806655-40579c2520d6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  src={post.media ? `${process.env.REACT_APP_API_URL}/media/${post.media}` : "public/coming-soon.png"} 
                   h={160}
-                  alt="Food!"
+                  alt="Post Media"
                 />
               </Card.Section>
                 <Group mt="md" position="apart">
