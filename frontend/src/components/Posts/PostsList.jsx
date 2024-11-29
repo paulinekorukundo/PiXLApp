@@ -7,11 +7,13 @@ import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import "../../assets/General.css";
 import { useAppContext } from "../../context/AppContext";
+import { API_URL } from "../../config";  
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+  const [loadedImages, setLoadedImages] = useState({});
+
   // User
   const { userDetails } = useAppContext();
 
@@ -54,6 +56,28 @@ function PostsList() {
     }
   };
 
+  
+  //Get Images
+  useEffect(() => {
+    const loadImages = async () => {
+      if (posts.length === 0) return;
+
+      const imagePromises = posts.map(async (post) => {
+        try {
+          const response = await axios.get(`${API_URL}/media/${post.media}`);
+          return response.data;
+        } catch (error) {
+          console.error(`Error loading image for post ${post.postId}:`, error);
+          return null;
+        }
+      });
+
+      const loadedImages = await Promise.all(imagePromises);
+      setLoadedImages(loadedImages.reduce((acc, img, index) => ({ ...acc, [posts[index].postId]: img }), {}));
+    };
+
+    loadImages();
+  }, [posts, API_URL]);
 
   //View posts
   useEffect(() => {
@@ -62,6 +86,7 @@ function PostsList() {
         const response = await axios.get("http://localhost:8080/api/v1/posts/");
         console.log("Response: ", response.data);
         setPosts(response.data || []); 
+
         
     } catch (error) {
         console.error("Error fetching posts:", error);
@@ -117,9 +142,12 @@ function PostsList() {
               <Card.Section>
                 <Image
                   // src="https://images.unsplash.com/photo-1447078806655-40579c2520d6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  src={post.media ? `${process.env.REACT_APP_API_URL}/media/${post.media}` : "public/coming-soon.png"} 
+                  src={post.media ? `${API_URL}/media/${post.media}` : '/coming-soon.png'}
+                  alt={`Post image for ${post.content}`}
                   h={160}
-                  alt="Post Media"
+                  onError={(e) => {
+                    e.target.src = "public/coming-soon.png"
+                  }}
                 />
               </Card.Section>
                 <Group mt="md" position="apart">

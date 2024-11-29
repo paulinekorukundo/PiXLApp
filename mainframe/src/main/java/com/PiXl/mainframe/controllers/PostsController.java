@@ -79,17 +79,6 @@ public class PostsController {
 		}
 	}
 	
-//	@RequestMapping(value = "/", method = RequestMethod.POST)
-//	@ResponseBody
-//	private ResponseEntity<Object> savePost(@RequestBody Posts json){
-//		Posts savedPost = postService.saveNewPost(json);
-//		if(savedPost == null) {
-//			return ResponseHandler.generateResponse("Error saving post.", HttpStatus.NOT_FOUND);
-//		}else {
-//			return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, savedPost);
-//		}
-//	}
-	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> savePost(@RequestParam("media") MultipartFile media,
