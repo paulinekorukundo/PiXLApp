@@ -5,24 +5,35 @@ import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
 import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-// import { rem } from "@mantine/styles";
 import "../../assets/General.css";
+import { useAppContext } from "../../context/AppContext";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   
+  // User
+  const { userDetails } = useAppContext();
+
   // Create a post
   const [opened, { open, close }] = useDisclosure(false);
   const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("");
+  const [tag, setTag] = useState("");
+  const [media, setMedia] = useState("");
 
   const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
 
   const handleSubmit = async () => {
     try {
-      const postData = { content, userId };
-      await axios.post("http://localhost:8080/api/v1/posts/", postData);
+      const formData = new FormData();
+        formData.append("media", media);
+        formData.append("userId", userId);
+        formData.append("content", content);
+        if (tag) formData.append("tag", tag);
+
+      await axios.post("http://localhost:8080/api/v1/posts/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       alert("Post created!");
       close();
     } catch (error) {
@@ -142,10 +153,9 @@ function PostsList() {
 
     <Modal opened={opened} onClose={close} title="Add Post">
       <TextInput
-        label="Post Title"
-        placeholder="Title"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
+        disabled
+        label="Username"
+        value={userDetails.email}
       />
       <TextInput
         label="Content"
@@ -159,9 +169,14 @@ function PostsList() {
         label="Upload Media"
         placeholder="Add Media"
         accept="image/png,image/jpeg"
-        // onChange={setValue} 
+        onChange={(media) => setMedia(media)} 
       />
-
+      <TextInput
+        label="Tag"
+        placeholder="Add Tag to Post"
+        value={tag}
+        onChange={(e) => setTag(e.target.value)}
+      />
       <Group position="right" mt="md">
         <Button onClick={handleSubmit}>Save</Button>
       </Group>
