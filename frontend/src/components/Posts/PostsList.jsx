@@ -1,13 +1,37 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Card, Text, Loader, Group, Image } from "@mantine/core";
+import { Card, Text, Loader, Group, Image, Button, ActionIcon, Modal, TextInput, FileInput } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
+import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+// import { rem } from "@mantine/styles";
+import "../../assets/General.css";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
- 
+  
+  // Create a post
+  const [opened, { open, close }] = useDisclosure(false);
+  const [content, setContent] = useState("");
+  const [userId, setUserId] = useState("");
+
+  const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
+
+  const handleSubmit = async () => {
+    try {
+      const postData = { content, userId };
+      await axios.post("http://localhost:8080/api/v1/posts/", postData);
+      alert("Post created!");
+      close();
+    } catch (error) {
+      console.error("Error saving post:", error);
+    }
+  };
+
+
+  //View posts
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -53,6 +77,7 @@ function PostsList() {
   if (loading) return <Loader />;
 
   return (
+    <>
     <Card>
       {posts?.length > 0 ? (
         posts.map((post) => (
@@ -97,6 +122,51 @@ function PostsList() {
         <Text>No posts available</Text>
       )}
     </Card>
+
+    {/* <Button fullWidth radius="md" mt="sm" size="md" variant="default"
+    onClick={open}
+    >
+      Create Post
+    </Button> */}
+    <ActionIcon size={42} 
+      variant="default" 
+      aria-label="Add Post"
+      onClick={open}
+      >
+        
+      <IconPlus 
+      className={classes.like} stroke={1.5} 
+       />
+    </ActionIcon>
+    
+
+    <Modal opened={opened} onClose={close} title="Add Post">
+      <TextInput
+        label="Post Title"
+        placeholder="Title"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
+      />
+      <TextInput
+        label="Content"
+        placeholder="Post Description"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
+      <FileInput
+        clearable
+        rightSection={icon}
+        label="Upload Media"
+        placeholder="Add Media"
+        accept="image/png,image/jpeg"
+        // onChange={setValue} 
+      />
+
+      <Group position="right" mt="md">
+        <Button onClick={handleSubmit}>Save</Button>
+      </Group>
+    </Modal>
+    </>
   );
 }
 

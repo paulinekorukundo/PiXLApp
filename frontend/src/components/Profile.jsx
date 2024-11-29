@@ -21,6 +21,7 @@ export default function Profile() {
   ));
 
   return (
+    <>
     <Card>
       <Card.Section
         h={250}
@@ -49,8 +50,11 @@ export default function Profile() {
           <Button fullWidth radius="md" mt="xl" size="md" variant="default">
             Follow
           </Button>
+          
         </Flex>
       </Flex>
     </Card>
+    
+    </>
   );
 }
