@@ -146,7 +146,7 @@ function PostsList() {
                   alt={`Post image for ${post.content}`}
                   h={160}
                   onError={(e) => {
-                    e.target.src = "public/coming-soon.png"
+                    e.target.src = "/coming-soon.png"
                   }}
                 />
               </Card.Section>
