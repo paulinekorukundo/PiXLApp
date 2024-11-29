@@ -33,4 +33,8 @@ public class PixlExceptions {
 	public ResponseEntity<String> handleAllOtherExceptions(Exception ex){
 	    return ResponseEntity.internalServerError().body("Unexpected error encountered!");
 	}
+	@ExceptionHandler(FileStorageException.class)
+	public ResponseEntity<String> handleFileStorageException(FileStorageException ex) {
+	    return ResponseEntity.status(HttpStatusCode.valueOf(404)).body(ex.getMessage());
+	}
 }

@@ -37,6 +37,8 @@ public interface TagsRepository extends JpaRepository<TagsEntity, Long>  {
 	 * @return a list of TagsEntity objects whose names contain the specified substring, ignoring case
 	 */
 	List<TagsEntity> findByNameContainingIgnoreCase(String name);
+	
+	Optional<TagsEntity> findByName(String name);
 
 	/**
 	 * Find tags associated with the specified posts.

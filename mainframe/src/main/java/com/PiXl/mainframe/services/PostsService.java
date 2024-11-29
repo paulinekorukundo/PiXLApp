@@ -1,6 +1,9 @@
 package com.PiXl.mainframe.services;
 
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.PiXl.mainframe.models.Posts;
 
 
@@ -9,7 +12,9 @@ public interface PostsService {
 	// GENERAL POSTS
 	List<Posts> getAllPosts();
     Posts getPostById(Long postId);
-    Posts saveNewPost(Posts post);
+    Posts savePost(Posts post);
+    Posts saveNewPost(MultipartFile file, String userId, String content, String tagName);
+    
     Posts editExistingPost(Posts post);
     void deletePost(Long postId);
     

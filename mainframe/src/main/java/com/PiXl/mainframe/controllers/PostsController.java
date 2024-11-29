@@ -1,19 +1,29 @@
 package com.PiXl.mainframe.controllers;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.PiXl.mainframe.exceptions.FileStorageException;
 import com.PiXl.mainframe.handler.ResponseHandler;
 import com.PiXl.mainframe.models.Posts;
 import com.PiXl.mainframe.services.PostsService;
@@ -71,14 +81,30 @@ public class PostsController {
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	@ResponseBody
-	private ResponseEntity<Object> savePost(@RequestBody Posts json){
-		Posts savedPost = postService.saveNewPost(json);
-		if(savedPost == null) {
-			return ResponseHandler.generateResponse("Error saving post.", HttpStatus.NOT_FOUND);
-		}else {
-			return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, savedPost);
-		}
+	public ResponseEntity<Object> savePost(@RequestParam("media") MultipartFile media,
+	                                       @RequestParam("userId") String userId,
+	                                       @RequestParam("content") String content,
+	                                       @RequestParam(value = "tag", required = false) String tagName) {
+	    try {
+	    	Posts savedPost = postService.saveNewPost(media, userId, content, tagName);
+
+	        return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, savedPost);
+	    } catch (FileStorageException e) {
+	        return ResponseHandler.generateResponse("Error saving post.", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+	    } catch (Exception e) {
+	        return ResponseHandler.generateResponse("Unexpected error occurred.", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+	    }
 	}
+
+	@GetMapping("/media/{filename}")
+	public ResponseEntity<Resource> getMedia(@PathVariable String filename) throws MalformedURLException {
+	    Path filePath = Paths.get("uploads/" + filename);
+	    Resource resource = new UrlResource(filePath.toUri());
+	    return ResponseEntity.ok()
+	                         .contentType(MediaType.IMAGE_JPEG)
+	                         .body(resource);
+	}
+	
 	
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
