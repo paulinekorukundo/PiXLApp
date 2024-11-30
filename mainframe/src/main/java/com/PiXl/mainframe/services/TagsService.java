@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.PiXl.mainframe.entities.PostsEntity;
-
+import com.PiXl.mainframe.entities.TagsEntity;
 import com.PiXl.mainframe.models.Tags;
 
 import jakarta.validation.Valid;
@@ -17,7 +17,7 @@ public interface TagsService {
 	 *
 	 * @return a list of all Tags objects available in the system
 	 */
-	List<Tags> getAllTags();
+	List<TagsEntity> getAllTags();
 	
 	/**
 	 * Retrieve a tag by its unique ID.
@@ -25,7 +25,7 @@ public interface TagsService {
 	 * @param id the unique identifier of the tag to retrieve
 	 * @return an Optional containing the Tags object if found, or an empty Optional if no tag is found with the specified ID
 	 */
-	Optional<Tags> getTagsById(Long id);
+	Optional<TagsEntity> getTagsById(Long id);
 	
 	/**
 	 * Retrieve tags whose names contain the specified substring, ignoring case.
@@ -33,7 +33,7 @@ public interface TagsService {
 	 * @param name the substring to search for in tag names
 	 * @return a list of Tags objects whose names contain the specified substring, ignoring case
 	 */
-	List<Tags> getTags(String name);
+	List<TagsEntity> getTags(String name);
 
 	/**
 	 * Retrieve all tags associated with a given set of posts.
@@ -41,7 +41,7 @@ public interface TagsService {
 	 * @param posts the set of PostsEntity objects to retrieve associated tags for
 	 * @return a list of Tags objects that are associated with the specified posts
 	 */
-	List<Tags> getAllTagsForPost(Set<PostsEntity> posts);
+	List<TagsEntity> getAllTagsForPost(Set<PostsEntity> posts);
 	
 	/**
 	 * Updates an existing tag in the repository
@@ -53,28 +53,30 @@ public interface TagsService {
 	 * Gets the most frequent tags
 	 * @return a list of the most frequent Tag objects 
 	 */
-	List<Tags> getMostFreqTags();
+	List<TagsEntity> getMostFreqTags();
 	
 	/**
 	 * Updates an existing tag in the repository
 	 * @param tag - The tag to be updated
 	 * @return tag - the updated tag object
 	 */
-	Tags update(@Valid Tags tags);
+	TagsEntity update(@Valid TagsEntity tags);
 	
     /**
      * Adds a new tag object
      * @param tag - the tag to be added 
      * @return tag - the added tag object
      */
-	Tags add(@Valid Tags tags);
+	TagsEntity add(@Valid TagsEntity tags);
 	
 	/**
 	 * Deletes an existing tag from the repository
 	 * @param tag - The tag to be deleted
 	 * @return true - the tag is successfully deleted
 	 */
-	boolean delete(@Valid Tags tags);   
+	boolean delete(@Valid TagsEntity tags);
+	
+	TagsEntity findOrCreateTagByName(String tagName);
 	
 
 }

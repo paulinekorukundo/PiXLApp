@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.PiXl.mainframe.models.Tags;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,7 +14,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,14 +37,17 @@ public class TagsEntity {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    /**
-     * Set of posts associated with this tag.
-     */
-    @OneToMany(mappedBy = "tags", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    @Getter
-    private Set<PostsEntity> posts = new HashSet<>();
+//    /**
+//     * Set of posts associated with this tag.
+//     */
+//    @OneToMany(mappedBy = "tags", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    @Getter
+//    private Set<PostsEntity> posts = new HashSet<>();
 	
+    @JsonBackReference
+    @ManyToMany (mappedBy = "tagsForPost", cascade = {CascadeType.MERGE})
+    private Set<PostsEntity> postsForTag = new HashSet<>();;
     
     /**
      * Constructs a new TagsEntity with the given id and name.
@@ -52,9 +55,8 @@ public class TagsEntity {
      * @param id The ID of the tag.
      * @param name The name of the tag.
      */
-	public TagsEntity(Long id, String name) {
+	public TagsEntity(String name) {
 		super();
-		this.tagId = id;
 		this.name = name;
 	}
 	
@@ -65,21 +67,19 @@ public class TagsEntity {
      * @param name The name of the tag.
      * @param postsEntity Set of posts associated with this tag.
      */
-    public TagsEntity(Long id, String name, Set<PostsEntity> postsEntity) {
+    public TagsEntity(String name, PostsEntity postsEntity) {
 		super();
-		this.tagId = id;
 		this.name = name;
-		this.posts = postsEntity;
+		this.postsForTag.add(postsEntity);
 	}
 
     public void addPost(PostsEntity post) {
-        posts.add(post);
-        post.setTags(this);
+        this.postsForTag.add(post);
     }
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(tagId, name, posts);
+		return Objects.hash(name);
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class TagsEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		TagsEntity other = (TagsEntity) obj;
-		return Objects.equals(tagId, other.tagId) && Objects.equals(name, other.name) && Objects.equals(posts, other.posts);
+		return Objects.equals(name, other.name);
 	}
     
 	 /**
@@ -102,8 +102,6 @@ public class TagsEntity {
 	public TagsEntity(Tags tag) {
 		this.tagId = tag.getTagId();
 		this.name = tag.getName();
-		this.posts = tag.getPosts().stream()
-				.map(PostsEntity::new)
-				.collect(Collectors.toSet());
+		this.postsForTag = tag.getPosts().stream().map(PostsEntity :: new).collect(Collectors.toSet());
 	}
 }

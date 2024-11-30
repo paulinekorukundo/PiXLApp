@@ -2,13 +2,11 @@ package com.PiXl.mainframe.repositories;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.PiXl.mainframe.entities.PostsEntity;
 import com.PiXl.mainframe.entities.TagsEntity;
 
 
@@ -46,15 +44,24 @@ public interface TagsRepository extends JpaRepository<TagsEntity, Long>  {
 	 * @param posts a set of Posts objects to search for associated tags
 	 * @return a list of TagsEntity objects that are associated with the given set of posts, ignoring case
 	 */
-	List<TagsEntity> findByPostsContainingIgnoreCase(Set<PostsEntity> posts);
+//	List<TagsEntity> findByPostsContainingIgnoreCase(Set<PostsEntity> posts);
 	
 	/**
 	 * Finds the most frequent tags and lists them in descending order
 	 * 
 	 * @return a list of TagsEntity objects with the highest frequency
 	 */
-	@Query("SELECT t FROM TagsEntity t ORDER BY SIZE(t.posts) DESC")
+	@Query("SELECT t FROM TagsEntity t ORDER BY SIZE(t.postsForTag) DESC")
 	List<TagsEntity> findMostFrequentTags();
 	
+	/**
+	 * Find tags whose name is an exact match to the given tag name
+	 * 
+	 * @param name
+	 * @return a list of TagsEntity objects whose names match exactly the given parameter
+	 */
+	List<TagsEntity> findAllByName(String name);
+	
+	Boolean existsByName(String name);
 	
 }

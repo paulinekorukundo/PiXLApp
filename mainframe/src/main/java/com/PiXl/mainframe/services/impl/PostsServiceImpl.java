@@ -6,8 +6,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import com.PiXl.mainframe.models.Posts;
 import com.PiXl.mainframe.repositories.PostsRepository;
 import com.PiXl.mainframe.repositories.TagsRepository;
 import com.PiXl.mainframe.services.PostsService;
+import com.PiXl.mainframe.services.TagsService;
 
 
 @Service
@@ -32,19 +35,35 @@ public class PostsServiceImpl implements PostsService {
 	@Autowired
 	private TagsRepository tagsRepo;
 	
+	@Autowired
+	private TagsService tagsServ;
+	
 	private static long offset = 0;
 	
+
+	private final Path fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
+
+    public void PostService() {
+        try {
+            Files.createDirectories(this.fileStorageLocation);
+        } catch (Exception ex) {
+            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+        }
+    }
+	
 	@Override
-	public List<Posts> getAllPosts() {
+	public List<PostsEntity> getAllPosts() {
 		List<PostsEntity> postEntities = postRepo.findAll();
 		if(postEntities.isEmpty()) {
-			return new ArrayList<Posts>();
+			return new ArrayList<PostsEntity>();
 		}
-		List<Posts> posts= new ArrayList<>();
-		for(PostsEntity p : postEntities) {
-			posts.add(of(p));
-		}
-		return posts;
+		return postEntities;
+//		return postEntities.stream().map(this :: of).collect(Collectors.toList());
+//		List<Posts> posts= new ArrayList<>();
+//		for(PostsEntity p : postEntities) {
+//			posts.add(of(p));
+//		}
+//		return posts;
 	}
 
 	@Override
@@ -57,22 +76,48 @@ public class PostsServiceImpl implements PostsService {
 		
 	}
 
-	private final Path fileStorageLocation = Paths.get("uploads").toAbsolutePath().normalize();
-
-    public void PostService() {
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
-    }
-
-    @Override
-    public Posts saveNewPost(MultipartFile file, String userId, String content, String tagName) {
-        try {
-
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            
+//    @Override
+//    public Posts saveNewPost(MultipartFile file, String userId, String content, String tagName) {
+//        try {
+//
+//            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//            
+//            if (fileName.contains("..")) {
+//                throw new FileStorageException("Invalid path sequence in filename: " + fileName);
+//            }
+//            String newFileName = System.currentTimeMillis() + "_" + fileName;
+//            Path targetLocation = this.fileStorageLocation.resolve(newFileName);
+//            Files.createDirectories(targetLocation.getParent());
+//            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+//
+//            PostsEntity postEntity = new PostsEntity();
+//            postEntity.setUserId(userId);
+//            postEntity.setContent(content);
+//            postEntity.setMedia(newFileName); 
+//
+//            if (tagName != null && !tagName.isEmpty()) {
+//                TagsEntity tag = tagsRepo.findByName(tagName)
+//                    .orElseGet(() -> {
+//                        TagsEntity newTag = new TagsEntity();
+//                        newTag.setName(tagName);
+//                        return tagsRepo.save(newTag);
+//                    });
+//                postEntity.setTags(tag);
+//            }
+//
+//            PostsEntity savedPostEntity = postRepo.save(postEntity);
+//
+//            return new Posts(savedPostEntity);
+//
+//        } catch () {
+//            
+//        }
+//    }
+   
+	@Override
+	public PostsEntity saveNewPost(PostsEntity post, Set<TagsEntity> tags, MultipartFile file) {
+		try {
+			String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             if (fileName.contains("..")) {
                 throw new FileStorageException("Invalid path sequence in filename: " + fileName);
             }
@@ -80,71 +125,64 @@ public class PostsServiceImpl implements PostsService {
             Path targetLocation = this.fileStorageLocation.resolve(newFileName);
             Files.createDirectories(targetLocation.getParent());
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            post.setMedia(newFileName);
+            
+            HashSet<TagsEntity> tagsToSave = new HashSet<>();
+            
 
-            PostsEntity postEntity = new PostsEntity();
-            postEntity.setUserId(userId);
-            postEntity.setContent(content);
-            postEntity.setMedia(newFileName); 
+            if(!tags.isEmpty()) {
+            	for(TagsEntity t : tags) {
+            		tagsToSave.add(tagsServ.findOrCreateTagByName(t.getName()));
+            	}
+            	tagsRepo.saveAll(tagsToSave);
+    		}
+            
+    		post.setTagsForPost(tagsToSave);
+    		PostsEntity savedPost = postRepo.save(post);
+    		return savedPost;
 
-            if (tagName != null && !tagName.isEmpty()) {
-                TagsEntity tag = tagsRepo.findByName(tagName)
-                    .orElseGet(() -> {
-                        TagsEntity newTag = new TagsEntity();
-                        newTag.setName(tagName);
-                        return tagsRepo.save(newTag);
-                    });
-                postEntity.setTags(tag);
-            }
-
-            PostsEntity savedPostEntity = postRepo.save(postEntity);
-
-            return new Posts(savedPostEntity);
-
-        } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
-        }
-    }
-    
-    // PK Comment: Creates post with new tag but no media url
-    @Override
+		}catch(IOException ex) {
+			throw new FileStorageException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
+		}
+	}
+	
+	@Override
 	public Posts savePost(Posts post) {
-	    PostsEntity postEntity = of(post);
-
-	    if (post.getTagName() != null) {
-	        TagsEntity tag = tagsRepo.findByName(post.getTagName())
-	            .orElseGet(() -> {
-
-	                TagsEntity newTag = new TagsEntity();
-	                newTag.setName(post.getTagName());
-	                return tagsRepo.save(newTag);
-	            });
-	        postEntity.setTags(tag);
-	    }
-
-	    PostsEntity savedPost = postRepo.save(postEntity);
-	    return of(savedPost);
+//	    PostsEntity postEntity = of(post);
+//	    if (post.getTagName() != null) {
+//	        TagsEntity tag = tagsRepo.findByName(post.getTagName())
+//	            .orElseGet(() -> {
+//	                TagsEntity newTag = new TagsEntity();
+//	                newTag.setName(post.getTagName());
+//	                return tagsRepo.save(newTag);
+//	            });
+//	        postEntity.setTags(tag);
+//	    }
+//	    PostsEntity savedPost = postRepo.save(postEntity);
+//	    return of(savedPost);
+		return null;
 	}
 
 	@Override
-	public Posts editExistingPost(Posts post) {
+	public PostsEntity editExistingPost(PostsEntity post) {
 		if(!postRepo.existsById(post.getPostId())) {
 			throw new IllegalArgumentException("Post does not exist!");
 		}
-		PostsEntity savedPost = postRepo.save(of(post));
-		return of(savedPost);
+		PostsEntity savedPost = postRepo.save(post);
+		return savedPost;
 	}
 
 	@Override
-	public List<Posts> getAllPostForUser(String userId) {
+	public List<PostsEntity> getAllPostForUser(String userId) {
 		List<PostsEntity> postEntities = postRepo.findByUserId(userId);
 		if(postEntities.isEmpty()) {
-			return new ArrayList<Posts>();
+			return new ArrayList<PostsEntity>();
 		}
-		List<Posts> posts= new ArrayList<>();
-		for(PostsEntity p : postEntities) {
-			posts.add(of(p));
-		}
-		return posts;
+//		List<Posts> posts= new ArrayList<>();
+//		for(PostsEntity p : postEntities) {
+//			posts.add(of(p));
+//		}
+		return postEntities;
 	}
 
 	@Override
@@ -190,7 +228,6 @@ public class PostsServiceImpl implements PostsService {
 		return posts;
 	}
 
-	// Can we not store User based Liked? Just Likes in total.
 	@Override
 	public void likePost(Long postId) {
 		PostsEntity post = postRepo.findById(postId).get();
@@ -230,6 +267,16 @@ public class PostsServiceImpl implements PostsService {
 	public List<Posts> searchPosts(String query) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<PostsEntity> savePostsInBatch(List<PostsEntity> posts) {
+//		List<PostsEntity> postsEn = posts.stream().map(this :: convertToEntity).collect(Collectors.toList());
+		Iterable<PostsEntity> savedPosts = postRepo.saveAll(posts);
+		List<PostsEntity> savedPostsEn = new ArrayList<>();
+//		savedPosts.forEach(p -> savedPostsModels.add(convertToModel(p)));
+		savedPosts.forEach(p -> savedPostsEn.add(p));
+		return savedPostsEn;
 	}
 
 }

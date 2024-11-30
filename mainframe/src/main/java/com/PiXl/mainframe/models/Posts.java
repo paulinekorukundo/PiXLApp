@@ -1,8 +1,12 @@
 package com.PiXl.mainframe.models;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.PiXl.mainframe.entities.PostsEntity;
+import com.PiXl.mainframe.entities.TagsEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,19 +20,20 @@ public class Posts {
 	private String media;
 	private Long likesCount;
 	private Long commentsCount;
-	private String tagName;
+//	private String tagName;
+	private Set<Tags> tags = new HashSet<>();
 	
-	public Posts(Long post_id, String user_id, String content, String media, 
-			Long likes_count, Long comments_count, String tagName) {
+	public Posts() {}
+	
+	public Posts(String user_id, String content, String media, 
+			Long likes_count, Long comments_count, Set<Tags> tags) {
 		super();
-		this.postId = post_id;
 		this.userId = user_id;
 		this.content = content;
 		this.media = media;
 		this.likesCount = likes_count;
 		this.commentsCount = comments_count;
-//		this.setTags(tags);
-		this.tagName = tagName;
+		this.tags = tags;
 	}
 
 
@@ -66,7 +71,7 @@ public class Posts {
 		this.media = post.getMedia();
 		this.likesCount = post.getLikesCount();
 		this.commentsCount = post.getCommentsCount();
-		this.tagName = post.getTags().getName();
+		this.tags = post.getTagsForPost().stream().map(Tags::new).collect(Collectors.toSet());
 	}
 
 }
