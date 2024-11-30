@@ -39,7 +39,7 @@ public interface PostsService {
      * */
     
     // CONTENT DISCOVERY
-    List<Posts> getAllPostsWithTag(String tagName);
+    List<PostsEntity> getAllPostsWithTag(String tagName);
     public List<Posts> searchPosts(String query);
     
     // Batch Insert
