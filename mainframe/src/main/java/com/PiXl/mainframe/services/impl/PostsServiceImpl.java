@@ -1,5 +1,6 @@
 package com.PiXl.mainframe.services.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,9 +8,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -178,10 +181,6 @@ public class PostsServiceImpl implements PostsService {
 		if(postEntities.isEmpty()) {
 			return new ArrayList<PostsEntity>();
 		}
-//		List<Posts> posts= new ArrayList<>();
-//		for(PostsEntity p : postEntities) {
-//			posts.add(of(p));
-//		}
 		return postEntities;
 	}
 
@@ -246,21 +245,10 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public List<Posts> getAllPostsWithTag(String tagName) {
-//		List<PostsEntity> postEntities = postRepo.findAll();
-//		List<PostsEntity> filteredPosts = postEntities.stream()
-//			    .filter(post -> post.getTags()
-//			        .stream()
-//			        .anyMatch(tag -> tag.getName().contains(tagName)))
-//			    .collect(Collectors.toList());
-//		
-//		List<Posts> posts = new ArrayList<>();
-//		for(PostsEntity p: filteredPosts) {
-//			posts.add(of(p));
-//		}
-//		
-//		return posts;
-		return new ArrayList<Posts>();
+	public List<PostsEntity> getAllPostsWithTag(String tagName) {
+		TagsEntity tag = tagsRepo.findAllByName(tagName).get(0);
+		List<Long> postIds = postRepo.findAllPostIdFromTagId(tag.getTagId());
+		return postRepo.findByPostIdIn(postIds);
 	}
 
 	@Override
@@ -269,14 +257,43 @@ public class PostsServiceImpl implements PostsService {
 		return null;
 	}
 
+	private String fileExistsInFolder(String fileName) {
+        File folder = new File(fileStorageLocation.toString());
+        if (folder.exists() && folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.getName().contains(fileName)) {
+                        return file.getName();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+	
 	@Override
 	public List<PostsEntity> savePostsInBatch(List<PostsEntity> posts) {
-//		List<PostsEntity> postsEn = posts.stream().map(this :: convertToEntity).collect(Collectors.toList());
-		Iterable<PostsEntity> savedPosts = postRepo.saveAll(posts);
-		List<PostsEntity> savedPostsEn = new ArrayList<>();
-//		savedPosts.forEach(p -> savedPostsModels.add(convertToModel(p)));
-		savedPosts.forEach(p -> savedPostsEn.add(p));
-		return savedPostsEn;
+		List<PostsEntity> postsToSave = new ArrayList<>();
+		for(PostsEntity post : posts) {
+			// Handle Tags
+			HashSet<TagsEntity> tagsToSave = new HashSet<>();
+			if(!post.getTagsForPost().isEmpty()) {
+	        	for(TagsEntity t : post.getTagsForPost()) {
+	        		tagsToSave.add(tagsServ.findOrCreateTagByName(t.getName()));
+	        	}
+	        	tagsRepo.saveAll(tagsToSave);
+			}
+			post.setTagsForPost(tagsToSave);
+			
+			// Handle Media
+			post.setMedia(fileExistsInFolder(post.getMedia()));
+
+			postsToSave.add(post);
+		}
+		List<PostsEntity> savedPosts = new ArrayList<>();
+		postRepo.saveAll(postsToSave).forEach(savedPosts :: add);
+		return savedPosts;
 	}
 
 }

@@ -7,9 +7,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -32,9 +34,7 @@ import com.PiXl.mainframe.entities.PostsEntity;
 import com.PiXl.mainframe.entities.TagsEntity;
 import com.PiXl.mainframe.handler.ResponseHandler;
 import com.PiXl.mainframe.models.Posts;
-import com.PiXl.mainframe.models.Tags;
 import com.PiXl.mainframe.services.PostsService;
-import com.PiXl.mainframe.services.TagsService;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -43,8 +43,6 @@ public class PostsController {
 	
 	@Autowired
 	private PostsService postService;
-	@Autowired
-	private TagsService tagsService;
 	
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -191,28 +189,7 @@ public class PostsController {
 	@RequestMapping(value = "/batchInsert", method = RequestMethod.GET)
 	@ResponseBody
 	private ResponseEntity<Object> saveManyPosts(){
-//		CSVReader reader;
-		List<PostsEntity> posts = new ArrayList<PostsEntity>();
-//		try {
-//			reader = new CSVReader(new FileReader("batch.csv"));
-//			reader.readNext();
-//			ColumnPositionMappingStrategy<Posts> beanStrategy = new ColumnPositionMappingStrategy<Posts>();
-//			beanStrategy.setType(Posts.class);
-//			beanStrategy.setColumnMapping(new String[]{"userId", "content", "media", "tagName"});
-//			
-//			CsvToBean<Posts> csvToBean = new CsvToBean<Posts>();
-//			csvToBean.setCsvReader(reader);
-//			csvToBean.setMappingStrategy(beanStrategy);
-//			
-//			posts = csvToBean.parse();
-//		} catch (FileNotFoundException e) {
-//			posts = new ArrayList<>();
-//		} catch (CsvValidationException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
+		List<PostsEntity> posts = new ArrayList<>();
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader("batch.csv"));
@@ -220,15 +197,16 @@ public class PostsController {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				String[] tokens = line.split(",");
-				String userId = tokens[0];
-				String content = tokens[1];
-				String media = tokens[2];
-				String[] tags = tokens[3].split(",");
-				HashSet<Tags> newTags = new HashSet<>();
-				for(String tag : tags) {
-					newTags.add(new Tags());
-				}
-//				posts.add(new Posts(userId, content, media, (long) 0, (long) 0));
+				String userId = tokens[0].strip();
+				String content = tokens[1].strip();
+				String media = tokens[2].strip();
+				HashSet<TagsEntity> newTags = Arrays.stream(tokens[3].split(";"))
+                        .map(tag -> new TagsEntity(tag.strip()))
+                        .collect(Collectors.toCollection(HashSet::new));
+				
+				PostsEntity postEn = new PostsEntity(userId, content, media, 0l,0l);
+				postEn.setTagsForPost(newTags);
+				posts.add(postEn);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -239,6 +217,16 @@ public class PostsController {
 		}else {
 			List<PostsEntity> savedPosts = postService.savePostsInBatch(posts);
 			return ResponseHandler.generateResponse("Inserted Posts", HttpStatus.OK, savedPosts);
+		}
+	}
+	
+	@RequestMapping(value = "/findPostsByTag", method = RequestMethod.GET)
+	private ResponseEntity<Object> findPostsByTag(@RequestBody Map<String, String> post){
+		List<PostsEntity> filteredPosts = postService.getAllPostsWithTag(post.get("tagName"));
+		if(filteredPosts.isEmpty()) {
+			return ResponseHandler.generateResponse("No Posts for given tag", HttpStatus.NOT_FOUND);
+		}else {
+			return ResponseHandler.generateResponse("Filtered Posts", HttpStatus.OK, filteredPosts);
 		}
 	}
 }
