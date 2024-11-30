@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.PiXl.mainframe.dto.AuthResponse;
-import com.PiXl.mainframe.entities.ProfileEntity;
 import com.PiXl.mainframe.entities.UserEntity;
 import com.PiXl.mainframe.models.User;
-import com.PiXl.mainframe.repositories.ProfileRepository;
 import com.PiXl.mainframe.repositories.UsersRepository;
 import com.PiXl.mainframe.services.AuthService;
 

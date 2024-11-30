@@ -31,9 +31,10 @@ public class TagsServiceImpl implements TagsService{
 	 * @return a list of all Tags objects available in the system
 	 */
 	@Override
-	public List<Tags> getAllTags() {
+	public List<TagsEntity> getAllTags() {
 		var tagsEntities = (List<TagsEntity>) tagsRepository.findAll();
-		return from(tagsEntities);
+//		return from(tagsEntities);
+		return tagsEntities;
 	}
 
 	/**
@@ -43,9 +44,10 @@ public class TagsServiceImpl implements TagsService{
 	 * @return a list of Tags objects that are associated with the specified posts
 	 */
 	@Override
-	public List<Tags> getAllTagsForPost(Set<PostsEntity> posts) {
-	    var tagsEntities = tagsRepository.findByPostsContainingIgnoreCase(posts);
-	    return from(tagsEntities);
+	public List<TagsEntity> getAllTagsForPost(Set<PostsEntity> posts) {
+//	    var tagsEntities = tagsRepository.findByPostsContainingIgnoreCase(posts);
+//	    return from(tagsEntities);
+		return null;
 	}
 
 	/**
@@ -55,9 +57,9 @@ public class TagsServiceImpl implements TagsService{
 	 * @return an Optional containing the Tags object if found, or an empty Optional if no tag is found with the specified ID
 	 */
 	@Override
-	public Optional<Tags> getTagsById(Long id) {
+	public Optional<TagsEntity> getTagsById(Long id) {
 	    var te = tagsRepository.findById(id);
-	    Optional<Tags> result = te.isPresent() ? Optional.of(new Tags(te.get())) : Optional.empty();
+	    Optional<TagsEntity> result = te.isPresent() ? Optional.of(te.get()) : Optional.empty();
 	    return result;
 	}
 
@@ -68,18 +70,20 @@ public class TagsServiceImpl implements TagsService{
 	 * @return a list of Tags objects whose names contain the specified substring, ignoring case
 	 */
 	@Override
-	public List<Tags> getTags(String name) {
+	public List<TagsEntity> getTags(String name) {
 	    var tagsEntities = tagsRepository.findByNameContainingIgnoreCase(name);
-	    return from(tagsEntities);
+//	    return from(tagsEntities);
+	    return tagsEntities;
 	}
 	
 	/**
 	 * Gets the most frequent tags
 	 * @return a list of the most frequent Tag objects 
 	 */
-	public List<Tags> getMostFreqTags(){
+	public List<TagsEntity> getMostFreqTags(){
 		var tagsEntities = tagsRepository.findMostFrequentTags();
-		return from(tagsEntities);
+//		return from(tagsEntities);
+		return tagsEntities;
 	}
 	
     /**
@@ -88,10 +92,11 @@ public class TagsServiceImpl implements TagsService{
      * @return tag - the added tag object
      */
 	@Override
-	public Tags add(@Valid Tags tags) {
-		TagsEntity tagsEntityToAdd = new TagsEntity(tags);
-		TagsEntity addedTagsEntity = tagsRepository.save(tagsEntityToAdd);
-		return new Tags(addedTagsEntity);
+	public TagsEntity add(@Valid TagsEntity tags) {
+//		TagsEntity tagsEntityToAdd = new TagsEntity(tags);
+		TagsEntity addedTagsEntity = tagsRepository.save(tags);
+//		return new Tags(addedTagsEntity);
+		return addedTagsEntity;
 	}
 	
 	
@@ -101,14 +106,14 @@ public class TagsServiceImpl implements TagsService{
 	 * @return tag - the updated tag object
 	 */
 	@Override
-	public Tags update(@Valid Tags tags) {
-		Tags updatedTags = null;
-		TagsEntity tagsEntityToUpdate = new TagsEntity(tags);
+	public TagsEntity update(@Valid TagsEntity tags) {
+		TagsEntity updatedTagsEntity = null;
+//		TagsEntity tagsEntityToUpdate = new TagsEntity(tags);
 		if(tagsRepository.existsById(tags.getTagId())) {
-			lombok.var updatedTagsEntity = tagsRepository.save(tagsEntityToUpdate);
-			updatedTags = new Tags(updatedTagsEntity);
+			updatedTagsEntity = tagsRepository.save(tags);
+//			updatedTags = new Tags(updatedTagsEntity);
 		}
-		return updatedTags;
+		return updatedTagsEntity;
 	}
 	
 	
@@ -118,16 +123,24 @@ public class TagsServiceImpl implements TagsService{
 	 * @return true - the tag is successfully deleted
 	 */
 	@Override
-	public boolean delete(@Valid Tags tags) {
+	public boolean delete(@Valid TagsEntity tags) {
 		boolean isDeleted = false;
-		TagsEntity tagsEntityToDelete = new TagsEntity(tags);
-		if(tagsRepository.existsById(tagsEntityToDelete.getTagId())){
-			tagsRepository.delete(new TagsEntity(tags));
+//		TagsEntity tagsEntityToDelete = new TagsEntity(tags);
+		if(tagsRepository.existsById(tags.getTagId())){
+			tagsRepository.delete(tags);
 			isDeleted = true;
 		}
 		return isDeleted;
 	}
 	
+	
+	public TagsEntity findOrCreateTagByName(String tagName) {
+		if(tagsRepository.existsByName(tagName)) {
+			return tagsRepository.findAllByName(tagName).get(0);
+		}else {
+			return tagsRepository.save(new TagsEntity(tagName));
+		}
+	}
 	
 	/**
 	 * Convert a list of TagsEntity objects to a list of Tags objects.

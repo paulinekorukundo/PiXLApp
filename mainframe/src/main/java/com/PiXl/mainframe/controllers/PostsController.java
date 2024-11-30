@@ -3,6 +3,11 @@ package com.PiXl.mainframe.controllers;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.PiXl.mainframe.exceptions.FileStorageException;
+import com.PiXl.mainframe.entities.PostsEntity;
+import com.PiXl.mainframe.entities.TagsEntity;
 import com.PiXl.mainframe.handler.ResponseHandler;
 import com.PiXl.mainframe.models.Posts;
+import com.PiXl.mainframe.models.Tags;
 import com.PiXl.mainframe.services.PostsService;
+import com.PiXl.mainframe.services.TagsService;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -35,13 +43,15 @@ public class PostsController {
 	
 	@Autowired
 	private PostsService postService;
+	@Autowired
+	private TagsService tagsService;
 	
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@ResponseBody
 	
-	private ResponseEntity<List<Posts>> getAllPosts() {
-	    List<Posts> allPosts = postService.getAllPosts();
+	private ResponseEntity<List<PostsEntity>> getAllPosts() {
+	    List<PostsEntity> allPosts = postService.getAllPosts();
 	    if (allPosts.isEmpty()) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	    } else {
@@ -71,7 +81,7 @@ public class PostsController {
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
 	private ResponseEntity<Object> getAllPostsForUser(@PathVariable String userId){
-		List<Posts> allPosts = postService.getAllPostForUser(userId);
+		List<PostsEntity> allPosts = postService.getAllPostForUser(userId);
 		if(allPosts.isEmpty()) {
 			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
 		}else {
@@ -84,10 +94,21 @@ public class PostsController {
 	public ResponseEntity<Object> savePost(@RequestParam("media") MultipartFile media,
 	                                       @RequestParam("userId") String userId,
 	                                       @RequestParam("content") String content,
-	                                       @RequestParam(value = "tag", required = false) String tagName) {
+	                                       @RequestParam(value = "tag", required = false) String tags) {
 	    try {
-	    	Posts savedPost = postService.saveNewPost(media, userId, content, tagName);
-
+	    	PostsEntity postToSave = new PostsEntity();
+	    	HashSet<TagsEntity> tagsToSave = new HashSet<>();;
+	    	if(!(tags.equals("") || tags.isEmpty() || tags.equals(null))) {
+				for(String t : tags.split(",")) {
+					tagsToSave.add(new TagsEntity(t.strip()));
+				}
+			}
+	    	postToSave.setUserId(userId);
+	    	postToSave.setContent(content);
+	    	postToSave.setMedia(null);
+	    	postToSave.setCommentsCount(0l);
+			postToSave.setLikesCount(0l);
+	    	PostsEntity savedPost = postService.saveNewPost(postToSave, tagsToSave, media);
 	        return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, savedPost);
 	    } catch (FileStorageException e) {
 	        return ResponseHandler.generateResponse("Error saving post.", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -95,6 +116,29 @@ public class PostsController {
 	        return ResponseHandler.generateResponse("Unexpected error occurred.", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 	    }
 	}
+	
+//	private ResponseEntity<Object> savePost(@RequestBody Map<String, String> json){
+//		HashSet<TagsEntity> tagsToSave = new HashSet<>();
+//		PostsEntity postToSave = new PostsEntity();
+//		if(!json.get("tags").equals("")) {
+//			String[] tags = json.get("tags").split(",");
+//			for(String t : tags) {
+//				tagsToSave.add(new TagsEntity(t.strip()));
+//			}
+//		}
+//		postToSave.setUserId(json.get("userId"));
+//		postToSave.setContent(json.get("content"));
+//		postToSave.setMedia(json.get("media"));
+//		postToSave.setCommentsCount(0l);
+//		postToSave.setLikesCount(0l);
+//		
+//		PostsEntity savedPost = postService.saveNewPost(postToSave, tagsToSave);
+//		if(savedPost == null) {
+//			return ResponseHandler.generateResponse("Error saving post.", HttpStatus.NOT_FOUND);
+//		}else {
+//			return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, savedPost);
+//		}
+//	}
 
 	@GetMapping("/media/{filename}")
 	public ResponseEntity<Resource> getMedia(@PathVariable String filename) throws MalformedURLException {
@@ -109,8 +153,8 @@ public class PostsController {
 	
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
-	private ResponseEntity<Object> editPost(@RequestBody Posts json){
-		Posts savedPost = postService.editExistingPost(json);
+	private ResponseEntity<Object> editPost(@RequestBody PostsEntity json){
+		PostsEntity savedPost = postService.editExistingPost(json);
 		if(savedPost == null) {
 			return ResponseHandler.generateResponse("Error editing post.", HttpStatus.NOT_FOUND);
 		}else {
@@ -141,6 +185,60 @@ public class PostsController {
 			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
 		}else {
 			return ResponseHandler.generateResponse("Top Liked Posts", HttpStatus.OK, topPosts);
+		}
+	}
+	
+	@RequestMapping(value = "/batchInsert", method = RequestMethod.GET)
+	@ResponseBody
+	private ResponseEntity<Object> saveManyPosts(){
+//		CSVReader reader;
+		List<PostsEntity> posts = new ArrayList<PostsEntity>();
+//		try {
+//			reader = new CSVReader(new FileReader("batch.csv"));
+//			reader.readNext();
+//			ColumnPositionMappingStrategy<Posts> beanStrategy = new ColumnPositionMappingStrategy<Posts>();
+//			beanStrategy.setType(Posts.class);
+//			beanStrategy.setColumnMapping(new String[]{"userId", "content", "media", "tagName"});
+//			
+//			CsvToBean<Posts> csvToBean = new CsvToBean<Posts>();
+//			csvToBean.setCsvReader(reader);
+//			csvToBean.setMappingStrategy(beanStrategy);
+//			
+//			posts = csvToBean.parse();
+//		} catch (FileNotFoundException e) {
+//			posts = new ArrayList<>();
+//		} catch (CsvValidationException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader("batch.csv"));
+			reader.readLine();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				String[] tokens = line.split(",");
+				String userId = tokens[0];
+				String content = tokens[1];
+				String media = tokens[2];
+				String[] tags = tokens[3].split(",");
+				HashSet<Tags> newTags = new HashSet<>();
+				for(String tag : tags) {
+					newTags.add(new Tags());
+				}
+//				posts.add(new Posts(userId, content, media, (long) 0, (long) 0));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if(posts.isEmpty()) {
+			return ResponseHandler.generateResponse("No Posts to Insert", HttpStatus.NOT_FOUND);
+		}else {
+			List<PostsEntity> savedPosts = postService.savePostsInBatch(posts);
+			return ResponseHandler.generateResponse("Inserted Posts", HttpStatus.OK, savedPosts);
 		}
 	}
 }

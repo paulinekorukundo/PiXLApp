@@ -25,5 +25,6 @@ public interface PostsRepository extends CrudRepository<PostsEntity, Long> {
     
     @Query("SELECT p FROM PostsEntity p ORDER BY p.likesCount DESC LIMIT :maxNum OFFSET :off")
     List<PostsEntity> getTopNLikedPosts(@Param("maxNum") Long maxNum, @Param("off") Long off);
-
+    
+//    PostsEntity saveAll(List<PostsEntity> posts);
 }

@@ -4,22 +4,25 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Set;
+
+import com.PiXl.mainframe.entities.PostsEntity;
+import com.PiXl.mainframe.entities.TagsEntity;
 import com.PiXl.mainframe.models.Posts;
 
 
 public interface PostsService {
 	
 	// GENERAL POSTS
-	List<Posts> getAllPosts();
+	List<PostsEntity> getAllPosts();
     Posts getPostById(Long postId);
     Posts savePost(Posts post);
-    Posts saveNewPost(MultipartFile file, String userId, String content, String tagName);
-    
-    Posts editExistingPost(Posts post);
+    PostsEntity saveNewPost(PostsEntity post, Set<TagsEntity> tags, MultipartFile file);
+    PostsEntity editExistingPost(PostsEntity post);
     void deletePost(Long postId);
     
     // USER SPECIFIC POSTS
-    List<Posts> getAllPostForUser(String userId);
+    List<PostsEntity> getAllPostForUser(String userId);
     
     // POSTS UTILITY
     List<Posts> getPostByMostLikes(long numOfPosts);
@@ -38,4 +41,7 @@ public interface PostsService {
     // CONTENT DISCOVERY
     List<Posts> getAllPostsWithTag(String tagName);
     public List<Posts> searchPosts(String query);
+    
+    // Batch Insert
+    List<PostsEntity> savePostsInBatch(List<PostsEntity> posts);
 }
