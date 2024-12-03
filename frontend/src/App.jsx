@@ -22,9 +22,8 @@ function App() {
       <AppProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
+            <Route index element={<PostsList />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="/posts" element={<PostsList />} />
             <Route path="/add-post" element={<PostForm />} />
           </Route>
           <Route path="auth">
