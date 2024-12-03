@@ -1,6 +1,6 @@
 import { Link, Navigate, Outlet } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
-import { Burger, Container, Flex, Group } from "@mantine/core";
+import { Burger, Container, Flex, Group, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
 
@@ -18,12 +18,19 @@ export default function Layout() {
           <Flex justify="space-between">
             <Link to="/">PiXL</Link>
             <Group gap={5} visibleFrom="sm">
-            <Link className="menu-item" to="/posts">
-                Timeline
+              <Link className="menu-item" to="/recipies">
+                Recipies
               </Link>
               <Link className="menu-item" to="/profile">
                 Profile
               </Link>
+              <UnstyledButton
+                onClick={() => {
+                  appState.logout();
+                }}
+              >
+                Logout
+              </UnstyledButton>
             </Group>
 
             <Burger
