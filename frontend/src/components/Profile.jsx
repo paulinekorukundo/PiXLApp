@@ -1,5 +1,6 @@
 import { useAppContext } from "../context/AppContext";
 import { Card, Avatar, Text, Group, Button, Flex } from "@mantine/core";
+import DisplayUserPosts from "./Posts/DisplayUserPosts";
 
 const stats = [
   { value: "34K", label: "Followers" },
@@ -53,7 +54,10 @@ export default function Profile() {
           
         </Flex>
       </Flex>
+      <DisplayUserPosts />
+        
     </Card>
+
     
     </>
   );
