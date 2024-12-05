@@ -31,39 +31,39 @@ function PostsList() {
   const { userDetails } = useAppContext();
 
   // Create a post
-  const [opened, { open, close }] = useDisclosure(false);
-  const [content, setContent] = useState("");
-  const [tag, setTag] = useState("");
-  const [media, setMedia] = useState("");
+  // const [opened, { open, close }] = useDisclosure(false);
+  // const [content, setContent] = useState("");
+  // const [tag, setTag] = useState("");
+  // const [media, setMedia] = useState("");
 
-  const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
+  // const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
+  // const [message, setMessage] = useState("");
 
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("media", media);
-      formData.append("userId", userDetails.email);
-      formData.append("content", content);
-      if (tag) formData.append("tag", tag);
-
-      await axios.post("http://localhost:8080/api/v1/posts/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setMessage("Post created successfully!");
-      close();
-    } catch (error) {
-      console.error("Error saving post:", error);
-      if (error.response) {
-        setMessage(`Error: ${error.response.data.message}`);
-      } else {
-        setMessage("An unexpected error occurred");
-      }
-    }
-  };
+  // const handleSubmit = async () => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("media", media);
+  //     formData.append("userId", userDetails.email);
+  //     formData.append("content", content);
+  //     if (tag) formData.append("tag", tag);
+      
+  //     //"http://localhost:8080/api/v1/posts/"
+  //     await axios.post(`${API_URL}`, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+  //     setMessage("Post created successfully!");
+  //     close();
+  //   } catch (error) {
+  //     console.error("Error saving post:", error);
+  //     if (error.response) {
+  //       setMessage(`Error: ${error.response.data.message}`);
+  //     } else {
+  //       setMessage("An unexpected error occurred");
+  //     }
+  //   }
+  // };
 
   //Get Images
   useEffect(() => {
@@ -202,7 +202,9 @@ function PostsList() {
     >
       Create Post
     </Button> */}
-      <ActionIcon
+      
+      
+      {/* <ActionIcon
         size={42}
         variant="default"
         aria-label="Add Post"
@@ -236,7 +238,7 @@ function PostsList() {
         <Group position="right" mt="md">
           <Button onClick={handleSubmit}>Save</Button>
         </Group>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

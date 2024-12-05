@@ -1,6 +1,8 @@
 import { useAppContext } from "../context/AppContext";
 import { Card, Avatar, Text, Group, Button, Flex } from "@mantine/core";
 import DisplayUserPosts from "./Posts/DisplayUserPosts";
+import PostForm from "./Posts/PostForm";
+import { IconPhoto } from "@tabler/icons-react";
 
 const stats = [
   { value: "34K", label: "Followers" },
@@ -48,9 +50,18 @@ export default function Profile() {
           <Group mt="xs" justify="left" gap={30}>
             {items}
           </Group>
-          <Button fullWidth radius="md" mt="xl" size="md" variant="default">
+          {/* <Group justify="center"> */}
+            <Button justify="center" radius="md" mt="xl" size="md" variant="default">
             Follow
           </Button>
+         
+          <PostForm />
+
+          <Button justify="center" leftSection={<IconPhoto size={14} />} variant="default">
+        Gallery
+      </Button>
+
+          {/* </Group> */}
           
         </Flex>
       </Flex>
