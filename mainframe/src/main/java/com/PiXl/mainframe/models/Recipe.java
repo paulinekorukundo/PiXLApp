@@ -4,6 +4,7 @@ import com.PiXl.mainframe.entities.RecipeEntity;
 
 public class Recipe {
 	private Long recipeId;
+	private String recipeName;
 	private String recipeIngredients;
 	private String recipeInstructions;
 	private String cusineType;
@@ -18,10 +19,11 @@ public class Recipe {
 		super();
 	}
 	
-	public Recipe(Long recipeId, String recipeIngredients, String recipeInstructions, String cusineType,
+	public Recipe(Long recipeId, String recipeName, String recipeIngredients, String recipeInstructions, String cusineType,
 			Boolean isVegan, Boolean isVegetarian, Boolean isLactoseFree, Boolean isGlutenFree, Profile profile, Double prepTime) {
 		super();
 		this.recipeId = recipeId;
+		this.recipeName = recipeName;
 		this.recipeIngredients = recipeIngredients;
 		this.recipeInstructions = recipeInstructions;
 		this.cusineType = cusineType;
@@ -44,6 +46,18 @@ public class Recipe {
 	 */
 	public void setRecipeId(Long recipeId) {
 		this.recipeId = recipeId;
+	}
+	/**
+	 * @return the recipeName
+	 */
+	public String getRecipeName() {
+		return recipeName;
+	}
+	/**
+	 * @param recipeName the recipeName to set
+	 */
+	public void setRecipeName(String recipeName) {
+		this.recipeName = recipeName;
 	}
 	/**
 	 * @return the recipeIngredients
@@ -156,7 +170,7 @@ public class Recipe {
 	
 	
 	public Recipe(RecipeEntity re) {
-		this(re.getRecipeId(), re.getRecipeIngredients(), re.getRecipeInstructions(), re.getCusineType(),
+		this(re.getRecipeId(), re.getRecipeName(), re.getRecipeIngredients(), re.getRecipeInstructions(), re.getCusineType(),
 				re.getIsVegan(), re.getIsVegetarian(), re.getIsLactoseFree(), re.getIsGlutenFree(), 
 				new Profile(re.getProfile()), re.getPrepTime());
 	}

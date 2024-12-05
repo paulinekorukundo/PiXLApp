@@ -3,6 +3,7 @@ import { useAppContext } from "../context/AppContext";
 import { Burger, Container, Flex, Group, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect } from "react";
+import Footer from "./Footer";
 
 export default function Layout() {
   const appState = useAppContext();
@@ -18,7 +19,7 @@ export default function Layout() {
           <Flex justify="space-between">
             <Link to="/">PiXL</Link>
             <Group gap={5} visibleFrom="sm">
-              <Link className="menu-item" to="/recipies">
+              <Link className="menu-item" to="/recipes">
                 Recipies
               </Link>
               <Link className="menu-item" to="/profile">
@@ -46,7 +47,16 @@ export default function Layout() {
         <Outlet />
       </Container>
       <footer>
-        <Container size="xl">Footer</Container>
+        <Container
+          size="xl"
+          sx={{
+            backgroundColor: "#f8f9fa",
+            marginTop: "100px",
+            borderTop: "1px solid #e7e7e7",
+          }}
+        >
+          <Footer />
+        </Container>
       </footer>
     </div>
   );

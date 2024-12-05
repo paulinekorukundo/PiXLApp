@@ -21,6 +21,9 @@ public class RecipeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long recipeId;
 	
+	@Column(name = "name")
+	private String recipeName;
+	
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id", referencedColumnName = "profileId")
     private ProfileEntity profile;
@@ -53,11 +56,12 @@ public class RecipeEntity {
 	public RecipeEntity() {
 		super();
 	}
-	public RecipeEntity(Long recipeId, ProfileEntity profile, String recipeIngredients, String recipeInstructions,
+	public RecipeEntity(Long recipeId, String recipeName, ProfileEntity profile, String recipeIngredients, String recipeInstructions,
 			String cusineType, Boolean isVegan, Boolean isVegetarian, Boolean isLactoseFree, Boolean isGlutenFree,
 			Double prepTime) {
 		super();
 		this.recipeId = recipeId;
+		this.recipeName = recipeName;
 		this.profile = profile;
 		this.recipeIngredients = recipeIngredients;
 		this.recipeInstructions = recipeInstructions;
@@ -82,6 +86,20 @@ public class RecipeEntity {
 	 */
 	public void setRecipeId(Long recipeId) {
 		this.recipeId = recipeId;
+	}
+	
+	/**
+	 * @return the recipeName
+	 */
+	public String getRecipeName() {
+		return recipeName;
+	}
+
+	/**
+	 * @param recipeName the recipeName to set
+	 */
+	public void setRecipeName(String recipeName) {
+		this.recipeName = recipeName;
 	}
 
 	/**
@@ -228,7 +246,7 @@ public class RecipeEntity {
 	}
 	
 	public RecipeEntity(Recipe recipe) {
-		this(recipe.getRecipeId(), new ProfileEntity(recipe.getProfile()), recipe.getRecipeIngredients(), recipe.getRecipeInstructions(), recipe.getCusineType(),
+		this(recipe.getRecipeId(), recipe.getRecipeName(), new ProfileEntity(recipe.getProfile()), recipe.getRecipeIngredients(), recipe.getRecipeInstructions(), recipe.getCusineType(),
 				recipe.getIsVegan(), recipe.getIsVegetarian(), recipe.getIsLactoseFree(), recipe.getIsGlutenFree(), recipe.getPrepTime());
 	}
 }

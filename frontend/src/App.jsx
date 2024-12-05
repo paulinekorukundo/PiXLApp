@@ -14,6 +14,8 @@ import Auth from "./components/Auth";
 import Profile from "./components/Profile";
 import PostsList from "./components/Posts/PostsList";
 import PostForm from "./components/Posts/PostForm";
+import RecipesList from "./components/Recipes/RecipesList";
+
 
 function App() {
   // const [formOpened, setFormOpened] = useState(false);
@@ -24,6 +26,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<PostsList />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="recipes" element={<RecipesList />} />
             <Route path="/add-post" element={<PostForm />} />
           </Route>
           <Route path="auth">
