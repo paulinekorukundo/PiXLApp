@@ -11,15 +11,15 @@ import { ActionIcon, Text } from "@mantine/core";
 import axios from "axios";
 
 function PostActions({ postId, likes, comments, onLike }) {
-  // const handleLike = async () => {
-  //   try {
-  //     const response = await axios.post("http://localhost:8080/api/v1/posts/likePost", { postId })
-  //     onLike(postId, response.data.likesCount);
-  //     alert("Post liked!");
-  //   } catch (error) {
-  //     console.error("Error liking post:", error);
-  //   }
-  // };
+  const handleLike = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/v1/posts/likePost", { postId })
+      onLike(postId, response.data.likesCount);
+      alert("Post liked!");
+    } catch (error) {
+      console.error("Error liking post:", error);
+    }
+  };
 
   const handleUnlike = async () => {
     try {

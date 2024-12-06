@@ -1,6 +1,8 @@
 import { useAppContext } from "../context/AppContext";
 import { Card, Avatar, Text, Group, Button, Flex } from "@mantine/core";
 import DisplayUserPosts from "./Posts/DisplayUserPosts";
+import PostForm from "./Posts/PostForm";
+import "../assets/General.css";
 
 const stats = [
   { value: "34K", label: "Followers" },
@@ -21,8 +23,13 @@ export default function Profile() {
     </div>
   ));
 
+  // const [opened, { open, close }] = useDisclosure(false);
+  // const add_icon = <IconPlus className={classes.like} stroke={1.5} />;
+
+
   return (
     <>
+
     <Card>
       <Card.Section
         h={250}
@@ -48,17 +55,22 @@ export default function Profile() {
           <Group mt="xs" justify="left" gap={30}>
             {items}
           </Group>
-          <Button fullWidth radius="md" mt="xl" size="md" variant="default">
-            Follow
-          </Button>
-          
+
+          <Group mt="xs" justify="flex-start" align="center" gap="md" className="custom-group">
+            <Button radius="md" mt="xl" size="md" variant="default">
+              Follow
+            </Button>
+            
+            
+            <PostForm />
+
+          </Group>
         </Flex>
       </Flex>
       <DisplayUserPosts />
         
     </Card>
 
-    
     </>
   );
 }
