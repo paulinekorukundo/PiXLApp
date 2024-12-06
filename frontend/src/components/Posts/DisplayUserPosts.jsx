@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Card, Text, Loader, Group, Image, Grid, Flex } from "@mantine/core";
+import { Card, Text, Loader, Group, Image } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
