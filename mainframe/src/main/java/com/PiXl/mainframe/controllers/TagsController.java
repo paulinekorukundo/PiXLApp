@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.PiXl.mainframe.entities.PostsEntity;
 import com.PiXl.mainframe.entities.TagsEntity;
-import com.PiXl.mainframe.models.Tags;
 import com.PiXl.mainframe.services.TagsService;
 
 import lombok.NoArgsConstructor;
