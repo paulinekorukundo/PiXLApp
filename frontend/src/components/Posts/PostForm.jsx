@@ -1,33 +1,13 @@
-import React, { useState } from "react";
-import { Modal, TextInput, Button, Group, ActionIcon, FileInput } from "@mantine/core";
-import { savePost, editPost } from "./api";
-import { useDisclosure } from "@mantine/hooks";
-import { useAppContext } from "../../context/AppContext";
+import React, { useEffect, useState } from "react";
+import { Modal, TextInput, Button, Group, ActionIcon, FileInput, MantineProvider } from "@mantine/core";
 import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
-import classes from "../../assets/BadgeCard.module.css";
 import axios from "axios";
-import { API_URL } from "../../config";
+import { useDisclosure } from "@mantine/hooks";
+import classes from "../../assets/BadgeCard.module.css";
+import { useAppContext } from "../../context/AppContext";
+import { notifications, showNotification } from '@mantine/notifications';
 
 function PostForm() {
-
-  // const [userId, setUserId] = useState(post?.userId || "");
-
-  // const handleSubmit = async () => {
-  //   try {
-  //     const postData = { ...post, content, userId };
-  //     if (isEditing) {
-  //       await editPost(postData);
-  //       alert("Post updated!");
-  //     } else {
-  //       await savePost(postData);
-  //       alert("Post created!");
-  //     }
-  //     onClose();
-  //   } catch (error) {
-  //     console.error("Error saving post:", error);
-  //   }
-  // };
-
   // User
   const { userDetails } = useAppContext();
 
@@ -38,6 +18,8 @@ function PostForm() {
   const [media, setMedia] = useState("");
 
   const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
+  const add_icon = <IconPlus className={classes.like} stroke={1.5} />;
+
   const [message, setMessage] = useState("");
 
   const handleSubmit = async () => {
@@ -47,63 +29,85 @@ function PostForm() {
       formData.append("userId", userDetails.email);
       formData.append("content", content);
       if (tag) formData.append("tag", tag);
-      
-      //"http://localhost:8080/api/v1/posts/"
-      await axios.post(`${API_URL}/`, formData, {
+
+      await axios.post("http://localhost:8080/api/v1/posts/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+
       setMessage("Post created successfully!");
+      notifications.show({
+        title: "Success",
+        message: "Post created successfully!",
+        color: "green",
+      });
+
       close();
     } catch (error) {
       console.error("Error saving post:", error);
       if (error.response) {
         setMessage(`Error: ${error.response.data.message}`);
+        notifications.show({
+          title: "Error",
+          message: error.response
+          ? `Error: ${error.response.data.message}`
+          : "An unexpected error occurred",
+          color: "red",
+        });
       } else {
         setMessage("An unexpected error occurred");
+        
       }
     }
   };
 
+  useEffect(() => {
+    showNotification({
+      title: "Success",
+      message: "Post created successfully!",
+      color: "green",
+    });
+  }, []);
+
   return (
     <>
-      <ActionIcon
-          size={42}
-          variant="default"
-          aria-label="Add Post"
-          onClick={open}
-        >
-          <IconPlus className={classes.like} stroke={1.5} />
-        </ActionIcon>
-      
+      <Button radius="md" mt="xl" size="md" variant="default"
+        onClick={open}
+        leftSection={add_icon}
+        >       
+        Create Post
+      </Button>
+    
       <Modal opened={opened} onClose={close} title="Add Post">
         <TextInput disabled label="Username" value={userDetails.email} />
-          <TextInput
-            label="Content"
-            placeholder="Post Description"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <FileInput
-            clearable
-            rightSection={icon}
-            label="Upload Media"
-            placeholder="Add Media"
-            accept="image/png,image/jpeg"
-            onChange={(media) => setMedia(media)}
-          />
-          <TextInput
-            label="Tag"
-            placeholder="Add Tag to Post"
-            value={tag}
-            onChange={(e) => setTag(e.target.value)}
-          />
-          <Group position="right" mt="md">
-            <Button onClick={handleSubmit}>Save</Button>
-          </Group>
-        </Modal>
-      </>
+        <TextInput
+          label="Content"
+          placeholder="Post Description"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+        <FileInput
+          clearable
+          rightSection={icon}
+          label="Upload Media"
+          placeholder="Add Media"
+          accept="image/png,image/jpeg"
+          onChange={(media) => setMedia(media)}
+        />
+        <TextInput
+          label="Tag"
+          placeholder="Add Tag to Post"
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+        />
+        <Group position="right" mt="md">
+          <Button onClick={handleSubmit}>Save</Button>
+        </Group>
+
+      </Modal>
+
+    </>
   );
 }
 

@@ -2,6 +2,9 @@ import "./App.css";
 import "@mantine/core/styles.css";
 
 import { MantineProvider } from "@mantine/core";
+
+import { Notifications } from '@mantine/notifications';
+
 import { Routes, Route } from "react-router-dom";
 
 import { AppProvider } from "./context/AppContext";
@@ -20,11 +23,13 @@ import RecipesList from "./components/Recipes/RecipesList";
 function App() {
   // const [formOpened, setFormOpened] = useState(false);
   return (
-    <MantineProvider>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
       <AppProvider>
+      <Notifications/>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<PostsList />} />
+            
             <Route path="profile" element={<Profile />} />
             <Route path="recipes" element={<RecipesList />} />
             <Route path="/add-post" element={<PostForm />} />
