@@ -44,14 +44,14 @@ function RecipesList() {
 
   return (
     <div>
-      <Typography
+      {/* <Typography
         variant="h4"
         align="center"
         gutterBottom
         sx={{ marginTop: 4 }}
       >
         All Recipes
-      </Typography>
+      </Typography> */}
       <Grid container spacing={4}>
         {recipes.map((recipe) => (
           <Grid item xs={12} sm={6} md={4} key={recipe.recipeId}>

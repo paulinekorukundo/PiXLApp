@@ -245,8 +245,7 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public List<PostsEntity> getAllPostsWithTag(String tagName) {
-		TagsEntity tag = tagsRepo.findAllByName(tagName).get(0);
+	public List<PostsEntity> getAllPostsWithTag(String tagName) {		TagsEntity tag = tagsRepo.findByNameContainingIgnoreCase(tagName).get(0);
 		List<Long> postIds = postRepo.findAllPostIdFromTagId(tag.getTagId());
 		return postRepo.findByPostIdIn(postIds);
 	}

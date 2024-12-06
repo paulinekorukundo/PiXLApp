@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { Burger, Container, Flex, Group, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -9,6 +9,9 @@ export default function Layout() {
   const appState = useAppContext();
   const [opened, { toggle }] = useDisclosure(false);
 
+  const location = useLocation();
+  const isRecipesPage = location.pathname === "/recipes";
+
   if (!appState.isLoggedIn) {
     return <Navigate to="/auth/login" />;
   }
@@ -17,10 +20,12 @@ export default function Layout() {
       <header>
         <Container size="xl" p="sm">
           <Flex justify="space-between">
-            <Link to="/">PiXL</Link>
+            <Link to="/">
+              <img width="100" height="100" src="/src/assets/PiXl Logo.png" />
+            </Link>
             <Group gap={5} visibleFrom="sm">
-              <Link className="menu-item" to="/recipes">
-                Recipies
+              <Link className="menu-item" to={isRecipesPage ? "/" : "/recipes"}>
+                {isRecipesPage ? "Posts" : "Recipes"}
               </Link>
               <Link className="menu-item" to="/profile">
                 Profile

@@ -13,19 +13,22 @@ import {
   FileInput,
   Flex,
   Grid,
+  Box,
 } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
-import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
+import { IconImageInPicture, IconPlus, IconSearch } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import "../../assets/General.css";
 import { useAppContext } from "../../context/AppContext";
 import { API_URL } from "../../config";
+import debounce from "lodash/debounce"; // Add this for debouncing input
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
+  const [searchTag, setSearchTag] = useState(""); // State for tag search
 
   // User
   const { userDetails } = useAppContext();
@@ -92,22 +95,37 @@ function PostsList() {
     loadImages();
   }, [posts, API_URL]);
 
-  //View posts
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/v1/posts/");
-        console.log("Response: ", response.data);
-        setPosts(response.data || []);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadPosts = async (searchTag = "") => {
+    // setLoading(true);
+    try {
+      const response = searchTag
+        ? await axios.post(
+            "http://localhost:8080/api/v1/posts/findPostsByTag",
+            {
+              tagName: searchTag,
+            }
+          )
+        : await axios.get("http://localhost:8080/api/v1/posts/");
 
-    loadPosts();
-  }, []);
+      setPosts(response.data || []);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Debounced search handler
+  const debouncedSearch = debounce((value) => {
+    if (value.length >= 3) loadPosts(value);
+    else loadPosts();
+  }, 300);
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTag(value);
+    debouncedSearch(value);
+  };
 
   const likePost = async (postId) => {
     try {
@@ -138,10 +156,44 @@ function PostsList() {
     }
   };
 
+  // Initial load
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
   if (loading) return <Loader />;
 
   return (
     <>
+      <Flex
+        align="center"
+        justify="space-between"
+        mb="md"
+        p="sm"
+        sx={(theme) => ({
+          backgroundColor: theme.colors.gray[1],
+          borderRadius: theme.radius.sm,
+          boxShadow: theme.shadows.xs,
+        })}
+      >
+        <Box sx={{ flex: 1, marginRight: "1rem" }}>
+          <TextInput
+            placeholder="Search By Tag"
+            value={searchTag}
+            onChange={handleSearchChange}
+            styles={{
+              input: {
+                border: "none",
+                borderBottom: "1px solid #ced4da",
+                borderRadius: 0,
+                padding: "10px 0",
+                fontSize: "16px",
+                width: "100%",
+              },
+            }}
+          />
+        </Box>
+      </Flex>
       <Grid gap={10}>
         {posts?.length > 0 ? (
           posts.map((post) => (
@@ -188,6 +240,25 @@ function PostsList() {
                       {post.content}
                     </Text>
                   </Group>
+                  {/* Render tags here */}
+                  {post.tagsForPost?.length > 0 && (
+                    <Group gap={5} mt="sm">
+                      {post.tagsForPost.map((tag, index) => (
+                        <Text
+                          key={index}
+                          size="xs"
+                          color="blue"
+                          sx={(theme) => ({
+                            backgroundColor: theme.colors.blue[0],
+                            padding: "2px 8px",
+                            borderRadius: theme.radius.xs,
+                          })}
+                        >
+                          #{tag.name}
+                        </Text>
+                      ))}
+                    </Group>
+                  )}
                 </Card.Section>
               </Card>
             </Grid.Col>
@@ -196,12 +267,6 @@ function PostsList() {
           <Text>No posts available</Text>
         )}
       </Grid>
-
-      {/* <Button fullWidth radius="md" mt="sm" size="md" variant="default"
-    onClick={open}
-    >
-      Create Post
-    </Button> */}
       
       
       {/* <ActionIcon
@@ -212,7 +277,6 @@ function PostsList() {
       >
         <IconPlus className={classes.like} stroke={1.5} />
       </ActionIcon>
-
       <Modal opened={opened} onClose={close} title="Add Post">
         <TextInput disabled label="Username" value={userDetails.email} />
         <TextInput
