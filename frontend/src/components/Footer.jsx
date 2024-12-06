@@ -12,7 +12,6 @@ const Footer = () => {
         backgroundColor: "#f8f9fa",
         padding: "20px 0",
         borderTop: "1px solid #e7e7e7",
-        marginTop: "auto",
         boxShadow: "0 -2px 5px rgba(0, 0, 0, 0.1)", // Subtle shadow for elevation
       }}
     >
@@ -33,10 +32,22 @@ const Footer = () => {
           <Typography variant="h6" gutterBottom>
             Quick Links
           </Typography>
-          <Link href="#" color="inherit" underline="hover" display="block">
+          <Link
+            to="/"
+            color="inherit"
+            underline="hover"
+            display="block"
+            style={{ cursor: "pointer" }}
+          >
             Home
           </Link>
-          <Link href="#" color="inherit" underline="hover" display="block">
+          <Link
+            to="/recipes"
+            color="inherit"
+            underline="hover"
+            display="block"
+            style={{ cursor: "pointer" }}
+          >
             Recipes
           </Link>
           <Link href="#" color="inherit" underline="hover" display="block">

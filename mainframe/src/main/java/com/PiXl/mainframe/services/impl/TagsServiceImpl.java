@@ -135,8 +135,8 @@ public class TagsServiceImpl implements TagsService{
 	
 	
 	public TagsEntity findOrCreateTagByName(String tagName) {
-		if(tagsRepository.existsByName(tagName)) {
-			return tagsRepository.findAllByName(tagName).get(0);
+		if(tagsRepository.existsByNameIgnoreCase(tagName)) {
+			return tagsRepository.findAllByNameIgnoreCase(tagName).get(0);
 		}else {
 			return tagsRepository.save(new TagsEntity(tagName));
 		}

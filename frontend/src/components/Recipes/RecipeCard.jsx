@@ -23,7 +23,7 @@ const RecipeCard = ({ recipe }) => {
   } = recipe;
 
   return (
-    <Card sx={{ maxWidth: 345, margin: "auto", boxShadow: 3 }}>
+    <Card sx={{ maxWidth: 400, height: 350, margin: "auto", boxShadow: 3 }}>
       <CardHeader
         title={`${cusineType} Recipe`}
         subheader={`By ${profile.firstName} ${profile.lastName}`}

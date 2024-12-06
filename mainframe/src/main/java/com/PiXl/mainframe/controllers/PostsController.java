@@ -220,13 +220,15 @@ public class PostsController {
 		}
 	}
 	
-	@RequestMapping(value = "/findPostsByTag", method = RequestMethod.GET)
+	@RequestMapping(value = "/findPostsByTag", method = RequestMethod.POST)
 	private ResponseEntity<Object> findPostsByTag(@RequestBody Map<String, String> post){
 		List<PostsEntity> filteredPosts = postService.getAllPostsWithTag(post.get("tagName"));
 		if(filteredPosts.isEmpty()) {
 			return ResponseHandler.generateResponse("No Posts for given tag", HttpStatus.NOT_FOUND);
 		}else {
-			return ResponseHandler.generateResponse("Filtered Posts", HttpStatus.OK, filteredPosts);
+//			return ResponseHandler.generateResponse("Filtered Posts", HttpStatus.OK, filteredPosts);
+			
+			return ResponseEntity.ok(filteredPosts);
 		}
 	}
 }

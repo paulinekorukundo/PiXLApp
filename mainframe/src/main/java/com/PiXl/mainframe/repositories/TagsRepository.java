@@ -36,7 +36,7 @@ public interface TagsRepository extends JpaRepository<TagsEntity, Long>  {
 	 */
 	List<TagsEntity> findByNameContainingIgnoreCase(String name);
 	
-	Optional<TagsEntity> findByName(String name);
+	Optional<TagsEntity> findByNameIgnoreCase(String name);
 
 	/**
 	 * Find tags associated with the specified posts.
@@ -60,8 +60,10 @@ public interface TagsRepository extends JpaRepository<TagsEntity, Long>  {
 	 * @param name
 	 * @return a list of TagsEntity objects whose names match exactly the given parameter
 	 */
-	List<TagsEntity> findAllByName(String name);
+	List<TagsEntity> findAllByNameIgnoreCase(String name);
 	
-	Boolean existsByName(String name);
+//	List<TagsEntity> findAllByNameContainingIgnoreCase(String name);
+	
+	Boolean existsByNameIgnoreCase(String name);
 	
 }
