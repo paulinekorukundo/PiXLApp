@@ -15,14 +15,14 @@ import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { API_URL } from "../../config";
-import debounce from "lodash/debounce"; // Add this for debouncing input
+import debounce from "lodash/debounce"; 
 import { useAppContext } from "../../context/AppContext";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
-  const [searchTag, setSearchTag] = useState(""); // State for tag search
+  const [searchTag, setSearchTag] = useState(""); 
   const { userDetails } = useAppContext();
 
 
@@ -93,6 +93,31 @@ function PostsList() {
       console.error("Error updating likes:", error);
     }
   };
+
+  const [editModalOpened, setEditModalOpened] = useState(false);
+  const [editContent, setEditContent] = useState("");
+  const [editPostId, setEditPostId] = useState(null);
+
+  const handleEditPost = (postId) => {
+    const postToEdit = userPosts.find((post) => post.postId === postId);
+    setEditContent(postToEdit.content);
+    setEditPostId(postId);
+    setEditModalOpened(true);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      await axios.put(`${API_URL}/api/v1/posts/${editPostId}`, {
+        content: editContent,
+      });
+      setEditModalOpened(false);
+      const response = await axios.get(`${API_URL}/api/v1/posts/${userDetails.email}`);
+      setPosts(response.data.data || []);
+    } catch (error) {
+      console.error("Error saving post:", error);
+    }
+  };
+
 
   // Initial load
   useEffect(() => {
