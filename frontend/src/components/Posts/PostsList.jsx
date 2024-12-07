@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   Text,
@@ -27,10 +27,11 @@ function PostsList() {
   useEffect(() => {
     const loadImages = async () => {
       if (posts.length === 0) return;
-
       const imagePromises = posts.map(async (post) => {
         try {
-          const response = await axios.get(`${API_URL}/media/${post.media}`);
+          const response = await axios.get(
+            `${API_URL}/api/v1/posts/media/${post.media}`,
+          );
           return response.data;
         } catch (error) {
           console.error(`Error loading image for post ${post.postId}:`, error);
@@ -42,8 +43,8 @@ function PostsList() {
       setLoadedImages(
         loadedImages.reduce(
           (acc, img, index) => ({ ...acc, [posts[index].postId]: img }),
-          {}
-        )
+          {},
+        ),
       );
     };
 
@@ -55,12 +56,12 @@ function PostsList() {
     try {
       const response = searchTag
         ? await axios.post(
-            "http://localhost:8080/api/v1/posts/findPostsByTag",
+            import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
             {
               tagName: searchTag,
-            }
+            },
           )
-        : await axios.get("http://localhost:8080/api/v1/posts/");
+        : await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
 
       setPosts(response.data || []);
     } catch (error) {
@@ -82,30 +83,9 @@ function PostsList() {
     debouncedSearch(value);
   };
 
-  const likePost = async (postId) => {
+  const handleLikeUpdate = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/posts/likePost",
-        { postId }
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error liking post:", error);
-      throw error;
-    }
-  };
-
-  const handleLikeUpdate = async (postId, updatedLikes) => {
-    try {
-      const response = await likePost(postId);
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-          post.postId === postId
-            ? { ...post, likesCount: response.likesCount }
-            : post
-        )
-      );
-      window.location.reload;
+      loadPosts();
     } catch (error) {
       console.error("Error updating likes:", error);
     }
@@ -167,7 +147,7 @@ function PostsList() {
                   <Image
                     src={
                       post.media
-                        ? `${API_URL}/media/${post.media}`
+                        ? `${API_URL}/api/v1/posts/media/${post.media}`
                         : "/coming-soon.png"
                     }
                     alt={`Post image for ${post.content}`}

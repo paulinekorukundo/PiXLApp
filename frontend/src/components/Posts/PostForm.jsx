@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Modal, TextInput, Button, Group, ActionIcon, FileInput, MantineProvider } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { Modal, TextInput, Button, Group, FileInput } from "@mantine/core";
 import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
 import axios from "axios";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../assets/BadgeCard.module.css";
 import { useAppContext } from "../../context/AppContext";
-import { notifications, showNotification } from '@mantine/notifications';
+import { notifications, showNotification } from "@mantine/notifications";
 
 function PostForm() {
   // User
@@ -30,11 +30,15 @@ function PostForm() {
       formData.append("content", content);
       if (tag) formData.append("tag", tag);
 
-      await axios.post("http://localhost:8080/api/v1/posts/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/api/v1/posts/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
 
       setMessage("Post created successfully!");
       notifications.show({
@@ -51,13 +55,12 @@ function PostForm() {
         notifications.show({
           title: "Error",
           message: error.response
-          ? `Error: ${error.response.data.message}`
-          : "An unexpected error occurred",
+            ? `Error: ${error.response.data.message}`
+            : "An unexpected error occurred",
           color: "red",
         });
       } else {
         setMessage("An unexpected error occurred");
-        
       }
     }
   };
@@ -72,13 +75,17 @@ function PostForm() {
 
   return (
     <>
-      <Button radius="md" mt="xl" size="md" variant="default"
+      <Button
+        radius="md"
+        mt="xl"
+        size="md"
+        variant="default"
         onClick={open}
         leftSection={add_icon}
-        >       
+      >
         Create Post
       </Button>
-    
+
       <Modal opened={opened} onClose={close} title="Add Post">
         <TextInput disabled label="Username" value={userDetails.email} />
         <TextInput
@@ -104,9 +111,7 @@ function PostForm() {
         <Group position="right" mt="md">
           <Button onClick={handleSubmit}>Save</Button>
         </Group>
-
       </Modal>
-
     </>
   );
 }

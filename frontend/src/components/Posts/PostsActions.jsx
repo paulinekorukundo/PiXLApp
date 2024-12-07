@@ -1,4 +1,3 @@
-import React from "react";
 import {
   IconHeart,
   IconEdit,
@@ -10,12 +9,15 @@ import "../../assets/General.css";
 import { ActionIcon, Text } from "@mantine/core";
 import axios from "axios";
 
+// eslint-disable-next-line react/prop-types
 function PostActions({ postId, likes, comments, onLike }) {
   const handleLike = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/posts/likePost", { postId })
-      onLike(postId, response.data.likesCount);
-      alert("Post liked!");
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/api/v1/posts/likePost",
+        { postId },
+      );
+      onLike(postId);
     } catch (error) {
       console.error("Error liking post:", error);
     }
@@ -23,12 +25,11 @@ function PostActions({ postId, likes, comments, onLike }) {
 
   const handleUnlike = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/posts/unlikePost",
-        { postId }
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/api/v1/posts/unlikePost",
+        { postId },
       );
-      // onLike(postId, response.data.likesCount);
-      alert("Post unliked!");
+      onLike(postId);
     } catch (error) {
       console.error("Error unliking post:", error);
     }
@@ -41,7 +42,9 @@ function PostActions({ postId, likes, comments, onLike }) {
           <IconHeart
             className={classes.like}
             stroke={1.5}
-            // onClick={handleLike}
+            onClick={() => {
+              handleLike();
+            }}
           />
         </ActionIcon>
         <Text className={classes.countText} size="sm" c="dimmed">

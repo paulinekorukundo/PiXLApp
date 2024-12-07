@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../../assets/General.css";
 import RecipeCard from "./RecipeCard";
 import {
@@ -28,9 +28,9 @@ function RecipesList() {
       const query = new URLSearchParams(filters).toString();
       const noFiltersApplied = Object.values(filters).every((value) => !value);
       const response = noFiltersApplied
-        ? await axios.get(`http://localhost:8080/api/v1/recipes`)
+        ? await axios.get(import.meta.env.VITE_API_URL + `/api/v1/recipes`)
         : await axios.get(
-            `http://localhost:8080/api/v1/recipes/filter/${query}`
+            import.meta.env.VITE_API_URL + `/api/v1/recipes/filter/${query}`,
           );
       console.log("Response: ", response.data);
       setRecipes(response.data || []);
