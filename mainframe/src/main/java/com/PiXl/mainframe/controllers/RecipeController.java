@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -79,7 +80,8 @@ public class RecipeController {
     }
 	
 	
-	@RequestMapping(value = "", method = RequestMethod.POST)
+//	@RequestMapping(value = "", method = RequestMethod.POST)
+	@PostMapping()
 	@ResponseBody
 	private ResponseEntity<Object> saveRecipe(@RequestBody Map<String, String> json){
 		Profile prof = profileService.getProfile(Long.valueOf(json.get("profileId")).longValue()).get();
@@ -91,9 +93,11 @@ public class RecipeController {
 
 		RecipeEntity savedPost = recServ.saveRecipe(recipeToSave);
 		if(savedPost == null) {
-			return ResponseHandler.generateResponse("Error saving post.", HttpStatus.NOT_FOUND);
+//			return ResponseHandler.generateResponse("Error saving recipe.", HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}else {
-			return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, savedPost);
+//			return ResponseHandler.generateResponse("Recipe Saved!", HttpStatus.OK, savedPost);
+			return ResponseEntity.ok(savedPost);
 		}
 	}
 	
@@ -103,9 +107,9 @@ public class RecipeController {
 	private ResponseEntity<Object> editRecipe(@RequestBody RecipeEntity json){
 		RecipeEntity savedPost = recServ.editRecipe(json);
 		if(savedPost == null) {
-			return ResponseHandler.generateResponse("Error editing post.", HttpStatus.NOT_FOUND);
+			return ResponseHandler.generateResponse("Error editing recipe.", HttpStatus.NOT_FOUND);
 		}else {
-			return ResponseHandler.generateResponse("Post Edited!", HttpStatus.OK, savedPost);
+			return ResponseHandler.generateResponse("Recipe Edited!", HttpStatus.OK, savedPost);
 		}
 	}
 }

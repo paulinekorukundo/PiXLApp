@@ -24,7 +24,7 @@ function RecipeForm() {
     isVegetarian: false,
     isLactoseFree: false,
     isGlutenFree: false,
-    profile: "",
+    profile: userDetails.profileId,
     prepTime: "",
   });
 
@@ -46,9 +46,9 @@ function RecipeForm() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post("http://localhost:8080/api/v1/recipes/", recipeData, {
+      await axios.post("http://localhost:8080/api/v1/recipes", recipeData, {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
       });
       setMessage("Recipe created successfully!");
@@ -74,13 +74,13 @@ function RecipeForm() {
     }
   };
 
-  useEffect(() => {
-    showNotification({
-      title: "Success",
-      message: "Post created successfully!",
-      color: "green",
-    });
-  }, []);
+  // useEffect(() => {
+  //   showNotification({
+  //     title: "Success",
+  //     message: "Post created successfully!",
+  //     color: "green",
+  //   });
+  // }, []);
 
   return (
     <>
@@ -131,44 +131,57 @@ function RecipeForm() {
           name="cuisineType"
         />
         <FormGroup> Dietary Restrictions
-        <FormControlLabel 
-          control={<Checkbox defaultChecked />} 
-          label="Vegan" 
-          name="isVegan"
-          checked={recipeData.isVegan}
-          onChange={handleChange}
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="isVegan"
+              checked={recipeData.isVegan}
+              onChange={handleChange}
+            />
+          }
+          label="Vegan"
         />
-        <FormControlLabel 
-          control={<Checkbox defaultChecked />} 
-          name="isLactoseFree"
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="isLactoseFree"
+              checked={recipeData.isLactoseFree}
+              onChange={handleChange}
+            />
+          }
           label="Lactose Free"
-          checked={recipeData.isLactoseFree}
-          onChange={handleChange}
         />
-        <FormControlLabel 
-          control={<Checkbox defaultChecked />} 
-          name="isVegetarian"
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="isVegetarian"
+              checked={recipeData.isVegetarian}
+              onChange={handleChange}
+            />
+          }
           label="Vegetarian"
-          checked={recipeData.isVegetarian}
-          onChange={handleChange}
         />
-        <FormControlLabel 
-          control={<Checkbox defaultChecked />} 
-          name="isGlutenFree"
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="isGlutenFree"
+              checked={recipeData.isGlutenFree}
+              onChange={handleChange}
+            />
+          }
           label="Gluten Free"
-          checked={recipeData.isGlutenFree}
-          onChange={handleChange}
         />
         </FormGroup>
          
         
-        <TextInput
+        {/* <TextInput
+          disabled
           label="Profile"
           placeholder="Profile"
-          value={recipeData.profile}
+          value={userDetails.profileId}
           onChange={handleChange}
           name="profile"
-        />
+        /> */}
         {/* <TextInput
           label="Preparation Time"
           placeholder="Preparation Time"
@@ -192,7 +205,7 @@ function RecipeForm() {
             endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
           }}
           value={recipeData.prepTime}
-          rightSection={clock_icon}
+          // leftSection={clock_icon}
           onChange={handleChange}
           name="prepTime"
         />

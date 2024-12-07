@@ -62,13 +62,13 @@ function PostForm() {
     }
   };
 
-  useEffect(() => {
-    showNotification({
-      title: "Success",
-      message: "Post created successfully!",
-      color: "green",
-    });
-  }, []);
+  // useEffect(() => {
+  //   showNotification({
+  //     title: "Success",
+  //     message: "Post created successfully!",
+  //     color: "green",
+  //   });
+  // }, []);
 
   return (
     <>

@@ -24,8 +24,10 @@ export default function Profile() {
     </div>
   ));
 
+  const profileId = appState.userDetails.profileId;
   // const [opened, { open, close }] = useDisclosure(false);
   // const add_icon = <IconPlus className={classes.like} stroke={1.5} />;
+
 
 
   return (
