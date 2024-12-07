@@ -18,16 +18,17 @@ export const AppProvider = ({ children }) => {
 
   const login = async (userDetails) => {
     const response = await axios.post(
-      "http://localhost:8080/api/v1/auth/login",
+      import.meta.env.VITE_API_URL + "/api/v1/auth/login",
       {
         email: userDetails.email,
         password: userDetails.password,
-      }
+      },
     );
 
     if (response.status === 200) {
       const userDetailsResponse = await axios.get(
-        `http://localhost:8080/api/v1/profiles/userid/${userDetails.email}`
+        import.meta.env.VITE_API_URL +
+          `/api/v1/profiles/userid/${userDetails.email}`,
       );
       setUserDetails({
         email: userDetailsResponse.data.userId,
@@ -47,8 +48,8 @@ export const AppProvider = ({ children }) => {
 
   const register = async (newUserDetails) => {
     const response = await axios.post(
-      "http://localhost:8080/api/v1/auth/register",
-      newUserDetails
+      import.meta.env.VITE_API_URL + "/api/v1/auth/register",
+      newUserDetails,
     );
     if (response.data.success) {
       setIsLoggedIn(true);
@@ -74,7 +75,7 @@ export const AppProvider = ({ children }) => {
       const token = localStorage.getItem("email");
       if (token) {
         const userDetailsResponse = await axios.get(
-          `http://localhost:8080/api/v1/profiles/userid/${token}`
+          import.meta.env.VITE_API_URL + `/api/v1/profiles/userid/${token}`,
         );
         setUserDetails({
           email: userDetailsResponse.data.userId,
