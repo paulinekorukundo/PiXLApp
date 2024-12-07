@@ -3,6 +3,7 @@ import { Card, Avatar, Text, Group, Button, Flex } from "@mantine/core";
 import DisplayUserPosts from "./Posts/DisplayUserPosts";
 import PostForm from "./Posts/PostForm";
 import "../assets/General.css";
+import RecipeForm from "./Recipes/RecipeForm";
 
 const stats = [
   { value: "34K", label: "Followers" },
@@ -63,6 +64,7 @@ export default function Profile() {
             
             
             <PostForm />
+            <RecipeForm />
 
           </Group>
         </Flex>
