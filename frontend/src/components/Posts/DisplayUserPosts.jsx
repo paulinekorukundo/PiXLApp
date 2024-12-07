@@ -1,13 +1,14 @@
+/* eslint-disable react/prop-types */
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Text, Loader, Group, Image } from "@mantine/core";
+import { Card, Text, Loader, Group, Image, Grid } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { useAppContext } from "../../context/AppContext";
 import { API_URL } from "../../config";
 
-function DisplayUserPosts() {
+function DisplayUserPosts(props) {
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
   const [userPosts, setUserPosts] = useState({});
@@ -18,7 +19,7 @@ function DisplayUserPosts() {
     const loadPosts = async () => {
       const userId = userDetails.email;
       try {
-        const response = await axios.get(`${API_URL}/${userId}`);
+        const response = await axios.get(`${API_URL}/api/v1/posts/${userId}`);
         setUserPosts(response.data.data || []);
       } catch (error) {
         if (error.response && error.response.status === 404) {
@@ -33,7 +34,7 @@ function DisplayUserPosts() {
     };
 
     loadPosts();
-  }, [userDetails.email]);
+  }, [userDetails.email, props.reload]);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -45,13 +46,13 @@ function DisplayUserPosts() {
           imagePromises = userPosts.map(async (post) => {
             try {
               const response = await axios.get(
-                `${API_URL}/api/v1/posts/media/${post.media}`,
+                `${API_URL}/api/v1/posts/media/${post.media}`
               );
               return response.data;
             } catch (error) {
               console.error(
                 `Error loading image for post ${post.postId}:`,
-                error,
+                error
               );
               return null;
             }
@@ -60,13 +61,13 @@ function DisplayUserPosts() {
           imagePromises = Object.values(userPosts).map(async (post) => {
             try {
               const response = await axios.get(
-                `${API_URL}/api/v1/posts/media/${post.media}`,
+                `${API_URL}/api/v1/posts/media/${post.media}`
               );
               return response.data;
             } catch (error) {
               console.error(
                 `Error loading image for post ${post.postId}:`,
-                error,
+                error
               );
               return null;
             }
@@ -77,8 +78,8 @@ function DisplayUserPosts() {
         setLoadedImages(
           loadedImages.reduce(
             (acc, img, index) => ({ ...acc, [index]: img }),
-            {},
-          ),
+            {}
+          )
         );
         setLoading(false);
       } catch (error) {
@@ -93,60 +94,57 @@ function DisplayUserPosts() {
   if (loading) return <Loader />;
 
   return (
-    // <Grid gap={10}>
-    <Card>
+    <Grid gap={10}>
       {userPosts && userPosts?.length > 0 ? (
         userPosts.map((post) => (
-          // <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
-          <Card
-            withBorder
-            radius="md"
-            p="md"
-            className={classes.card}
-            key={post.postId}
-            shadow="sm"
-            padding="lg"
-          >
-            <Card.Section>
-              <Image
-                src={
-                  post.media
-                    ? `${API_URL}/api/v1/posts/media/${post.media}`
-                    : "/coming-soon.png"
-                }
-                alt={`Post image for ${post.content}`}
-                h={300}
-                onError={(e) => {
-                  e.target.src = "/coming-soon.png";
-                }}
-              />
-            </Card.Section>
-            <Group mt="md" position="apart">
-              <PostActions
-                postId={post.postId}
-                likes={post.likesCount}
-                comments={post.commentsCount}
-              />
-            </Group>
-            <Card.Section className={classes.section}>
-              <Group gap={7} mt={5}>
-                <Text fw={500} fz="sm" mt="xs">
-                  {post.userId}
-                </Text>
-                <Text weight={300} fz="sm" mt="xs">
-                  {post.content}
-                </Text>
+          <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
+            <Card
+              withBorder
+              radius="md"
+              p="md"
+              className={classes.card}
+              key={post.postId}
+              shadow="sm"
+              padding="lg"
+            >
+              <Card.Section>
+                <Image
+                  src={
+                    post.media
+                      ? `${API_URL}/api/v1/posts/media/${post.media}`
+                      : "/coming-soon.png"
+                  }
+                  alt={`Post image for ${post.content}`}
+                  h={300}
+                  onError={(e) => {
+                    e.target.src = "/coming-soon.png";
+                  }}
+                />
+              </Card.Section>
+              <Group mt="md" position="apart">
+                <PostActions
+                  postId={post.postId}
+                  likes={post.likesCount}
+                  comments={post.commentsCount}
+                />
               </Group>
-            </Card.Section>
-          </Card>
-          // </Grid.Col>
+              <Card.Section className={classes.section}>
+                <Group gap={7} mt={5}>
+                  <Text fw={500} fz="sm" mt="xs">
+                    {post.userId}
+                  </Text>
+                  <Text weight={300} fz="sm" mt="xs">
+                    {post.content}
+                  </Text>
+                </Group>
+              </Card.Section>
+            </Card>
+          </Grid.Col>
         ))
       ) : (
         <Text>No posts available</Text>
       )}
-    </Card>
-
-    // </Grid>
+    </Grid>
   );
 }
 
