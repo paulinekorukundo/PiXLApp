@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.PiXl.mainframe.dto.RecipeFilter;
 import com.PiXl.mainframe.entities.RecipeEntity;
 import com.PiXl.mainframe.models.Recipe;
 import com.PiXl.mainframe.repositories.RecipesRepository;
@@ -68,10 +69,10 @@ public class RecipesServiceImpl implements RecipesService {
 	}
 
 	@Override
-	public List<Recipe> getFilteredRecipes(boolean isVegan, boolean isVegetarian, boolean isLactoseFree,
-			boolean isGlutenFree) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Recipe> getFilteredRecipes(RecipeFilter filter) {
+		return recRepo.findRecipes(filter).stream()
+				.map(this::convertToRecipeModel)
+				.collect(Collectors.toList());
 	}
 
 	@Override

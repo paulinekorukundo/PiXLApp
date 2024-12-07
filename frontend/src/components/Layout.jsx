@@ -51,12 +51,15 @@ export default function Layout() {
       <Container size="xl">
         <Outlet />
       </Container>
-      <footer>
+      <footer
+        style={{
+          marginTop: "100px", // Added margin top to footer
+        }}
+      >
         <Container
           size="xl"
           sx={{
             backgroundColor: "#f8f9fa",
-            marginTop: "100px",
             borderTop: "1px solid #e7e7e7",
           }}
         >

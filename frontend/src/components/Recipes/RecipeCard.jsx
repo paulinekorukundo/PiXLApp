@@ -22,47 +22,62 @@ const RecipeCard = ({ recipe }) => {
     profile,
   } = recipe;
 
+  const chipStyles = (condition) => ({
+    backgroundColor: condition ? "#000411" : "#efcb68",
+    color: "#fff",
+  });
+
   return (
-    <Card sx={{ maxWidth: 400, height: 350, margin: "auto", boxShadow: 3 }}>
+    <Card
+      sx={{
+        maxWidth: 400,
+        height: 350,
+        margin: "auto",
+        boxShadow: 3,
+      }}
+    >
       <CardHeader
         title={`${cusineType} Recipe`}
         subheader={`By ${profile.firstName} ${profile.lastName}`}
+        sx={{
+          color: "#000411",
+        }}
       />
-      <Divider />
+      <Divider sx={{ backgroundColor: "#8ea8c3" }} />
       <CardContent>
-        <Typography variant="body1" color="text.secondary" gutterBottom>
+        <Typography variant="body1" color="#160c28" gutterBottom>
           <strong>Ingredients:</strong> {recipeIngredients}
         </Typography>
-        <Typography variant="body2" color="text.secondary" gutterBottom>
+        <Typography variant="body2" color="#160c28" gutterBottom>
           <strong>Instructions:</strong> {recipeInstructions}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="#160c28">
           <strong>Prep Time:</strong> {prepTime} minutes
         </Typography>
-        <Divider sx={{ marginY: 2 }} />
+        <Divider sx={{ backgroundColor: "#8ea8c3", marginY: 2 }} />
         <Grid container spacing={1}>
           <Grid item>
             <Chip
               label={`Vegan: ${isVegan ? "Yes" : "No"}`}
-              color={isVegan ? "success" : "default"}
+              sx={chipStyles(isVegan)}
             />
           </Grid>
           <Grid item>
             <Chip
               label={`Vegetarian: ${isVegetarian ? "Yes" : "No"}`}
-              color={isVegetarian ? "success" : "default"}
+              sx={chipStyles(isVegetarian)}
             />
           </Grid>
           <Grid item>
             <Chip
               label={`Lactose-Free: ${isLactoseFree ? "Yes" : "No"}`}
-              color={isLactoseFree ? "success" : "default"}
+              sx={chipStyles(isLactoseFree)}
             />
           </Grid>
           <Grid item>
             <Chip
               label={`Gluten-Free: ${isGlutenFree ? "Yes" : "No"}`}
-              color={isGlutenFree ? "success" : "default"}
+              sx={chipStyles(isGlutenFree)}
             />
           </Grid>
         </Grid>

@@ -2,6 +2,7 @@ package com.PiXl.mainframe.services;
 
 import java.util.List;
 
+import com.PiXl.mainframe.dto.RecipeFilter;
 import com.PiXl.mainframe.models.Recipe;
 
 public interface RecipesService {
@@ -15,7 +16,7 @@ public interface RecipesService {
 	void deleteRecipe(long recipeId);
 	
 	// Filter Recipes
-	List<Recipe> getFilteredRecipes(boolean isVegan, boolean isVegetarian, boolean isLactoseFree, boolean isGlutenFree);
+	List<Recipe> getFilteredRecipes(RecipeFilter filter);
 	List<Recipe> getRecipesBasedOnIngredients(String ingredients);
 	List<Recipe> getRecipesFilteredByPrepTime(long minTime, long maxTime);
 }

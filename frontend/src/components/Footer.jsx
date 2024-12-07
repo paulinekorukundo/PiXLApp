@@ -10,7 +10,7 @@ const Footer = () => {
         position: "sticky",
         bottom: 0,
         backgroundColor: "#f8f9fa",
-        padding: "20px 0",
+        padding: "20px 15px",
         borderTop: "1px solid #e7e7e7",
         boxShadow: "0 -2px 5px rgba(0, 0, 0, 0.1)", // Subtle shadow for elevation
       }}

@@ -8,6 +8,8 @@ import {
   Image,
   Grid,
   Box,
+  TextInput,
+  Flex,
 } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
@@ -224,3 +226,35 @@ function PostsList() {
 }
 
 export default PostsList;
+
+{
+  /* <Flex
+        align="center"
+        justify="space-between"
+        mb="md"
+        p="sm"
+        sx={(theme) => ({
+          backgroundColor: theme.colors.gray[1],
+          borderRadius: theme.radius.sm,
+          boxShadow: theme.shadows.xs,
+        })}
+      >
+        <Box sx={{ flex: 1, marginRight: "1rem" }}>
+          <TextInput
+            placeholder="Search By Tag"
+            value={filterConditions}
+            onChange={handleSearchChange}
+            styles={{
+              input: {
+                border: "none",
+                borderBottom: "1px solid #ced4da",
+                borderRadius: 0,
+                padding: "10px 0",
+                fontSize: "16px",
+                width: "100%",
+              },
+            }}
+          />
+        </Box>
+      </Flex> */
+}
