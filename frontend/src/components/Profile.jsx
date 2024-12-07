@@ -4,6 +4,7 @@ import DisplayUserPosts from "./Posts/DisplayUserPosts";
 import PostForm from "./Posts/PostForm";
 import "../assets/General.css";
 import RecipeForm from "./Recipes/RecipeForm";
+import { useState } from "react";
 
 const stats = [
   { value: "34K", label: "Followers" },
@@ -13,6 +14,9 @@ const stats = [
 
 export default function Profile() {
   const appState = useAppContext();
+  // variable to keep track of if the user posts need to be reloaded
+  const [reloadPosts, setReloadPosts] = useState(false);
+
   const items = stats.map((stat) => (
     <div key={stat.label}>
       <Text ta="left" fz="lg" fw={500}>
@@ -66,12 +70,12 @@ export default function Profile() {
                 Follow
               </Button>
 
-              <PostForm />
-              <RecipeForm />
+              <PostForm needsReload={setReloadPosts} />
+              <RecipeForm needsReload={setReloadPosts} />
             </Group>
           </Flex>
         </Flex>
-        <DisplayUserPosts />
+        <DisplayUserPosts reload={reloadPosts} />
       </Card>
     </>
   );
