@@ -32,49 +32,50 @@ export default function Profile() {
 
   return (
     <>
-
-    <Card>
-      <Card.Section
-        h={250}
-        style={{
-          backgroundImage:
-            "url(https://canadianfoodfocus.org/wp-content/uploads/2021/03/cultural-cuisine.jpg)",
-          backgroundSize: "cover",
-        }}
-      />
-      <Flex align="center" mt="md">
-        <Avatar
-          src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-9.png"
-          size={200}
-          radius={200}
+      <Card>
+        <Card.Section
+          h={250}
+          style={{
+            backgroundImage:
+              "url(https://canadianfoodfocus.org/wp-content/uploads/2021/03/cultural-cuisine.jpg)",
+            backgroundSize: "cover",
+          }}
         />
-        <Flex direction="column" p="lg">
-          <Text ta="left" fz="lg" fw={500}>
-            {appState.userDetails.firstName} {appState.userDetails.lastName}
-          </Text>
-          <Text ta="left" fz="sm" c="dimmed">
-            {appState.userDetails.bio}
-          </Text>
-          <Group mt="xs" justify="left" gap={30}>
-            {items}
-          </Group>
+        <Flex align="center" mt="md">
+          <Avatar
+            src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-9.png"
+            size={200}
+            radius={200}
+          />
+          <Flex direction="column" p="lg">
+            <Text ta="left" fz="lg" fw={500}>
+              {appState.userDetails.firstName} {appState.userDetails.lastName}
+            </Text>
+            <Text ta="left" fz="sm" c="dimmed">
+              {appState.userDetails.bio}
+            </Text>
+            <Group mt="xs" justify="left" gap={30}>
+              {items}
+            </Group>
 
-          <Group mt="xs" justify="flex-start" align="center" gap="md" className="custom-group">
-            <Button radius="md" mt="xl" size="md" variant="default">
-              Follow
-            </Button>
-            
-            
-            <PostForm />
-            <RecipeForm />
+            <Group
+              mt="xs"
+              justify="flex-start"
+              align="center"
+              gap="md"
+              className="custom-group"
+            >
+              <Button radius="md" mt="xl" size="md" variant="default">
+                Follow
+              </Button>
 
-          </Group>
+              <PostForm />
+              <RecipeForm />
+            </Group>
+          </Flex>
         </Flex>
-      </Flex>
-      <DisplayUserPosts />
-        
-    </Card>
-
+        <DisplayUserPosts />
+      </Card>
     </>
   );
 }

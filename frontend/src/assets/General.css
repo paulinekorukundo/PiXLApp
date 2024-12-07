@@ -1,8 +1,8 @@
 .item {
-    display: inline-block;
-  }
+  display: inline-block;
+}
 
-  .image-icon{
-    width: rem(18);
-    height: rem(18);
-  }
+.image-icon {
+  width: rem(18);
+  height: rem(18);
+}

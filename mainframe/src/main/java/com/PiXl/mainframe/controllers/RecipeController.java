@@ -32,60 +32,56 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/v1/recipes")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin
 public class RecipeController {
-	
+
 	@Autowired
 	private RecipesService recServ;
 	@Autowired
-    private ProfileService profileService;
-	
+	private ProfileService profileService;
+
 	@GetMapping
-    public ResponseEntity<List<RecipeEntity>> getRecipes(){
-    	return ResponseEntity.ok(recServ.getAllRecipes());
-    }
-	
+	public ResponseEntity<List<RecipeEntity>> getRecipes() {
+		return ResponseEntity.ok(recServ.getAllRecipes());
+	}
+
 	@GetMapping("/filter/**")
-    public ResponseEntity<List<RecipeEntity>> filterRecipes(HttpServletRequest request) {
-        String fullPath = request.getRequestURI(); // Extract the full path
-        String queryString = fullPath.substring(fullPath.indexOf("/filter/") + "/filter/".length());
+	public ResponseEntity<List<RecipeEntity>> filterRecipes(HttpServletRequest request) {
+		String fullPath = request.getRequestURI(); // Extract the full path
+		String queryString = fullPath.substring(fullPath.indexOf("/filter/") + "/filter/".length());
 
-        Map<String, String> filters = Arrays.stream(queryString.split("&"))
-            .map(param -> param.split("="))
-            .collect(Collectors.toMap(
-                arr -> arr[0], 
-                arr -> arr.length > 1 ? arr[1] : ""
-            ));
+		Map<String, String> filters = Arrays.stream(queryString.split("&"))
+				.map(param -> param.split("="))
+				.collect(Collectors.toMap(
+						arr -> arr[0],
+						arr -> arr.length > 1 ? arr[1] : ""));
 
-        RecipeFilter filter = new RecipeFilter(
-            Boolean.valueOf(filters.get("isGlutenFree")),
-            Boolean.valueOf(filters.get("isVegan")),
-            Boolean.valueOf(filters.get("isVegetarian")),
-            Boolean.valueOf(filters.get("isLactoseFree"))
-        );
+		RecipeFilter filter = new RecipeFilter(
+				Boolean.valueOf(filters.get("isGlutenFree")),
+				Boolean.valueOf(filters.get("isVegan")),
+				Boolean.valueOf(filters.get("isVegetarian")),
+				Boolean.valueOf(filters.get("isLactoseFree")));
 
-        List<RecipeEntity> recipes = recServ.getFilteredRecipes(filter);
+		List<RecipeEntity> recipes = recServ.getFilteredRecipes(filter);
 
-        return ResponseEntity.ok(recipes);
-    }
-	
+		return ResponseEntity.ok(recipes);
+	}
+
 	@GetMapping("/{recipe_id}")
-    public ResponseEntity<RecipeEntity> getRecipesById(@PathVariable Long recipe_id){
-    	return ResponseEntity.ok(recServ.getRecipesById(recipe_id));
-    }
-	
+	public ResponseEntity<RecipeEntity> getRecipesById(@PathVariable Long recipe_id) {
+		return ResponseEntity.ok(recServ.getRecipesById(recipe_id));
+	}
+
 	@GetMapping("/profile/{profile_id}")
-    public ResponseEntity<List<RecipeEntity>> getRecipesByProfile(@PathVariable Long profile_id){
-    	return ResponseEntity.ok(recServ.getRecipesByProfileId(profile_id));
-    }
-	
-	
-//	@RequestMapping(value = "", method = RequestMethod.POST)
-	@PostMapping()
+	public ResponseEntity<List<RecipeEntity>> getRecipesByProfile(@PathVariable Long profile_id) {
+		return ResponseEntity.ok(recServ.getRecipesByProfileId(profile_id));
+	}
+
+	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
-	private ResponseEntity<Object> saveRecipe(@RequestBody Map<String, String> json){
+	private ResponseEntity<Object> saveRecipe(@RequestBody Map<String, String> json) {
 		Profile prof = profileService.getProfile(Long.valueOf(json.get("profileId")).longValue()).get();
-		RecipeEntity recipeToSave = new RecipeEntity(json.get("recipeName"), new ProfileEntity(prof), 
+		RecipeEntity recipeToSave = new RecipeEntity(json.get("recipeName"), new ProfileEntity(prof),
 				json.get("recipeIngredients"), json.get("recipeInstructions"), json.get("cusineType"),
 				Boolean.valueOf(json.get("isVegan")), Boolean.valueOf(json.get("isVegetarian")), 
 				Boolean.valueOf(json.get("isLactoseFree")), Boolean.valueOf(json.get("isGlutenFree")), 
@@ -100,16 +96,15 @@ public class RecipeController {
 //			return ResponseEntity.ok(savedPost);
 		}
 	}
-	
-	
+
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
-	private ResponseEntity<Object> editRecipe(@RequestBody RecipeEntity json){
+	private ResponseEntity<Object> editRecipe(@RequestBody RecipeEntity json) {
 		RecipeEntity savedPost = recServ.editRecipe(json);
-		if(savedPost == null) {
-			return ResponseHandler.generateResponse("Error editing recipe.", HttpStatus.NOT_FOUND);
-		}else {
-			return ResponseHandler.generateResponse("Recipe Edited!", HttpStatus.OK, savedPost);
+		if (savedPost == null) {
+			return ResponseHandler.generateResponse("Error editing post.", HttpStatus.NOT_FOUND);
+		} else {
+			return ResponseHandler.generateResponse("Post Edited!", HttpStatus.OK, savedPost);
 		}
 	}
 }

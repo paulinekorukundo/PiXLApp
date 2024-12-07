@@ -5,8 +5,14 @@ import axios from "axios";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../assets/BadgeCard.module.css";
 import { useAppContext } from "../../context/AppContext";
-import { notifications, showNotification } from '@mantine/notifications';
-import { Checkbox, FormControlLabel, FormGroup, InputAdornment, TextField } from "@mui/material";
+import { notifications, showNotification } from "@mantine/notifications";
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 
 function RecipeForm() {
   // User
@@ -14,7 +20,7 @@ function RecipeForm() {
 
   // Create a post
   const [opened, { open, close }] = useDisclosure(false);
-  
+
   const [recipeData, setRecipeData] = useState({
     recipeName: "",
     recipeIngredients: "",
@@ -33,51 +39,28 @@ function RecipeForm() {
 
   const [message, setMessage] = useState("");
 
-  const RECIPE_URL = "http://localhost:8080/api/v1/recipes";
-  
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-  //   setRecipeData((prevData) => ({
-  //     ...prevData,
-  //     [name]: type === 'checkbox' ? checked : value,
-  //   }));
-  // };
+  const RECIPE_URL = import.meta.env.VITE_API_URL + "/api/v1/recipes";
 
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-  //   let newValue;
-  
-  //   if (type === 'number') {
-  //     newValue = isNaN(Number(value)) ? '' : Number(value);
-  //   } else if (type === 'checkbox') {
-  //     newValue = checked;
-  //   } else {
-  //     newValue = value;
-  //   }
-  
-  //   setRecipeData((prevData) => ({
-  //     ...prevData,
-  //     [name]: newValue,
-  //   }));
-  // };
-  
-  const handleChange = (event) => {
-    const { name, value, type } = event.target;
-  
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setRecipeData((prevData) => ({
       ...prevData,
-      [name]: name === "prepTime" ? (value ? parseFloat(value) : 0) : value, // Parse to number for prepTime
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async () => {
     console.log("Sending Data: ", recipeData);
     try {
-      await axios.post("http://localhost:8080/api/v1/recipes", recipeData, {
-        headers: {
-          "Content-Type": "application/json",
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/api/v1/recipes/",
+        recipeData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       setMessage("Recipe created successfully!");
       notifications.show({
         title: "Success",
@@ -88,16 +71,16 @@ function RecipeForm() {
       close();
     } catch (error) {
       console.error("Error saving recipe:", error);
-        const errorMessage = error.response
+      const errorMessage = error.response
         ? `Error: ${error.response.data.message}`
         : "An unexpected error occurred";
-        setMessage(errorMessage);
-        
-        notifications.show({
-          title: "Error",
-          message: errorMessage,
-          color: "red",
-        });
+      setMessage(errorMessage);
+
+      notifications.show({
+        title: "Error",
+        message: errorMessage,
+        color: "red",
+      });
     }
   };
 
@@ -111,16 +94,19 @@ function RecipeForm() {
 
   return (
     <>
-      <Button radius="md" mt="xl" size="md" variant="default"
+      <Button
+        radius="md"
+        mt="xl"
+        size="md"
+        variant="default"
         onClick={open}
         leftSection={add_icon}
-        >       
+      >
         Add Recipe
       </Button>
-    
+
       <Modal opened={opened} onClose={close} title="Add Recipe">
-        
-      <TextInput
+        <TextInput
           label="Recipe Name"
           placeholder="Recipe Name"
           value={recipeData.recipeName}
@@ -138,7 +124,7 @@ function RecipeForm() {
           onChange={handleChange}
           name="recipeIngredients"
         />
-        
+
         <TextField
           fullWidth
           multiline
@@ -229,7 +215,9 @@ function RecipeForm() {
           //   },
           // }}
           InputProps={{
-            endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+            endAdornment: (
+              <InputAdornment position="end">minutes</InputAdornment>
+            ),
           }}
           value={recipeData.prepTime}
           // leftSection={clock_icon}
@@ -239,9 +227,7 @@ function RecipeForm() {
         <Group position="right" mt="md">
           <Button onClick={handleSubmit}>Save</Button>
         </Group>
-
       </Modal>
-
     </>
   );
 }

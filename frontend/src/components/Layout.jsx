@@ -2,7 +2,6 @@ import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { Burger, Container, Flex, Group, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { useEffect } from "react";
 import Footer from "./Footer";
 
 export default function Layout() {
