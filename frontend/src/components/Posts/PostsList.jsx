@@ -16,12 +16,15 @@ import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { API_URL } from "../../config";
 import debounce from "lodash/debounce"; // Add this for debouncing input
+import { useAppContext } from "../../context/AppContext";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
   const [searchTag, setSearchTag] = useState(""); // State for tag search
+  const { userDetails } = useAppContext();
+
 
   //Get Images
   useEffect(() => {
@@ -163,6 +166,9 @@ function PostsList() {
                     likes={post.likesCount}
                     comments={post.commentsCount}
                     onLike={handleLikeUpdate}
+                    userId={post.userId} 
+                    loggedInUserId={userDetails.email} 
+                    onEdit={(postId) => handleEditPost(postId)}
                   />
                 </Group>
                 <Card.Section className={classes.section}>
