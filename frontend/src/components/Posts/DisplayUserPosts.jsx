@@ -21,14 +21,20 @@ function DisplayUserPosts() {
         const response = await axios.get(`${API_URL}/${userId}`);
         setUserPosts(response.data.data || []);     
     } catch (error) {
-        console.error("Error fetching posts:", error);
+        if(error.response && error.response.status === 404){
+          setUserPosts([]);
+          console.log("No Posts for User");
+        }else{
+          console.error("Error fetching posts:", error);
+        }
+        
       } finally {
         setLoading(false);
       }
     };
 
     loadPosts();
-  }, []);
+  }, [userDetails.email]);
 
 
   useEffect(() => {
@@ -69,7 +75,7 @@ function DisplayUserPosts() {
     };
 
     loadImages();
-  }, [userPosts, API_URL]);
+  }, [userPosts]);
   
   
 

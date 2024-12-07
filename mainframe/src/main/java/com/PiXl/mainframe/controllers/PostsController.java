@@ -85,6 +85,7 @@ public class PostsController {
 		}else {
 			return ResponseHandler.generateResponse("All Posts for UserId: " + userId, HttpStatus.OK, allPosts);
 		}
+//		return ResponseEntity.ok(allPosts);
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
