@@ -30,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
      */
     @Override
     public List<Profile> searchProfilesByName(String name) {
-        lombok.var profileEntities = pr.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name);
+        var profileEntities = pr.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name);
         return from(profileEntities);
     }
 
@@ -65,7 +65,7 @@ public class ProfileServiceImpl implements ProfileService {
      */
     @Override
     public List<Profile> getProfiles() {
-        lombok.var profileEntities = (List<ProfileEntity>) pr.findAll();
+        var profileEntities = (List<ProfileEntity>) pr.findAll();
         return from(profileEntities);
     }
 
@@ -115,7 +115,7 @@ public class ProfileServiceImpl implements ProfileService {
         Profile addedProfile = null;
         ProfileEntity profileEntityToAdd = new ProfileEntity(profile);
         if (!pr.existsByProfileId(profileEntityToAdd.getProfileId())) {
-            lombok.var profileEntityVar = pr.save(profileEntityToAdd);
+            var profileEntityVar = pr.save(profileEntityToAdd);
             addedProfile = new Profile(profileEntityVar);
         }
         return addedProfile;
@@ -132,7 +132,7 @@ public class ProfileServiceImpl implements ProfileService {
         Profile updatedProfile = null;
         ProfileEntity profileEntityToUpdate = new ProfileEntity(profile);
         if (pr.existsByProfileId(profileEntityToUpdate.getProfileId())) {
-            lombok.var updatedProfileEntityVar = pr.save(new ProfileEntity(profile));
+            var updatedProfileEntityVar = pr.save(new ProfileEntity(profile));
             updatedProfile = new Profile(updatedProfileEntityVar);
         }
         return updatedProfile;
@@ -160,7 +160,7 @@ public class ProfileServiceImpl implements ProfileService {
      */
     private List<Profile> from(List<ProfileEntity> profileEntities) {
 
-        lombok.var profiles = profileEntities.stream()
+        var profiles = profileEntities.stream()
                 .map(pe -> new Profile(pe))
                 .collect(Collectors.toList());
         if (profiles.isEmpty()) {
