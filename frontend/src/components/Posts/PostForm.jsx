@@ -68,14 +68,6 @@ function PostForm(props) {
     }
   };
 
-  // useEffect(() => {
-  //   showNotification({
-  //     title: "Success",
-  //     message: "Post created successfully!",
-  //     color: "green",
-  //   });
-  // }, []);
-
   return (
     <>
       <Button

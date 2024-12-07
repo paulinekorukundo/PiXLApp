@@ -90,13 +90,6 @@ function RecipeForm(props) {
     }
   };
 
-  // useEffect(() => {
-  //   showNotification({
-  //     title: "Success",
-  //     message: "Post created successfully!",
-  //     color: "green",
-  //   });
-  // }, []);
 
   return (
     <>
