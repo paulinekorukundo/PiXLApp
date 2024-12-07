@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { Modal, TextInput, Button, Group } from "@mantine/core";
 import { IconChefHat, IconClock } from "@tabler/icons-react";
@@ -14,7 +15,7 @@ import {
   TextField,
 } from "@mui/material";
 
-function RecipeForm() {
+function RecipeForm(props) {
   // User
   const { userDetails } = useAppContext();
 
@@ -61,7 +62,7 @@ function RecipeForm() {
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
       setMessage("Recipe created successfully!");
       notifications.show({
@@ -69,6 +70,9 @@ function RecipeForm() {
         message: "Recipe created successfully!",
         color: "green",
       });
+      if (props.needsReload) {
+        props.needsReload((prevState) => !prevState);
+      }
 
       close();
     } catch (error) {

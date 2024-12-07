@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { Modal, TextInput, Button, Group, FileInput } from "@mantine/core";
 import { IconImageInPicture, IconPlus } from "@tabler/icons-react";
@@ -7,7 +8,7 @@ import classes from "../../assets/BadgeCard.module.css";
 import { useAppContext } from "../../context/AppContext";
 import { notifications, showNotification } from "@mantine/notifications";
 
-function PostForm() {
+function PostForm(props) {
   // User
   const { userDetails } = useAppContext();
 
@@ -37,7 +38,7 @@ function PostForm() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
 
       setMessage("Post created successfully!");
@@ -46,7 +47,9 @@ function PostForm() {
         message: "Post created successfully!",
         color: "green",
       });
-
+      if (props.needsReload) {
+        props.needsReload((prevState) => !prevState);
+      }
       close();
     } catch (error) {
       console.error("Error saving post:", error);
