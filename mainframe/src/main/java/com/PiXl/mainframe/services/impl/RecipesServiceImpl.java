@@ -20,41 +20,40 @@ public class RecipesServiceImpl implements RecipesService {
 	private RecipesRepository recRepo;
 	
 	@Override
-	public List<Recipe> getAllRecipes() {
-		List<Recipe> recipes = recRepo.findAll().stream()
-				.map(this::convertToRecipeModel)
-				.collect(Collectors.toList());
-		return recipes;
+	public List<RecipeEntity> getAllRecipes() {
+		return recRepo.findAll();
+//				.stream()
+//				.map(this::convertToRecipeModel)
+//				.collect(Collectors.toList());
 	}
 
 	@Override
-	public Recipe getRecipesById(long recipeId) {
+	public RecipeEntity getRecipesById(long recipeId) {
 		Optional<RecipeEntity> re = recRepo.findByRecipeId(recipeId);
 		if(re.isEmpty()) {
-			throw new IllegalArgumentException("Recipe does not exist!");
+			return null;
 		}
 		
-		return convertToRecipeModel(re.get()); 
+		return re.get();
 	}
 
 	@Override
-	public List<Recipe> getRecipesByProfileId(long profileId) {
+	public List<RecipeEntity> getRecipesByProfileId(long profileId) {
 		List<RecipeEntity> recipes = recRepo.findAll();
 		return recipes.stream()
 				.filter(x -> x.getProfile().getProfileId() == profileId)
-				.map(this::convertToRecipeModel)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public Recipe saveRecipe(Recipe recipe) {
-		return convertToRecipeModel(recRepo.save(convertToRecipeEntity(recipe)));
+	public RecipeEntity saveRecipe(RecipeEntity recipe) {
+		return recRepo.save(recipe);
 	}
 	
 	@Override
-	public Recipe editRecipe(Recipe rec) {
+	public RecipeEntity editRecipe(RecipeEntity rec) {
 		if(recRepo.existsById(rec.getRecipeId())) {
-			return convertToRecipeModel(recRepo.save(convertToRecipeEntity(rec)));
+			return recRepo.save(rec);
 		}else {
 			throw new IllegalArgumentException("Recipe does not exist!");
 		}
@@ -69,20 +68,19 @@ public class RecipesServiceImpl implements RecipesService {
 	}
 
 	@Override
-	public List<Recipe> getFilteredRecipes(RecipeFilter filter) {
+	public List<RecipeEntity> getFilteredRecipes(RecipeFilter filter) {
 		return recRepo.findRecipes(filter).stream()
-				.map(this::convertToRecipeModel)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<Recipe> getRecipesBasedOnIngredients(String ingredients) {
+	public List<RecipeEntity> getRecipesBasedOnIngredients(String ingredients) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Recipe> getRecipesFilteredByPrepTime(long minTime, long maxTime) {
+	public List<RecipeEntity> getRecipesFilteredByPrepTime(long minTime, long maxTime) {
 		// TODO Auto-generated method stub
 		return null;
 	}

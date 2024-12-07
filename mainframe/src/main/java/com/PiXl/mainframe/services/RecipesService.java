@@ -3,20 +3,21 @@ package com.PiXl.mainframe.services;
 import java.util.List;
 
 import com.PiXl.mainframe.dto.RecipeFilter;
+import com.PiXl.mainframe.entities.RecipeEntity;
 import com.PiXl.mainframe.models.Recipe;
 
 public interface RecipesService {
 	// General
-	List<Recipe> getAllRecipes();
-	Recipe getRecipesById(long recipeId);
-	List<Recipe> getRecipesByProfileId(long profileId);
+	List<RecipeEntity> getAllRecipes();
+	RecipeEntity getRecipesById(long recipeId);
+	List<RecipeEntity> getRecipesByProfileId(long profileId);
 	
-	Recipe saveRecipe(Recipe recipe);
-	Recipe editRecipe(Recipe recipe);
+	RecipeEntity saveRecipe(RecipeEntity recipe);
+	RecipeEntity editRecipe(RecipeEntity recipe);
 	void deleteRecipe(long recipeId);
 	
 	// Filter Recipes
-	List<Recipe> getFilteredRecipes(RecipeFilter filter);
-	List<Recipe> getRecipesBasedOnIngredients(String ingredients);
-	List<Recipe> getRecipesFilteredByPrepTime(long minTime, long maxTime);
+	List<RecipeEntity> getFilteredRecipes(RecipeFilter filter);
+	List<RecipeEntity> getRecipesBasedOnIngredients(String ingredients);
+	List<RecipeEntity> getRecipesFilteredByPrepTime(long minTime, long maxTime);
 }

@@ -56,11 +56,11 @@ public class RecipeEntity {
 	public RecipeEntity() {
 		super();
 	}
-	public RecipeEntity(Long recipeId, String recipeName, ProfileEntity profile, String recipeIngredients, String recipeInstructions,
+	public RecipeEntity(String recipeName, ProfileEntity profile, String recipeIngredients, String recipeInstructions,
 			String cusineType, Boolean isVegan, Boolean isVegetarian, Boolean isLactoseFree, Boolean isGlutenFree,
 			Double prepTime) {
 		super();
-		this.recipeId = recipeId;
+//		this.recipeId = recipeId;
 		this.recipeName = recipeName;
 		this.profile = profile;
 		this.recipeIngredients = recipeIngredients;
@@ -246,7 +246,7 @@ public class RecipeEntity {
 	}
 	
 	public RecipeEntity(Recipe recipe) {
-		this(recipe.getRecipeId(), recipe.getRecipeName(), new ProfileEntity(recipe.getProfile()), recipe.getRecipeIngredients(), recipe.getRecipeInstructions(), recipe.getCusineType(),
+		this(recipe.getRecipeName(), new ProfileEntity(recipe.getProfile()), recipe.getRecipeIngredients(), recipe.getRecipeInstructions(), recipe.getCusineType(),
 				recipe.getIsVegan(), recipe.getIsVegetarian(), recipe.getIsLactoseFree(), recipe.getIsGlutenFree(), recipe.getPrepTime());
 	}
 }

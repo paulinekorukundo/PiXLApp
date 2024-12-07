@@ -19,10 +19,10 @@ public class Recipe {
 		super();
 	}
 	
-	public Recipe(Long recipeId, String recipeName, String recipeIngredients, String recipeInstructions, String cusineType,
+	public Recipe(String recipeName, String recipeIngredients, String recipeInstructions, String cusineType,
 			Boolean isVegan, Boolean isVegetarian, Boolean isLactoseFree, Boolean isGlutenFree, Profile profile, Double prepTime) {
 		super();
-		this.recipeId = recipeId;
+//		this.recipeId = recipeId;
 		this.recipeName = recipeName;
 		this.recipeIngredients = recipeIngredients;
 		this.recipeInstructions = recipeInstructions;
@@ -170,7 +170,7 @@ public class Recipe {
 	
 	
 	public Recipe(RecipeEntity re) {
-		this(re.getRecipeId(), re.getRecipeName(), re.getRecipeIngredients(), re.getRecipeInstructions(), re.getCusineType(),
+		this(re.getRecipeName(), re.getRecipeIngredients(), re.getRecipeInstructions(), re.getCusineType(),
 				re.getIsVegan(), re.getIsVegetarian(), re.getIsLactoseFree(), re.getIsGlutenFree(), 
 				new Profile(re.getProfile()), re.getPrepTime());
 	}
