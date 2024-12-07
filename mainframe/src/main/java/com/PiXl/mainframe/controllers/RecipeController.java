@@ -89,15 +89,15 @@ public class RecipeController {
 				json.get("recipeIngredients"), json.get("recipeInstructions"), json.get("cusineType"),
 				Boolean.valueOf(json.get("isVegan")), Boolean.valueOf(json.get("isVegetarian")), 
 				Boolean.valueOf(json.get("isLactoseFree")), Boolean.valueOf(json.get("isGlutenFree")), 
-				Double.valueOf(json.get("prepTime")).doubleValue());
+				Double.parseDouble(json.get("prepTime")));
 
 		RecipeEntity savedPost = recServ.saveRecipe(recipeToSave);
 		if(savedPost == null) {
-//			return ResponseHandler.generateResponse("Error saving recipe.", HttpStatus.NOT_FOUND);
-			return ResponseEntity.notFound().build();
+			return ResponseHandler.generateResponse("Error saving recipe.", HttpStatus.NOT_FOUND);
+//			return ResponseEntity.notFound().build();
 		}else {
-//			return ResponseHandler.generateResponse("Recipe Saved!", HttpStatus.OK, savedPost);
-			return ResponseEntity.ok(savedPost);
+			return ResponseHandler.generateResponse("Recipe Saved!", HttpStatus.OK, savedPost);
+//			return ResponseEntity.ok(savedPost);
 		}
 	}
 	

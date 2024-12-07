@@ -24,8 +24,8 @@ function RecipeForm() {
     isVegetarian: false,
     isLactoseFree: false,
     isGlutenFree: false,
-    profile: userDetails.profileId,
-    prepTime: "",
+    profile: userDetails?.profileId || 0,
+    prepTime: 0,
   });
 
   const clock_icon = <IconClock className="image-icon" stroke={1.5} />;
@@ -35,16 +35,43 @@ function RecipeForm() {
 
   const RECIPE_URL = "http://localhost:8080/api/v1/recipes";
   
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   setRecipeData((prevData) => ({
+  //     ...prevData,
+  //     [name]: type === 'checkbox' ? checked : value,
+  //   }));
+  // };
+
+  // const handleChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   let newValue;
+  
+  //   if (type === 'number') {
+  //     newValue = isNaN(Number(value)) ? '' : Number(value);
+  //   } else if (type === 'checkbox') {
+  //     newValue = checked;
+  //   } else {
+  //     newValue = value;
+  //   }
+  
+  //   setRecipeData((prevData) => ({
+  //     ...prevData,
+  //     [name]: newValue,
+  //   }));
+  // };
+  
+  const handleChange = (event) => {
+    const { name, value, type } = event.target;
+  
     setRecipeData((prevData) => ({
       ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: name === "prepTime" ? (value ? parseFloat(value) : 0) : value, // Parse to number for prepTime
     }));
   };
-  
 
   const handleSubmit = async () => {
+    console.log("Sending Data: ", recipeData);
     try {
       await axios.post("http://localhost:8080/api/v1/recipes", recipeData, {
         headers: {
