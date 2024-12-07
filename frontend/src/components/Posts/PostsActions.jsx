@@ -10,7 +10,7 @@ import { ActionIcon, Text } from "@mantine/core";
 import axios from "axios";
 
 // eslint-disable-next-line react/prop-types
-function PostActions({ postId, likes, comments, onLike }) {
+function PostActions({ postId, likes, comments, onLike, userId, loggedInUserId, onEdit }) {
   const handleLike = async () => {
     try {
       await axios.post(
@@ -32,6 +32,18 @@ function PostActions({ postId, likes, comments, onLike }) {
       onLike(postId);
     } catch (error) {
       console.error("Error unliking post:", error);
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/api/v1/posts/edit",
+        { postId },
+      );
+      onEdit(postId);
+    } catch (error) {
+      console.error("Error editing post:", error);
     }
   };
 
@@ -64,6 +76,7 @@ function PostActions({ postId, likes, comments, onLike }) {
       </div>
 
       <div className={classes.iconTextWrapper}>
+
         <ActionIcon variant="light" radius="md" size={36}>
           <IconMessageChatbot
             size={48}
@@ -76,11 +89,13 @@ function PostActions({ postId, likes, comments, onLike }) {
         </Text>
       </div>
 
-      {/* TODO PK: Add comment on click */}
+
       <div className={classes.iconTextWrapper}>
+      {userId === loggedInUserId && (
         <ActionIcon className="item" variant="light" radius="md" size={36}>
           <IconEdit className={classes.like} stroke={1.5} />
         </ActionIcon>
+      )}
       </div>
     </div>
   );
