@@ -39,21 +39,23 @@ function RecipeForm() {
 
   const [message, setMessage] = useState("");
 
-  const RECIPE_URL = import.meta.env.VITE_API_URL + "/api/v1/recipes";
+  // const RECIPE_URL = import.meta.env.VITE_API_URL + "/api/v1/recipes";
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
+  
     setRecipeData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : type === "number" ? parseFloat(value) : value,
     }));
   };
+  
 
   const handleSubmit = async () => {
     console.log("Sending Data: ", recipeData);
     try {
       await axios.post(
-        import.meta.env.VITE_API_URL + "/api/v1/recipes/",
+        import.meta.env.VITE_API_URL + "/api/v1/recipes",
         recipeData,
         {
           headers: {
@@ -186,15 +188,6 @@ function RecipeForm() {
         />
         </FormGroup>
          
-        
-        {/* <TextInput
-          disabled
-          label="Profile"
-          placeholder="Profile"
-          value={userDetails.profileId}
-          onChange={handleChange}
-          name="profile"
-        /> */}
         {/* <TextInput
           label="Preparation Time"
           placeholder="Preparation Time"
@@ -225,7 +218,7 @@ function RecipeForm() {
           name="prepTime"
         />
         <Group position="right" mt="md">
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button onClick={handleSubmit}>Save Recipe</Button>
         </Group>
       </Modal>
     </>
