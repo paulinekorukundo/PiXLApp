@@ -11,12 +11,7 @@ import axios from "axios";
 import { useAppContext } from "../../context/AppContext";
 
 // eslint-disable-next-line react/prop-types
-function PostActions({ postId, likes, comments, onLike, postUserId }) {
-
-  const { userDetails } = useAppContext();
-
-  const isAuthor = userDetails.userId === postUserId;
-
+function PostActions({ postId, likes, comments, onLike, userId, loggedInUserId, onEdit }) {
   const handleLike = async () => {
     try {
       await axios.post(
@@ -38,6 +33,18 @@ function PostActions({ postId, likes, comments, onLike, postUserId }) {
       onLike(postId);
     } catch (error) {
       console.error("Error unliking post:", error);
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/api/v1/posts/edit",
+        { postId },
+      );
+      onEdit(postId);
+    } catch (error) {
+      console.error("Error editing post:", error);
     }
   };
 
@@ -70,6 +77,7 @@ function PostActions({ postId, likes, comments, onLike, postUserId }) {
       </div>
 
       <div className={classes.iconTextWrapper}>
+
         <ActionIcon variant="light" radius="md" size={36}>
           <IconMessageChatbot
             size={48}
@@ -87,6 +95,7 @@ function PostActions({ postId, likes, comments, onLike, postUserId }) {
         <ActionIcon className="item" variant="light" radius="md" size={36}>
           <IconEdit className={classes.like} stroke={1.5} />
         </ActionIcon>
+      )}
       </div>
       )}
       

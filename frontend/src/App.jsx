@@ -24,7 +24,7 @@ function App() {
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <AppProvider>
-        <Notifications position="top-right" />
+      <Notifications position="top-right"/>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<PostsList />} />

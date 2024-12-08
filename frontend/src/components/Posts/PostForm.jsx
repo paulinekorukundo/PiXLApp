@@ -68,8 +68,6 @@ function PostForm(props) {
     }
   };
 
-
-
   return (
     <>
       <Button
