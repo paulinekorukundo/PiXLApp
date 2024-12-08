@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +23,6 @@ import com.PiXl.mainframe.entities.ProfileEntity;
 import com.PiXl.mainframe.entities.RecipeEntity;
 import com.PiXl.mainframe.handler.ResponseHandler;
 import com.PiXl.mainframe.models.Profile;
-import com.PiXl.mainframe.models.Recipe;
 import com.PiXl.mainframe.services.ProfileService;
 import com.PiXl.mainframe.services.RecipesService;
 

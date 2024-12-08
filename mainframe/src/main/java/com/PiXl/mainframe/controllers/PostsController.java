@@ -183,8 +183,9 @@ public class PostsController {
 	// LOADING.
 	@RequestMapping(value = "/topPosts", method = RequestMethod.GET)
 	@ResponseBody
-	private ResponseEntity<Object> getTopLikedPosts(@RequestBody Map<String, Long> json) {
-		List<Posts> topPosts = postService.getPostByMostLikes(json.get("numPosts"));
+//	private ResponseEntity<Object> getTopLikedPosts(@RequestBody Map<String, Long> json) {
+	private ResponseEntity<Object> getTopLikedPosts(@RequestParam(defaultValue = "10") Long limit) {
+		List<Posts> topPosts = postService.getPostByMostLikes(limit); //json.get("numPosts")
 		if (topPosts.isEmpty()) {
 			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
 		} else {

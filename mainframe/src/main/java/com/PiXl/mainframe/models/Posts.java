@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.PiXl.mainframe.entities.PostsEntity;
-import com.PiXl.mainframe.entities.TagsEntity;
 
 import lombok.Getter;
 import lombok.Setter;
