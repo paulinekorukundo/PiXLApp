@@ -14,7 +14,7 @@ import { useAppContext } from "../../context/AppContext";
 import { notifications } from "@mantine/notifications";
 
 // eslint-disable-next-line react/prop-types
-function PostActions({ postId, likes, comments, onLike, postUserId, onEdit }) {
+function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDelete }) {
   const { userDetails } = useAppContext();
   const isAuthor = userDetails.email === postUserId;
   const handleLike = async () => {
@@ -56,17 +56,17 @@ function PostActions({ postId, likes, comments, onLike, postUserId, onEdit }) {
   const handleDelete = async () => {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/posts?postId=${postId}`);
-      
+      if (onDelete) onDelete(postId);
       notifications.show({
         title: "Success",
         message: "Post deleted!",
         color: "green",
       });
+
     } catch (error) {
       console.error("Error deleting post:", error);
       
       if (error.response) {
-        // setMessage(`Error: ${error.response.data.message}`);
         notifications.show({
           title: "Error",
           message: error.response

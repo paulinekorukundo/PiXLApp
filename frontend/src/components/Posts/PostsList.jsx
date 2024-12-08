@@ -114,6 +114,11 @@ function PostsList() {
     }
   };
 
+  const handlePostDeleted = (deletedPostId) => {
+    loadPosts();
+  };
+
+
   const [editModalOpened, setEditModalOpened] = useState(false);
   const [editContent, setEditContent] = useState("");
   const [editPostId, setEditPostId] = useState(null);
@@ -218,6 +223,7 @@ function PostsList() {
                     onLike={handleLikeUpdate}
                     postUserId={post.userId} 
                     onEdit={(postId) => handleEditPost(postId)}
+                    onDelete={handlePostDeleted}
                   />
                 </Group>
                 <Card.Section className={classes.section}>
