@@ -17,7 +17,6 @@ import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { API_URL } from "../../config";
 import debounce from "lodash/debounce"; 
-import { useAppContext } from "../../context/AppContext";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
@@ -69,10 +68,10 @@ function PostsList() {
       let response;
       if (searchTag){
         response = await axios.post(import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
-                {
-                  tagName: searchTag,
-                },
-              )
+          {
+            tagName: searchTag,
+          },
+        )
       }else if (showTopPosts){
         response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
       } else {
@@ -178,7 +177,7 @@ function PostsList() {
         <Switch
           checked={showTopPosts}
           onChange={(event) => handleToggleTopPosts(event.currentTarget.checked)}
-          label="Popular Posts"
+          label="Most Popular"
         />
       </Flex>
       <Grid gap={10}>
@@ -215,8 +214,7 @@ function PostsList() {
                     likes={post.likesCount}
                     comments={post.commentsCount}
                     onLike={handleLikeUpdate}
-                    userId={post.userId} 
-                    loggedInUserId={userDetails.email} 
+                    postUserId={post.userId} 
                     onEdit={(postId) => handleEditPost(postId)}
                   />
                 </Group>

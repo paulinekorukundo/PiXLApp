@@ -15,12 +15,21 @@ INSERT INTO tag (name) VALUES ('Desserts');
 
 
 -- Post Table
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user123', 'This is my first post!', '1732864476110_food1.jpg', 10, 5);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user456', 'Loving the weather today!', 'food5.jpg', 25, 8);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user789', 'Check out my new blog post!', 'food2.jpg', 15, 3);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user101', 'Happy Monday, everyone!', 'food3.jpg', 5, 1);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user123', 'This is my first post!', '1732864476110_food1.jpg', 300, 55);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user456', 'Loving the weather today!', 'food5.jpg', 1002, 8);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user789', 'Check out my new blog post!', 'food2.jpg', 350, 32);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user101', 'Happy Monday, everyone!', 'food3.jpg', 290, 1);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user202', 'Time flies, but food settles, super excited!', 'food4.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user123', 'This is my first post!', '1732864476110_food1.jpg', 102, 5);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Loving the weather today!', 'food5.jpg', 25, 8);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user789', 'Check out my new blog post!', 'food2.jpg', 125, 3);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user101', 'Happy Monday, everyone!', 'food3.jpg', 348, 1);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user202', 'Traveling to Japan tomorrow, super excited!', 'food4.jpg', 100, 50);
-
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user123', 'Another exciting post!', '1732864476110_food1.jpg', 10, 22);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('user456', 'Loving the weather today!', 'food5.jpg', 133, 221);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Check out my new blog post!', 'food2.jpg', 15, 13);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Happy Monday, everyone!', 'food3.jpg', 300, 1);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Traveling to Japan tomorrow, super excited!', 'food4.jpg', 100, 50);
 
 -- Recipe Table
 INSERT INTO recipes (profile_id, name, ingredients, instructions, cusine_type, vegan, vegetarian, lactose_free, gluten_free, prep_time) VALUES (1, 'Basic Desert', 'Flour, Sugar, Eggs', 'Mix ingredients and bake at 350°F for 25 minutes', 'Dessert', false, true, false, true, 25.5);

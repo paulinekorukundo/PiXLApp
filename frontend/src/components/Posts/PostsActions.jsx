@@ -11,7 +11,9 @@ import axios from "axios";
 import { useAppContext } from "../../context/AppContext";
 
 // eslint-disable-next-line react/prop-types
-function PostActions({ postId, likes, comments, onLike, userId, loggedInUserId, onEdit }) {
+function PostActions({ postId, likes, comments, onLike, postUserId, onEdit }) {
+  const { userDetails } = useAppContext();
+  const isAuthor = userDetails.email === postUserId;
   const handleLike = async () => {
     try {
       await axios.post(
@@ -95,7 +97,6 @@ function PostActions({ postId, likes, comments, onLike, userId, loggedInUserId, 
         <ActionIcon className="item" variant="light" radius="md" size={36}>
           <IconEdit className={classes.like} stroke={1.5} />
         </ActionIcon>
-      )}
       </div>
       )}
       
