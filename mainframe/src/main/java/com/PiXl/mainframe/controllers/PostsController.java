@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ import com.PiXl.mainframe.entities.PostsEntity;
 import com.PiXl.mainframe.entities.TagsEntity;
 import com.PiXl.mainframe.handler.ResponseHandler;
 import com.PiXl.mainframe.models.Posts;
+import com.PiXl.mainframe.models.Profile;
 import com.PiXl.mainframe.services.PostsService;
 
 @RestController
@@ -239,4 +241,21 @@ public class PostsController {
 			return ResponseEntity.ok(filteredPosts);
 		}
 	}
+	
+	/**
+	 * Deletes a post from the system.
+	 *
+	 * @param post The post to delete.
+	 * @return A ResponseEntity containing a boolean indicating success or failure.
+	 */
+	@DeleteMapping()
+    public ResponseEntity<Boolean> delete(@RequestParam Long postId) {
+        boolean deletedPost = postService.deletePost(postId);
+        if (deletedPost == false) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(deletedPost);
+    }
+	
+	
 }

@@ -19,7 +19,7 @@ public interface PostsService {
     Posts savePost(Posts post);
     PostsEntity saveNewPost(PostsEntity post, Set<TagsEntity> tags, MultipartFile file);
     PostsEntity editExistingPost(PostsEntity post);
-    void deletePost(Long postId);
+    boolean deletePost(Long postId);
     
     // USER SPECIFIC POSTS
     List<PostsEntity> getAllPostForUser(String userId);

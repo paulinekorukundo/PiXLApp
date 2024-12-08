@@ -72,9 +72,11 @@ function PostsList() {
             tagName: searchTag,
           },
         )
-      }else if (showTopPosts){
-        response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
-      } else {
+      }
+      // else if (showTopPosts){
+      //   response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
+      // } 
+      else {
         response = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
       }
       
