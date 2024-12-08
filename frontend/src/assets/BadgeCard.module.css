@@ -29,6 +29,16 @@
   transform: scale(1.2);
 }
 
+.delete_icon {
+  color: red;
+}
+
+.delete_icon:hover {
+  transform: scale(1.2);
+  color: red;
+}
+
+
 .actionsContainer {
   display: flex;
   align-items: center;

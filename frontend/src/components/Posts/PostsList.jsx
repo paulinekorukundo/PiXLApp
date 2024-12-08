@@ -72,9 +72,11 @@ function PostsList() {
             tagName: searchTag,
           },
         )
-      }else if (showTopPosts){
-        response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
-      } else {
+      }
+      // else if (showTopPosts){
+      //   response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
+      // } 
+      else {
         response = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
       }
       
@@ -111,6 +113,11 @@ function PostsList() {
       console.error("Error updating likes:", error);
     }
   };
+
+  const handlePostDeleted = (deletedPostId) => {
+    loadPosts();
+  };
+
 
   const [editModalOpened, setEditModalOpened] = useState(false);
   const [editContent, setEditContent] = useState("");
@@ -216,6 +223,7 @@ function PostsList() {
                     onLike={handleLikeUpdate}
                     postUserId={post.userId} 
                     onEdit={(postId) => handleEditPost(postId)}
+                    onDelete={handlePostDeleted}
                   />
                 </Group>
                 <Card.Section className={classes.section}>
