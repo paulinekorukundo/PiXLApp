@@ -10,18 +10,22 @@ import {
   Box,
   TextInput,
   Flex,
+  Switch,
 } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { API_URL } from "../../config";
 import debounce from "lodash/debounce"; // Add this for debouncing input
+import { useAppContext } from "../../context/AppContext";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
   const [searchTag, setSearchTag] = useState(""); // State for tag search
+  const [showTopPosts, setShowTopPosts] = useState(false);
+
 
   //Get Images
   useEffect(() => {
@@ -54,14 +58,27 @@ function PostsList() {
   const loadPosts = async (searchTag = "") => {
     // setLoading(true);
     try {
-      const response = searchTag
-        ? await axios.post(
-            import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
-            {
-              tagName: searchTag,
-            },
-          )
-        : await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
+      // const response = searchTag
+      //   ? await axios.post(
+      //       import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
+      //       {
+      //         tagName: searchTag,
+      //       },
+      //     )
+      //   : await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
+      let response;
+      if (searchTag){
+        response = await axios.post(import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
+                {
+                  tagName: searchTag,
+                },
+              )
+      }else if (showTopPosts){
+        response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
+      } else {
+        response = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
+      }
+      
 
       setPosts(response.data || []);
     } catch (error) {
@@ -81,6 +98,11 @@ function PostsList() {
     const value = e.target.value;
     setSearchTag(value);
     debouncedSearch(value);
+  };
+
+  const handleToggleTopPosts = (checked) => {
+    setShowTopPosts(checked);
+    loadPosts(searchTag);
   };
 
   const handleLikeUpdate = async () => {
@@ -128,6 +150,11 @@ function PostsList() {
             }}
           />
         </Box>
+        <Switch
+          checked={showTopPosts}
+          onChange={(event) => handleToggleTopPosts(event.currentTarget.checked)}
+          label="Popular Posts"
+        />
       </Flex>
       <Grid gap={10}>
         {posts?.length > 0 ? (
@@ -163,6 +190,7 @@ function PostsList() {
                     likes={post.likesCount}
                     comments={post.commentsCount}
                     onLike={handleLikeUpdate}
+                    postUserId={post.userId}
                   />
                 </Group>
                 <Card.Section className={classes.section}>

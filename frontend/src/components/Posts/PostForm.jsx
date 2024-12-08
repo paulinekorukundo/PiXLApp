@@ -6,7 +6,7 @@ import axios from "axios";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../assets/BadgeCard.module.css";
 import { useAppContext } from "../../context/AppContext";
-import { notifications, showNotification } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 
 function PostForm(props) {
   // User
@@ -41,7 +41,7 @@ function PostForm(props) {
         }
       );
 
-      setMessage("Post created successfully!");
+      // setMessage("Post created successfully!");
       notifications.show({
         title: "Success",
         message: "Post created successfully!",
@@ -54,7 +54,7 @@ function PostForm(props) {
     } catch (error) {
       console.error("Error saving post:", error);
       if (error.response) {
-        setMessage(`Error: ${error.response.data.message}`);
+        // setMessage(`Error: ${error.response.data.message}`);
         notifications.show({
           title: "Error",
           message: error.response
@@ -68,13 +68,7 @@ function PostForm(props) {
     }
   };
 
-  useEffect(() => {
-    showNotification({
-      title: "Success",
-      message: "Post created successfully!",
-      color: "green",
-    });
-  }, []);
+
 
   return (
     <>

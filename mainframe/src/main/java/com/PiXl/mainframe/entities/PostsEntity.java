@@ -4,8 +4,6 @@ package com.PiXl.mainframe.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.annotations.Cascade;
-
 import com.PiXl.mainframe.models.Posts;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 

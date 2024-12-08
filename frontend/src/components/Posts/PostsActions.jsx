@@ -8,9 +8,15 @@ import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { ActionIcon, Text } from "@mantine/core";
 import axios from "axios";
+import { useAppContext } from "../../context/AppContext";
 
 // eslint-disable-next-line react/prop-types
-function PostActions({ postId, likes, comments, onLike }) {
+function PostActions({ postId, likes, comments, onLike, postUserId }) {
+
+  const { userDetails } = useAppContext();
+
+  const isAuthor = userDetails.userId === postUserId;
+
   const handleLike = async () => {
     try {
       await axios.post(
@@ -76,12 +82,14 @@ function PostActions({ postId, likes, comments, onLike }) {
         </Text>
       </div>
 
-      {/* TODO PK: Add comment on click */}
-      <div className={classes.iconTextWrapper}>
+      {isAuthor && (
+        <div className={classes.iconTextWrapper}>
         <ActionIcon className="item" variant="light" radius="md" size={36}>
           <IconEdit className={classes.like} stroke={1.5} />
         </ActionIcon>
       </div>
+      )}
+      
     </div>
   );
 }

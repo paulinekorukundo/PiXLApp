@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.PiXl.mainframe.dto.RecipeFilter;
 import com.PiXl.mainframe.entities.RecipeEntity;
-import com.PiXl.mainframe.models.Recipe;
 
 public interface RecipesService {
 	// General

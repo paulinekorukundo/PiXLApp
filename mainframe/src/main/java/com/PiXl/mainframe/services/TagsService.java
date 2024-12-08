@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.PiXl.mainframe.entities.PostsEntity;
 import com.PiXl.mainframe.entities.TagsEntity;
-import com.PiXl.mainframe.models.Tags;
 
 import jakarta.validation.Valid;
 
