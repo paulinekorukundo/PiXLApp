@@ -73,7 +73,6 @@ public class TagsServiceImpl implements TagsService {
 	@Override
 	public List<TagsEntity> getTags(String name) {
 		var tagsEntities = tagsRepository.findByNameContainingIgnoreCase(name);
-		// return from(tagsEntities);
 		return tagsEntities;
 	}
 
@@ -84,7 +83,6 @@ public class TagsServiceImpl implements TagsService {
 	 */
 	public List<TagsEntity> getMostFreqTags() {
 		var tagsEntities = tagsRepository.findMostFrequentTags();
-		// return from(tagsEntities);
 		return tagsEntities;
 	}
 
@@ -96,9 +94,7 @@ public class TagsServiceImpl implements TagsService {
 	 */
 	@Override
 	public TagsEntity add(@Valid TagsEntity tags) {
-		// TagsEntity tagsEntityToAdd = new TagsEntity(tags);
 		TagsEntity addedTagsEntity = tagsRepository.save(tags);
-		// return new Tags(addedTagsEntity);
 		return addedTagsEntity;
 	}
 
@@ -111,10 +107,8 @@ public class TagsServiceImpl implements TagsService {
 	@Override
 	public TagsEntity update(@Valid TagsEntity tags) {
 		TagsEntity updatedTagsEntity = null;
-		// TagsEntity tagsEntityToUpdate = new TagsEntity(tags);
 		if (tagsRepository.existsById(tags.getTagId())) {
 			updatedTagsEntity = tagsRepository.save(tags);
-			// updatedTags = new Tags(updatedTagsEntity);
 		}
 		return updatedTagsEntity;
 	}
@@ -128,7 +122,6 @@ public class TagsServiceImpl implements TagsService {
 	@Override
 	public boolean delete(@Valid TagsEntity tags) {
 		boolean isDeleted = false;
-		// TagsEntity tagsEntityToDelete = new TagsEntity(tags);
 		if (tagsRepository.existsById(tags.getTagId())) {
 			tagsRepository.delete(tags);
 			isDeleted = true;

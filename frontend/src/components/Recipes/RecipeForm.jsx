@@ -36,26 +36,10 @@ function RecipeForm(props) {
   const [opened, { open, close }] = useDisclosure(false);
 
   const [recipeData, setRecipeData] = useState(initialRecipeData);
-  // const [recipeData, setRecipeData] = useState({
-  //   recipeName: "",
-  //   recipeIngredients: "",
-  //   recipeInstructions: "",
-  //   cusineType: "",
-  //   isVegan: false,
-  //   isVegetarian: false,
-  //   isLactoseFree: false,
-  //   isGlutenFree: false,
-  //   profileId: userDetails?.profileId || 0,
-  //   prepTime: 0,
-  // });
-
   const clock_icon = <IconClock className="image-icon" stroke={1.5} />;
   const add_icon = <IconChefHat className={classes.like} stroke={1.5} />;
 
   const [message, setMessage] = useState("");
-
-  // const RECIPE_URL = import.meta.env.VITE_API_URL + "/api/v1/recipes";
-
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     console.log(event.target);

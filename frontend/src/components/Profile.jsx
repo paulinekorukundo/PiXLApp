@@ -1,6 +1,5 @@
 import { useAppContext } from "../context/AppContext";
 import { Card, Avatar, Text, Group, Button, Flex } from "@mantine/core";
-import DisplayUserPosts from "./Posts/DisplayUserPosts";
 import UserPostsRecipes from "./Posts/UserPostsRecipes";
 import PostForm from "./Posts/PostForm";
 import "../assets/General.css";
@@ -33,29 +32,6 @@ const stats = [
  * }
  *
  * @returns {JSX.Element} A card layout containing the user's profile info, actions, and their posts.
- *
- * Internal Details:
- * - **State Variables:**
- *   - `reloadPosts` (boolean): Controls whether the user's posts should be re-fetched. Triggered by actions like creating a new post or recipe.
- *
- * - **Data Sources:**
- *   - Uses `useAppContext()` to access the currently logged-in user's details (profileId, firstName, lastName, bio).
- *
- * - **Sub-Components:**
- *   - `DisplayUserPosts`: Shows the user's posts. It accepts a `reload` prop that, when toggled, refetches the user's posts.
- *   - `PostForm`: Allows the user to create a new post. If a new post is created, it updates `reloadPosts` to refresh the post list.
- *   - `RecipeForm`: Allows the user to create a new recipe. Similarly updates `reloadPosts` to refresh posts.
- *
- * - **UI Elements:**
- *   - Uses `Card`, `Avatar`, `Text`, `Group`, `Button`, `Flex` from `@mantine/core` for layout and styling.
- *   - Displays user stats (followers, follows, posts) as a simple, static array (`stats`).
- *
- * - **Functional Flow:**
- *   1. Displays a cover image and user avatar.
- *   2. Shows the user's name and bio retrieved from useAppContext.
- *   3. Renders user stats (currently hardcoded values).
- *   4. Includes actions to follow the user (non-functional), create new posts (PostForm), and create new recipes (RecipeForm).
- *   5. Displays the user's posts below the profile section via `DisplayUserPosts`. The `reloadPosts` state triggers a refresh when posts are created.
  */
 
 export default function Profile() {
@@ -75,8 +51,6 @@ export default function Profile() {
   ));
 
   const profileId = appState.userDetails.profileId;
-  // const [opened, { open, close }] = useDisclosure(false);
-  // const add_icon = <IconPlus className={classes.like} stroke={1.5} />;
 
   return (
     <>
@@ -122,7 +96,6 @@ export default function Profile() {
             </Group>
           </Flex>
         </Flex>
-        {/* <DisplayUserPosts reload={reloadPosts} /> */}
         <UserPostsRecipes reload={reloadPosts} />
       </Card>
     </>

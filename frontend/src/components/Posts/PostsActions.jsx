@@ -1,9 +1,7 @@
 import {
   IconHeart,
-  IconEdit,
   IconMessageChatbot,
   IconHeartBroken,
-  IconCross,
   IconX,
 } from "@tabler/icons-react";
 import classes from "../../assets/BadgeCard.module.css";
@@ -36,38 +34,8 @@ import { notifications } from "@mantine/notifications";
  * @prop {Function} onDelete - A callback function executed when the delete action is triggered. The postId is passed
  *   to this function for identifying which post to remove from the UI.
  *
- * @example
- * // Example usage:
- * function Post({ id, userId, likesCount, commentsCount, refreshPosts }) {
- *   const handleLike = (postId) => {
- *     // Update local state or trigger a re-fetch of posts
- *     refreshPosts();
- *   };
- *
- *   const handleEdit = (postId) => {
- *     // Open edit modal, etc.
- *   };
- *
- *   const handleDelete = (postId) => {
- *     // Remove the deleted post from the UI
- *     refreshPosts();
- *   };
- *
- *   return (
- *     <PostActions
- *       postId={id}
- *       likes={likesCount}
- *       comments={commentsCount}
- *       onLike={handleLike}
- *       postUserId={userId}
- *       onEdit={handleEdit}
- *       onDelete={handleDelete}
- *     />
- *   );
- * }
  */
 
-// eslint-disable-next-line react/prop-types
 function PostActions({
   postId,
   likes,

@@ -27,6 +27,12 @@ import com.PiXl.mainframe.services.RecipesService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+
+/**
+ * Controller class that handles all HTTP requests related to recipes.
+ * It provides endpoints for retrieving, filtering, creating, editing,
+ * and deleting recipes.
+ */
 @RestController
 @RequestMapping("/api/v1/recipes")
 @CrossOrigin
@@ -37,11 +43,27 @@ public class RecipeController {
 	@Autowired
 	private ProfileService profileService;
 
+	/**
+     * Retrieves all available recipes.
+     *
+     * @return A ResponseEntity containing a list of all RecipeEntity objects.
+     */
 	@GetMapping
 	public ResponseEntity<List<RecipeEntity>> getRecipes() {
 		return ResponseEntity.ok(recServ.getAllRecipes());
 	}
 
+	/**
+     * Filters recipes based on query parameters supplied".
+     * The query parameters should be provided in the URL and may include:
+     * - isGlutenFree
+     * - isVegan
+     * - isVegetarian
+     * - isLactoseFree
+     *
+     * @param request The HttpServletRequest containing the query parameters.
+     * @return A ResponseEntity containing a filtered list of RecipeEntity objects.
+     */
 	@GetMapping("/filter/**")
 	public ResponseEntity<List<RecipeEntity>> filterRecipes(HttpServletRequest request) {
 		String fullPath = request.getRequestURI(); // Extract the full path
@@ -64,16 +86,45 @@ public class RecipeController {
 		return ResponseEntity.ok(recipes);
 	}
 
+	/**
+     * Retrieves a recipe by its ID.
+     *
+     * @param recipe_id The ID of the recipe to retrieve.
+     * @return A ResponseEntity containing the requested RecipeEntity object.
+     */
 	@GetMapping("/{recipe_id}")
 	public ResponseEntity<RecipeEntity> getRecipesById(@PathVariable Long recipe_id) {
 		return ResponseEntity.ok(recServ.getRecipesById(recipe_id));
 	}
 
+	/**
+     * Retrieves all recipes associated with a specific profile.
+     *
+     * @param profile_id The ID of the profile.
+     * @return A ResponseEntity containing a list of RecipeEntity objects linked to the given profile ID.
+     */
 	@GetMapping("/profile/{profile_id}")
 	public ResponseEntity<List<RecipeEntity>> getRecipesByProfile(@PathVariable Long profile_id) {
 		return ResponseEntity.ok(recServ.getRecipesByProfileId(profile_id));
 	}
 
+	/**
+     * Saves a new recipe. The recipe details should be provided in the request body as JSON.
+     * Expected keys include:
+     * - profileId (Long)
+     * - recipeName (String)
+     * - recipeIngredients (String)
+     * - recipeInstructions (String)
+     * - cusineType (String)
+     * - isVegan (Boolean)
+     * - isVegetarian (Boolean)
+     * - isLactoseFree (Boolean)
+     * - isGlutenFree (Boolean)
+     * - prepTime (Double)
+     *
+     * @param json A map containing the details of the recipe.
+     * @return A ResponseEntity with a success or error message along with the saved RecipeEntity.
+     */
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	private ResponseEntity<Object> saveRecipe(@RequestBody Map<String, String> json) {
@@ -92,6 +143,13 @@ public class RecipeController {
 		}
 	}
 
+	
+	/**
+     * Updates an existing recipe. The updated recipe details are provided in the request body.
+     *
+     * @param json The RecipeEntity object with updated fields.
+     * @return A ResponseEntity with a success or error message along with the updated RecipeEntity.
+     */
 	@RequestMapping(value = "", method = RequestMethod.PUT)
 	@ResponseBody
 	private ResponseEntity<Object> editRecipe(@RequestBody Map<String, String> json) {
@@ -110,6 +168,13 @@ public class RecipeController {
 		}
 	}
 	
+	
+	/**
+	 *  Method to delete a recipe
+	 *  
+	 *  @param recipeId of the recipe to delete
+	 *  @return boolean showing recipe is deleted or not
+	 */
 	@RequestMapping(value="/{recipeId}", method=RequestMethod.DELETE)
 	@ResponseBody
 	private ResponseEntity<Object> deleteRecipe(@PathVariable long recipeId) {

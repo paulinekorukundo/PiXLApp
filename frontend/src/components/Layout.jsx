@@ -29,7 +29,7 @@ export default function Layout() {
               <Link className="menu-item" to="/profile">
                 Profile
               </Link>
-              <UnstyledButton
+              <UnstyledButton 
                 onClick={() => {
                   appState.logout();
                 }}
@@ -52,7 +52,7 @@ export default function Layout() {
       </Container>
       <footer
         style={{
-          marginTop: "100px", // Added margin top to footer
+          marginTop: "100px", 
         }}
       >
         <Container

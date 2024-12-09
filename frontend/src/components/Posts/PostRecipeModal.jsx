@@ -8,16 +8,59 @@ import {
   TextField,
 } from "@mui/material";
 
+/**
+ * PostRecipeModal Component
+ *
+ * This component renders a modal for creating or editing posts and recipes. Depending on the `type` prop,
+ * it shows the appropriate form fields:
+ * - If `type === "post"`, it displays inputs for content and an optional tag.
+ * - If `type === "recipe"`, it displays fields for recipe name, ingredients, instructions, cuisine type,
+ *   dietary restrictions, and preparation time.
+ *
+ * The component uses Mantine's Modal and MUI's TextField, Checkbox, and related components for UI.
+ *
+ * @component
+ * @param {Object} props - The component props.
+ * @param {boolean} props.opened - Controls whether the modal is visible.
+ * @param {Function} props.onClose - Function to close the modal.
+ * @param {string} props.title - The title displayed on the modal.
+ * @param {string} [props.content] - Content text for the post mode.
+ * @param {string} [props.tag] - Tag for the post mode.
+ * @param {Function} [props.setContent] - Callback to update the content state.
+ * @param {Function} [props.setTag] - Callback to update the tag state.
+ * @param {string} props.type - Determines which form to show: "post" or "recipe".
+ * @param {Function} props.onSubmit - Callback to handle form submission.
+ * @param {string} [props.recipeName] - Name of the recipe for recipe mode.
+ * @param {string} [props.recipeIngredients] - Ingredients for the recipe.
+ * @param {string} [props.recipeInstructions] - Instructions for the recipe.
+ * @param {string} [props.cusineType] - Cuisine type of the recipe.
+ * @param {boolean} [props.isVegan] - Whether the recipe is vegan.
+ * @param {boolean} [props.isVegetarian] - Whether the recipe is vegetarian.
+ * @param {boolean} [props.isLactoseFree] - Whether the recipe is lactose-free.
+ * @param {boolean} [props.isGlutenFree] - Whether the recipe is gluten-free.
+ * @param {string|number} [props.profileId] - ID of the profile associated with the recipe.
+ * @param {string|number} [props.prepTime] - Preparation time for the recipe in minutes.
+ * @param {Function} [props.setRecipeName] - Callback to update the recipeName state.
+ * @param {Function} [props.setRecipeIngredients] - Callback to update the recipeIngredients state.
+ * @param {Function} [props.setRecipeInstructions] - Callback to update the recipeInstructions state.
+ * @param {Function} [props.setCusineType] - Callback to update the cusineType state.
+ * @param {Function} [props.setIsVegan] - Callback to update the isVegan state.
+ * @param {Function} [props.setIsVegetarian] - Callback to update the isVegetarian state.
+ * @param {Function} [props.setIsLactoseFree] - Callback to update the isLactoseFree state.
+ * @param {Function} [props.setIsGlutenFree] - Callback to update the isGlutenFree state.
+ * @param {Function} [props.setProfileId] - Callback to update the profileId state.
+ * @param {Function} [props.setPrepTime] - Callback to update the prepTime state.
+ *
+ * />
+ */
 const PostRecipeModal = ({
   opened,
   onClose,
   title,
   content,
   tag,
-  media,
   setContent,
   setTag,
-  setMedia,
   type,
   onSubmit,
   recipeName,
@@ -52,15 +95,7 @@ const PostRecipeModal = ({
           required
         />
       )}
-      {/* {type === "post" && (
-        <FileInput
-          clearable
-          label="Upload Media"
-          placeholder="Add Media"
-          accept="image/png,image/jpeg"
-          onChange={(media) => setMedia(media)}
-        />
-      )} */}
+
       {type === "post" && (
         <TextInput
           label="Tag"

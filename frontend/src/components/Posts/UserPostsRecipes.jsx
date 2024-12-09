@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Button,
   Grid,
   Card,
   Group,
@@ -445,7 +444,7 @@ const UserPostsRecipes = (props) => {
                     variant="light"
                     radius="md"
                     size={36}
-                    onClick={() => handleEdit(recipe, "recipes")}
+                    onClick={() => handleEdit(recipe, "recipe")}
                   >
                     <IconEdit className={classes.like} stroke={1.5} />
                   </ActionIcon>

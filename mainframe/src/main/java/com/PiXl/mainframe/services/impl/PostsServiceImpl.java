@@ -59,12 +59,6 @@ public class PostsServiceImpl implements PostsService {
 			return new ArrayList<PostsEntity>();
 		}
 		return postEntities;
-//		return postEntities.stream().map(this :: of).collect(Collectors.toList());
-//		List<Posts> posts= new ArrayList<>();
-//		for(PostsEntity p : postEntities) {
-//			posts.add(of(p));
-//		}
-//		return posts;
 	}
 
 	@Override
@@ -77,43 +71,6 @@ public class PostsServiceImpl implements PostsService {
 		
 	}
 
-//    @Override
-//    public Posts saveNewPost(MultipartFile file, String userId, String content, String tagName) {
-//        try {
-//
-//            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-//            
-//            if (fileName.contains("..")) {
-//                throw new FileStorageException("Invalid path sequence in filename: " + fileName);
-//            }
-//            String newFileName = System.currentTimeMillis() + "_" + fileName;
-//            Path targetLocation = this.fileStorageLocation.resolve(newFileName);
-//            Files.createDirectories(targetLocation.getParent());
-//            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-//
-//            PostsEntity postEntity = new PostsEntity();
-//            postEntity.setUserId(userId);
-//            postEntity.setContent(content);
-//            postEntity.setMedia(newFileName); 
-//
-//            if (tagName != null && !tagName.isEmpty()) {
-//                TagsEntity tag = tagsRepo.findByName(tagName)
-//                    .orElseGet(() -> {
-//                        TagsEntity newTag = new TagsEntity();
-//                        newTag.setName(tagName);
-//                        return tagsRepo.save(newTag);
-//                    });
-//                postEntity.setTags(tag);
-//            }
-//
-//            PostsEntity savedPostEntity = postRepo.save(postEntity);
-//
-//            return new Posts(savedPostEntity);
-//
-//        } catch () {
-//            
-//        }
-//    }
    
 	@Override
 	public PostsEntity saveNewPost(PostsEntity post, Set<TagsEntity> tags, MultipartFile file) {
