@@ -23,14 +23,6 @@ const stats = [
  *
  * @component
  *
- * @example
- * // Example usage:
- * import Profile from './Profile';
- *
- * function App() {
- *   return <Profile />;
- * }
- *
  * @returns {JSX.Element} A card layout containing the user's profile info, actions, and their posts.
  */
 
@@ -49,8 +41,6 @@ export default function Profile() {
       </Text>
     </div>
   ));
-
-  const profileId = appState.userDetails.profileId;
 
   return (
     <>

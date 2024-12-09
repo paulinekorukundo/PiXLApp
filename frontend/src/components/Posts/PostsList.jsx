@@ -1,16 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {
-  Card,
-  Text,
-  Loader,
-  Group,
-  Image,
-  Grid,
-  Box,
-  TextInput,
-  Flex,
-  Switch,
+  Card, Text, Loader, Group, Image, Grid, Box, TextInput, Flex, Switch,
 } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
@@ -43,37 +34,6 @@ import debounce from "lodash/debounce";
  *
  * @returns {JSX.Element} A rendered list of post cards, each displaying an image, content, tags, and actions.
  *
- * Internal Details:
- * - **State Variables:**
- *   - `posts` (Array): The array of post objects retrieved from the API.
- *   - `loading` (boolean): Indicates whether data is being fetched from the API.
- *   - `loadedImages` (Object): An object mapping post IDs to their loaded images (not currently fully utilized).
- *   - `searchTag` (string): The current tag being searched for.
- *   - `showTopPosts` (boolean): Controls whether top-liked posts should be displayed (functionality commented out).
- *   - `editModalOpened`, `editContent`, `editPostId` (various): For editing posts (currently partially implemented).
- *
- * - **Functions:**
- *   - `loadPosts(searchTag)`: Fetches posts, filtered by a tag if provided. Updates `posts` and `loading` state.
- *   - `debouncedSearch(value)`: Debounces the search input to minimize excessive fetches.
- *   - `handleSearchChange(e)`: Updates `searchTag` state and triggers `debouncedSearch`.
- *   - `handleToggleTopPosts(checked)`: Toggles `showTopPosts` and reloads posts.
- *   - `handleLikeUpdate()`: Reloads posts to reflect changes in like counts.
- *   - `handlePostDeleted(deletedPostId)`: Reloads posts after a deletion.
- *   - `handleEditPost(postId)`: Prepares edit state for a given post (partially implemented).
- *   - `handleSaveEdit()`: Saves edited content to the server (partially implemented).
- *
- * - **Rendering:**
- *   - Renders a search bar and a switch to toggle showing top posts.
- *   - Renders a grid of cards (one per post), including:
- *     - Post image (or placeholder if missing).
- *     - PostActions component for likes/comments and author-only actions (edit/delete).
- *     - Post content and tags.
- *
- * - **Dependencies:**
- *   - Uses `axios` for HTTP requests.
- *   - Uses `@mantine/core` for UI elements like Card, Image, Text, etc.
- *   - Uses `debounce` from `lodash` to debounce the search handler.
- *
  * @see PostActions for the actions available on each post.
  */
 
@@ -81,9 +41,8 @@ function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
-  const [searchTag, setSearchTag] = useState(""); // State for tag search
+  const [searchTag, setSearchTag] = useState(""); 
   const [showTopPosts, setShowTopPosts] = useState(false);
-
 
   //Get Images
   useEffect(() => {
@@ -114,7 +73,6 @@ function PostsList() {
   }, [posts, API_URL]);
 
   const loadPosts = async (searchTag = "") => {
-    // setLoading(true);
     try {
       // const response = searchTag
       //   ? await axios.post(
@@ -327,34 +285,3 @@ function PostsList() {
 
 export default PostsList;
 
-{
-  /* <Flex
-        align="center"
-        justify="space-between"
-        mb="md"
-        p="sm"
-        sx={(theme) => ({
-          backgroundColor: theme.colors.gray[1],
-          borderRadius: theme.radius.sm,
-          boxShadow: theme.shadows.xs,
-        })}
-      >
-        <Box sx={{ flex: 1, marginRight: "1rem" }}>
-          <TextInput
-            placeholder="Search By Tag"
-            value={filterConditions}
-            onChange={handleSearchChange}
-            styles={{
-              input: {
-                border: "none",
-                borderBottom: "1px solid #ced4da",
-                borderRadius: 0,
-                padding: "10px 0",
-                fontSize: "16px",
-                width: "100%",
-              },
-            }}
-          />
-        </Box>
-      </Flex> */
-}

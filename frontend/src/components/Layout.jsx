@@ -4,6 +4,10 @@ import { Burger, Container, Flex, Group, UnstyledButton } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Footer from "./Footer";
 
+/**
+ * Provides the general layout used by the Recipes, Profile and Posts components 
+ */
+
 export default function Layout() {
   const appState = useAppContext();
   const [opened, { toggle }] = useDisclosure(false);
