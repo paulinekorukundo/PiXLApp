@@ -8,6 +8,64 @@ import "../../assets/General.css";
 import { useAppContext } from "../../context/AppContext";
 import { API_URL } from "../../config";
 
+
+/**
+ * DisplayUserPosts Component
+ *
+ * This component fetches and displays all posts created by the currently logged-in user.
+ * It shows a grid of post cards, each containing an image, textual content, and post actions
+ * (like/comment). If no posts are found, it displays a "No posts available" message.
+ *
+ * @component
+ *
+ * @prop {boolean} [reload] - A prop that, when changed, triggers the component to refetch the user's posts.
+ *
+ * @example
+ * // Example usage:
+ * import { useState } from 'react';
+ * import DisplayUserPosts from './DisplayUserPosts';
+ *
+ * function UserProfile() {
+ *   const [reloadFlag, setReloadFlag] = useState(false);
+ *
+ *   const reloadPosts = () => setReloadFlag(prev => !prev);
+ *
+ *   return (
+ *     <div>
+ *       <button onClick={reloadPosts}>Reload User Posts</button>
+ *       <DisplayUserPosts reload={reloadFlag} />
+ *     </div>
+ *   );
+ * }
+ *
+ * @returns {JSX.Element} A grid of user posts or a loading indicator or a message if no posts are available.
+ *
+ * Internal Details:
+ * - **State Variables:**
+ *   - `loading` (boolean): Indicates whether the component is currently loading data.
+ *   - `loadedImages` (Object): Maps indices to loaded images (currently not heavily utilized).
+ *   - `userPosts` (Array|Object): The list of posts fetched for the user. Usually an array of post objects.
+ *
+ * - **Data Fetching:**
+ *   Uses the currently logged-in user's email from the AppContext to fetch their posts from the backend.
+ *   If no posts are found, sets `userPosts` to an empty array.
+ *
+ * - **Image Loading:**
+ *   Attempts to load each post's media from the server. If any fails, a placeholder image is used.
+ *
+ * - **Dependencies:**
+ *   - `axios` for HTTP requests.
+ *   - `@mantine/core` for UI components like Card, Grid, Loader, Text, and Image.
+ *   - `useAppContext` to get the current user's details.
+ *
+ * - **Lifecycle:**
+ *   - On mount and whenever `userDetails.email` or `props.reload` changes, it refetches the user’s posts.
+ *   - On `userPosts` change, attempts to load the associated images.
+ *
+ * @see PostActions for actions available on each post (like, unlike, edit, delete).
+ */
+
+
 function DisplayUserPosts(props) {
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});

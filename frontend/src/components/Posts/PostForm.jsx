@@ -8,6 +8,36 @@ import classes from "../../assets/BadgeCard.module.css";
 import { useAppContext } from "../../context/AppContext";
 import { notifications } from "@mantine/notifications";
 
+/**
+ * PostForm Component
+ *
+ * This component provides a modal form for creating and submitting new posts. 
+ * Users can enter textual content, optionally add a tag, and upload an image file.
+ * Once submitted, it sends a POST request to create a new post in the backend system.
+ * If successful, it displays a success notification and optionally triggers a re-render
+ * in the parent component. If an error occurs, it displays an error notification.
+ *
+ * @component
+ *
+ * @prop {Function} [needsReload] - An optional state setter function from the parent 
+ *   component. If provided, it will be called after a successful post creation to 
+ *   request a data reload in the parent.
+ *
+ * @example
+ * // Example usage:
+ * import PostForm from './PostForm';
+ *
+ * function Feed() {
+ *   const [reload, setReload] = useState(false);
+ *
+ *   return (
+ *     <div>
+ *       <PostForm needsReload={setReload} />
+ *       {reload && <PostsList />} 
+ *     </div>
+ *   );
+ * }
+ */
 function PostForm(props) {
   // User
   const { userDetails } = useAppContext();

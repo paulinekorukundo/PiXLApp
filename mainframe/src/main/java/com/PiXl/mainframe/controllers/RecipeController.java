@@ -100,9 +100,9 @@ public class RecipeController {
 	private ResponseEntity<Object> editRecipe(@RequestBody RecipeEntity json) {
 		RecipeEntity savedPost = recServ.editRecipe(json);
 		if (savedPost == null) {
-			return ResponseHandler.generateResponse("Error editing post.", HttpStatus.NOT_FOUND);
+			return ResponseHandler.generateResponse("Error editing recipe.", HttpStatus.NOT_FOUND);
 		} else {
-			return ResponseHandler.generateResponse("Post Edited!", HttpStatus.OK, savedPost);
+			return ResponseHandler.generateResponse("Recipe Edited!", HttpStatus.OK, savedPost);
 		}
 	}
 }
