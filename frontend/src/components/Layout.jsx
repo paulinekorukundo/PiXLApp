@@ -20,7 +20,7 @@ export default function Layout() {
         <Container size="xl" p="sm">
           <Flex justify="space-between">
             <Link to="/">
-              <img width="100" height="100" src="/src/assets/PiXl Logo.png" />
+              <img width="180" height="130" src="/src/assets/PiXl Logo.png" />
             </Link>
             <Group gap={5} visibleFrom="sm">
               <Link className="menu-item" to={isRecipesPage ? "/" : "/recipes"}>
@@ -29,13 +29,14 @@ export default function Layout() {
               <Link className="menu-item" to="/profile">
                 Profile
               </Link>
-              <UnstyledButton
+              <Link
+                className="menu-item"
                 onClick={() => {
                   appState.logout();
                 }}
               >
                 Logout
-              </UnstyledButton>
+              </Link>
             </Group>
 
             <Burger

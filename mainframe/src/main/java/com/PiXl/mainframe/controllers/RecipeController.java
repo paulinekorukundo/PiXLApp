@@ -54,10 +54,10 @@ public class RecipeController {
 						arr -> arr.length > 1 ? arr[1] : ""));
 
 		RecipeFilter filter = new RecipeFilter(
-				Boolean.valueOf(filters.get("isGlutenFree")),
-				Boolean.valueOf(filters.get("isVegan")),
-				Boolean.valueOf(filters.get("isVegetarian")),
-				Boolean.valueOf(filters.get("isLactoseFree")));
+				Boolean.valueOf(filters.get("isGlutenFree")) == false ? null : Boolean.valueOf(filters.get("isGlutenFree")),
+				Boolean.valueOf(filters.get("isVegan")) == false ? null : Boolean.valueOf(filters.get("isVegan")),
+				Boolean.valueOf(filters.get("isVegetarian")) == false ? null : Boolean.valueOf(filters.get("isVegetarian")),
+				Boolean.valueOf(filters.get("isLactoseFree")) == false ? null : Boolean.valueOf(filters.get("isLactoseFree")));
 
 		List<RecipeEntity> recipes = recServ.getFilteredRecipes(filter);
 

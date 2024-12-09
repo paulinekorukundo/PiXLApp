@@ -163,7 +163,7 @@ const UserPostsRecipes = (props) => {
     try {
       const userId = userDetails.email;
       const profileId = userDetails.profileId;
-      if (type === "recipes") {
+      if (type === "recipe") {
         await axios.delete(
           `${import.meta.env.VITE_API_URL}/api/v1/recipes/${item.recipeId}`
         );
@@ -445,7 +445,7 @@ const UserPostsRecipes = (props) => {
                     variant="light"
                     radius="md"
                     size={36}
-                    onClick={() => handleEdit(recipe, "recipes")}
+                    onClick={() => handleEdit(recipe, "recipe")}
                   >
                     <IconEdit className={classes.like} stroke={1.5} />
                   </ActionIcon>
@@ -454,7 +454,7 @@ const UserPostsRecipes = (props) => {
                     variant="light"
                     radius="md"
                     size={36}
-                    onClick={() => handleDelete(recipe, "recipes")}
+                    onClick={() => handleDelete(recipe, "recipe")}
                   >
                     <IconX className={classes.delete_icon} stroke={1.5} />
                   </ActionIcon>
