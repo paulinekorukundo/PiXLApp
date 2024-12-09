@@ -4,13 +4,14 @@ import {
   CardContent,
   Typography,
   Chip,
-  Grid,
+  Grid2,
   CardHeader,
   Divider,
 } from "@mui/material";
 
 const RecipeCard = ({ recipe }) => {
   const {
+    recipeName,
     recipeIngredients,
     recipeInstructions,
     cusineType,
@@ -37,7 +38,7 @@ const RecipeCard = ({ recipe }) => {
       }}
     >
       <CardHeader
-        title={`${cusineType} Recipe`}
+        title={`${recipeName}`}
         subheader={`By ${profile.firstName} ${profile.lastName}`}
         sx={{
           color: "#000411",
@@ -45,7 +46,10 @@ const RecipeCard = ({ recipe }) => {
       />
       <Divider sx={{ backgroundColor: "#8ea8c3" }} />
       <CardContent>
-        <Typography variant="body1" color="#160c28" gutterBottom>
+        <Typography variant="body2" color="#160c28" gutterBottom>
+          <strong>Cusine Type:</strong> {cusineType}
+        </Typography>
+        <Typography variant="body2" color="#160c28" gutterBottom>
           <strong>Ingredients:</strong> {recipeIngredients}
         </Typography>
         <Typography variant="body2" color="#160c28" gutterBottom>
@@ -55,32 +59,32 @@ const RecipeCard = ({ recipe }) => {
           <strong>Prep Time:</strong> {prepTime} minutes
         </Typography>
         <Divider sx={{ backgroundColor: "#8ea8c3", marginY: 2 }} />
-        <Grid container spacing={1}>
-          <Grid item>
+        <Grid2 container spacing={1}>
+          <Grid2 item>
             <Chip
               label={`Vegan: ${isVegan ? "Yes" : "No"}`}
               sx={chipStyles(isVegan)}
             />
-          </Grid>
-          <Grid item>
+          </Grid2>
+          <Grid2 item>
             <Chip
               label={`Vegetarian: ${isVegetarian ? "Yes" : "No"}`}
               sx={chipStyles(isVegetarian)}
             />
-          </Grid>
-          <Grid item>
+          </Grid2>
+          <Grid2 item>
             <Chip
               label={`Lactose-Free: ${isLactoseFree ? "Yes" : "No"}`}
               sx={chipStyles(isLactoseFree)}
             />
-          </Grid>
-          <Grid item>
+          </Grid2>
+          <Grid2 item>
             <Chip
               label={`Gluten-Free: ${isGlutenFree ? "Yes" : "No"}`}
               sx={chipStyles(isGlutenFree)}
             />
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </CardContent>
     </Card>
   );

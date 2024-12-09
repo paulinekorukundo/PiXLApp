@@ -1,6 +1,7 @@
 import { useAppContext } from "../context/AppContext";
 import { Card, Avatar, Text, Group, Button, Flex } from "@mantine/core";
 import DisplayUserPosts from "./Posts/DisplayUserPosts";
+import UserPostsRecipes from "./Posts/UserPostsRecipes";
 import PostForm from "./Posts/PostForm";
 import "../assets/General.css";
 import RecipeForm from "./Recipes/RecipeForm";
@@ -11,7 +12,6 @@ const stats = [
   { value: "187", label: "Follows" },
   { value: "1.6K", label: "Posts" },
 ];
-
 
 /**
  * Profile Component
@@ -27,7 +27,7 @@ const stats = [
  * @example
  * // Example usage:
  * import Profile from './Profile';
- * 
+ *
  * function App() {
  *   return <Profile />;
  * }
@@ -40,7 +40,7 @@ const stats = [
  *
  * - **Data Sources:**
  *   - Uses `useAppContext()` to access the currently logged-in user's details (profileId, firstName, lastName, bio).
- *   
+ *
  * - **Sub-Components:**
  *   - `DisplayUserPosts`: Shows the user's posts. It accepts a `reload` prop that, when toggled, refetches the user's posts.
  *   - `PostForm`: Allows the user to create a new post. If a new post is created, it updates `reloadPosts` to refresh the post list.
@@ -77,8 +77,6 @@ export default function Profile() {
   const profileId = appState.userDetails.profileId;
   // const [opened, { open, close }] = useDisclosure(false);
   // const add_icon = <IconPlus className={classes.like} stroke={1.5} />;
-
-
 
   return (
     <>
@@ -124,7 +122,8 @@ export default function Profile() {
             </Group>
           </Flex>
         </Flex>
-        <DisplayUserPosts reload={reloadPosts} />
+        {/* <DisplayUserPosts reload={reloadPosts} /> */}
+        <UserPostsRecipes reload={reloadPosts} />
       </Card>
     </>
   );

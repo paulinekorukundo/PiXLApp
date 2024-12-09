@@ -19,21 +19,35 @@ function RecipeForm(props) {
   // User
   const { userDetails } = useAppContext();
 
-  // Create a post
-  const [opened, { open, close }] = useDisclosure(false);
-
-  const [recipeData, setRecipeData] = useState({
+  const initialRecipeData = {
     recipeName: "",
     recipeIngredients: "",
     recipeInstructions: "",
-    cuisineType: "",
+    cusineType: "",
     isVegan: false,
     isVegetarian: false,
     isLactoseFree: false,
     isGlutenFree: false,
-    profile: userDetails?.profileId || 0,
+    profileId: userDetails?.profileId || 0,
     prepTime: 0,
-  });
+  };
+
+  // Create a post
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const [recipeData, setRecipeData] = useState(initialRecipeData);
+  // const [recipeData, setRecipeData] = useState({
+  //   recipeName: "",
+  //   recipeIngredients: "",
+  //   recipeInstructions: "",
+  //   cusineType: "",
+  //   isVegan: false,
+  //   isVegetarian: false,
+  //   isLactoseFree: false,
+  //   isGlutenFree: false,
+  //   profileId: userDetails?.profileId || 0,
+  //   prepTime: 0,
+  // });
 
   const clock_icon = <IconClock className="image-icon" stroke={1.5} />;
   const add_icon = <IconChefHat className={classes.like} stroke={1.5} />;
@@ -44,13 +58,17 @@ function RecipeForm(props) {
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
-  
+    console.log(event.target);
     setRecipeData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : type === "number" ? parseFloat(value) : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
-  
+
+  const handleOpen = () => {
+    setRecipeData(initialRecipeData); // Reset recipeData when modal opens
+    open(); // Open the modal
+  };
 
   const handleSubmit = async () => {
     console.log("Sending Data: ", recipeData);
@@ -90,7 +108,6 @@ function RecipeForm(props) {
     }
   };
 
-
   return (
     <>
       <Button
@@ -98,7 +115,7 @@ function RecipeForm(props) {
         mt="xl"
         size="md"
         variant="default"
-        onClick={open}
+        onClick={handleOpen}
         leftSection={add_icon}
       >
         Add Recipe
@@ -136,55 +153,57 @@ function RecipeForm(props) {
           name="recipeInstructions"
         />
         <TextInput
-          label="Cuisine Type"
-          placeholder="Cuisine Type"
-          value={recipeData.cuisineType}
+          label="Cusine Type"
+          placeholder="Cusine Type"
+          value={recipeData.cusineType}
           onChange={handleChange}
-          name="cuisineType"
+          name="cusineType"
         />
-        <FormGroup> Dietary Restrictions
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="isVegan"
-              checked={recipeData.isVegan}
-              onChange={handleChange}
-            />
-          }
-          label="Vegan"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="isLactoseFree"
-              checked={recipeData.isLactoseFree}
-              onChange={handleChange}
-            />
-          }
-          label="Lactose Free"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="isVegetarian"
-              checked={recipeData.isVegetarian}
-              onChange={handleChange}
-            />
-          }
-          label="Vegetarian"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              name="isGlutenFree"
-              checked={recipeData.isGlutenFree}
-              onChange={handleChange}
-            />
-          }
-          label="Gluten Free"
-        />
+        <FormGroup>
+          {" "}
+          Dietary Restrictions
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="isVegan"
+                checked={recipeData.isVegan}
+                onChange={handleChange}
+              />
+            }
+            label="Vegan"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="isLactoseFree"
+                checked={recipeData.isLactoseFree}
+                onChange={handleChange}
+              />
+            }
+            label="Lactose Free"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="isVegetarian"
+                checked={recipeData.isVegetarian}
+                onChange={handleChange}
+              />
+            }
+            label="Vegetarian"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="isGlutenFree"
+                checked={recipeData.isGlutenFree}
+                onChange={handleChange}
+              />
+            }
+            label="Gluten Free"
+          />
         </FormGroup>
-         
+
         {/* <TextInput
           label="Preparation Time"
           placeholder="Preparation Time"

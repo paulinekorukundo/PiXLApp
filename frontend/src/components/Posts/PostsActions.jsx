@@ -29,12 +29,12 @@ import { notifications } from "@mantine/notifications";
  * @prop {number} comments - The current number of comments the post has.
  * @prop {Function} onLike - A callback function executed when the post is liked or unliked. It should
  *   handle any state updates or refresh actions related to the post's like count.
- * @prop {string} postUserId - The email or user ID of the post's author. Used to determine if the edit 
+ * @prop {string} postUserId - The email or user ID of the post's author. Used to determine if the edit
  *   and delete buttons should be displayed.
  * @prop {Function} onEdit - A callback function executed when the edit action is triggered. The postId is passed
  *   to this function for identifying which post to edit.
  * @prop {Function} onDelete - A callback function executed when the delete action is triggered. The postId is passed
- *   to this function for identifying which post to remove from the UI. 
+ *   to this function for identifying which post to remove from the UI.
  *
  * @example
  * // Example usage:
@@ -68,14 +68,22 @@ import { notifications } from "@mantine/notifications";
  */
 
 // eslint-disable-next-line react/prop-types
-function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDelete }) {
+function PostActions({
+  postId,
+  likes,
+  comments,
+  onLike,
+  postUserId,
+  onEdit,
+  onDelete,
+}) {
   const { userDetails } = useAppContext();
   const isAuthor = userDetails.email === postUserId;
   const handleLike = async () => {
     try {
       await axios.post(
         import.meta.env.VITE_API_URL + "/api/v1/posts/likePost",
-        { postId },
+        { postId }
       );
       onLike(postId);
     } catch (error) {
@@ -87,7 +95,7 @@ function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDe
     try {
       await axios.post(
         import.meta.env.VITE_API_URL + "/api/v1/posts/unlikePost",
-        { postId },
+        { postId }
       );
       onLike(postId);
     } catch (error) {
@@ -97,10 +105,9 @@ function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDe
 
   const handleEdit = async () => {
     try {
-      await axios.post(
-        import.meta.env.VITE_API_URL + "/api/v1/posts/edit",
-        { postId },
-      );
+      await axios.post(import.meta.env.VITE_API_URL + "/api/v1/posts/edit", {
+        postId,
+      });
       onEdit(postId);
     } catch (error) {
       console.error("Error editing post:", error);
@@ -109,17 +116,18 @@ function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDe
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/posts?postId=${postId}`);
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/api/v1/posts?postId=${postId}`
+      );
       if (onDelete) onDelete(postId);
       notifications.show({
         title: "Success",
         message: "Post deleted!",
         color: "green",
       });
-
     } catch (error) {
       console.error("Error deleting post:", error);
-      
+
       if (error.response) {
         notifications.show({
           title: "Error",
@@ -129,11 +137,8 @@ function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDe
           color: "red",
         });
       }
-
     }
   };
-
-
 
   return (
     <div className={classes.actionsContainer}>
@@ -164,7 +169,6 @@ function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDe
       </div>
 
       <div className={classes.iconTextWrapper}>
-
         <ActionIcon variant="light" radius="md" size={36}>
           <IconMessageChatbot
             size={48}
@@ -179,28 +183,18 @@ function PostActions({ postId, likes, comments, onLike, postUserId, onEdit, onDe
 
       {isAuthor && (
         <div className={classes.iconTextWrapper}>
-          <ActionIcon 
-            className="item" 
-            variant="light" 
-            radius="md" 
+          <ActionIcon
+            className="item "
+            variant="light"
+            radius="md"
             size={36}
-            >
-            <IconEdit className={classes.like} stroke={1.5} />
-          </ActionIcon>
-
-          <ActionIcon 
-            className="item " 
-            variant="light" 
-            radius="md" 
-            size={36}
+            style={{ position: "absolute", right: 50 }}
             onClick={handleDelete}
           >
             <IconX className={classes.delete_icon} stroke={1.5} />
           </ActionIcon>
-
-      </div>
+        </div>
       )}
-      
     </div>
   );
 }

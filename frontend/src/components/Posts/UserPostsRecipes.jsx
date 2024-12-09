@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Card, Group, Text, Image } from "@mantine/core";
+import {
+  Button,
+  Grid,
+  Card,
+  Group,
+  Text,
+  Image,
+  ActionIcon,
+} from "@mantine/core";
+import { IconEdit, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { useAppContext } from "../../context/AppContext";
 import PostRecipeModal from "./PostRecipeModal";
@@ -15,8 +24,9 @@ import {
 } from "@mui/material";
 
 import { API_URL } from "../../config";
+import { notifications } from "@mantine/notifications";
 
-const UserPostsRecipes = () => {
+const UserPostsRecipes = (props) => {
   const { userDetails } = useAppContext();
   const [posts, setPosts] = useState([]);
   const [recipes, setRecipes] = useState([]);
@@ -39,6 +49,7 @@ const UserPostsRecipes = () => {
   const [prepTime, setPrepTime] = useState(0);
   const [recipeId, setRecipeId] = useState(0);
   const [postId, setPostId] = useState(0);
+  const [message, setMessage] = useState("");
 
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
@@ -50,11 +61,13 @@ const UserPostsRecipes = () => {
         const userId = userDetails.email;
         const profileId = userDetails.profileId;
         const postsResponse = await axios.get(
-          `${API_URL}/api/v1/posts/${userId}`
+          `${import.meta.env.VITE_API_URL}/api/v1/posts/${userId}`
         );
         const recipesResponse = await axios.get(
-          `${API_URL}/api/v1/recipes/profile/${profileId}`
+          `${import.meta.env.VITE_API_URL}/api/v1/recipes/profile/${profileId}`
         );
+
+        console.log(recipesResponse);
 
         setPosts(postsResponse.data.data);
         setRecipes(recipesResponse.data);
@@ -63,7 +76,7 @@ const UserPostsRecipes = () => {
       }
     };
     fetchData();
-  }, [userDetails.email]);
+  }, [userDetails.email, props.reload]);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -75,7 +88,9 @@ const UserPostsRecipes = () => {
           imagePromises = posts.map(async (post) => {
             try {
               const response = await axios.get(
-                `${API_URL}/api/v1/posts/media/${post.media}`
+                `${import.meta.env.VITE_API_URL}/api/v1/posts/media/${
+                  post.media
+                }`
               );
               return response.data;
             } catch (error) {
@@ -90,7 +105,9 @@ const UserPostsRecipes = () => {
           imagePromises = Object.values(posts).map(async (post) => {
             try {
               const response = await axios.get(
-                `${API_URL}/api/v1/posts/media/${post.media}`
+                `${import.meta.env.VITE_API_URL}/api/v1/posts/media/${
+                  post.media
+                }`
               );
               return response.data;
             } catch (error) {
@@ -120,7 +137,6 @@ const UserPostsRecipes = () => {
     loadImages();
   }, [posts]);
 
-  // Open edit modal
   const handleEdit = (item, type) => {
     setEditMode(true);
     setSelectedItem(item);
@@ -143,12 +159,56 @@ const UserPostsRecipes = () => {
     setOpened(true);
   };
 
+  const handleDelete = async (item, type) => {
+    try {
+      const userId = userDetails.email;
+      const profileId = userDetails.profileId;
+      if (type === "recipes") {
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/v1/recipes/${item.recipeId}`
+        );
+        notifications.show({
+          title: "Success",
+          message: "Recipe deleted successfully!",
+          color: "green",
+        });
+        const updatedData = await axios.get(
+          `${API_URL}/api/v1/recipes/profile/${profileId}`
+        );
+        setRecipes(updatedData.data);
+      } else {
+        await axios.delete(
+          `${import.meta.env.VITE_API_URL}/api/v1/posts?postId=${item.postId}`
+        );
+        notifications.show({
+          title: "Success",
+          message: "Post deleted successfully!",
+          color: "green",
+        });
+        const updatedData = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/v1/posts/${userId}`
+        );
+        setPosts(updatedData.data.data);
+      }
+    } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: error.response
+          ? `Error: ${error.response.data.message}`
+          : "An unexpected error occurred",
+        color: "red",
+      });
+    }
+  };
+
   // Save changes
   const handleSave = async () => {
     const userId = userDetails.email;
     const profileId = userDetails.profileId;
     const url =
-      type === "post" ? `${API_URL}/api/v1/posts` : `${API_URL}/api/v1/recipes`;
+      type === "post"
+        ? `${import.meta.env.VITE_API_URL}/api/v1/posts`
+        : `${import.meta.env.VITE_API_URL}/api/v1/recipes`;
     try {
       const formData = {};
       if (type === "post") {
@@ -160,6 +220,7 @@ const UserPostsRecipes = () => {
         formData["recipeName"] = recipeName;
         formData["recipeIngredients"] = recipeIngredients;
         formData["recipeInstructions"] = recipeInstructions;
+        formData["cusineType"] = cusineType;
         formData["isVegan"] = isVegan;
         formData["isVegetarian"] = isVegetarian;
         formData["isLactoseFree"] = isLactoseFree;
@@ -174,8 +235,14 @@ const UserPostsRecipes = () => {
 
       const updatedData =
         type === "post"
-          ? await axios.get(`${API_URL}/api/v1/posts/${userId}`)
-          : await axios.get(`${API_URL}/api/v1/recipes/profile/${profileId}`);
+          ? await axios.get(
+              `${import.meta.env.VITE_API_URL}/api/v1/posts/${userId}`
+            )
+          : await axios.get(
+              `${
+                import.meta.env.VITE_API_URL
+              }/api/v1/recipes/profile/${profileId}`
+            );
       type === "post"
         ? setPosts(updatedData.data.data)
         : setRecipes(updatedData.data);
@@ -228,13 +295,36 @@ const UserPostsRecipes = () => {
                     likes={post.likesCount}
                     comments={post.commentsCount}
                   />
-                  <Button
-                    variant="light"
-                    size="xs"
-                    onClick={() => handleEdit(post, "post")}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      marginLeft: "10px",
+                      padding: "md",
+                      position: "absolute",
+                      right: 10,
+                    }}
                   >
-                    Edit
-                  </Button>
+                    <ActionIcon
+                      className="item"
+                      variant="light"
+                      radius="md"
+                      size={36}
+                      onClick={() => handleEdit(post, "post")}
+                    >
+                      <IconEdit className={classes.like} stroke={1.5} />
+                    </ActionIcon>
+                    <ActionIcon
+                      className="item"
+                      variant="light"
+                      radius="md"
+                      size={36}
+                      onClick={() => handleDelete(post, "post")}
+                    >
+                      <IconX className={classes.delete_icon} stroke={1.5} />
+                    </ActionIcon>
+                  </div>
                 </Group>
                 <Card.Section className={classes.section}>
                   <Group gap={7} mt={5}>
@@ -244,25 +334,25 @@ const UserPostsRecipes = () => {
                     <Text weight={300} fz="sm" mt="xs">
                       {post.content}
                     </Text>
-                    {post.tagsForPost?.length > 0 && (
-                      <Group gap={5} mt="sm">
-                        {post.tagsForPost.map((tag, index) => (
-                          <Text
-                            key={index}
-                            size="xs"
-                            color="blue"
-                            sx={(theme) => ({
-                              backgroundColor: theme.colors.blue[0],
-                              padding: "2px 8px",
-                              borderRadius: theme.radius.xs,
-                            })}
-                          >
-                            #{tag.name}
-                          </Text>
-                        ))}
-                      </Group>
-                    )}
                   </Group>
+                  {post.tagsForPost?.length > 0 && (
+                    <Group gap={5} mt="sm">
+                      {post.tagsForPost.map((tag, index) => (
+                        <Text
+                          key={index}
+                          size="xs"
+                          color="blue"
+                          sx={(theme) => ({
+                            backgroundColor: theme.colors.blue[0],
+                            padding: "2px 8px",
+                            borderRadius: theme.radius.xs,
+                          })}
+                        >
+                          #{tag.name}
+                        </Text>
+                      ))}
+                    </Group>
+                  )}
                 </Card.Section>
               </Card>
             </Grid.Col>
@@ -341,13 +431,34 @@ const UserPostsRecipes = () => {
                     </Grid2>
                   </Grid2>
                 </CardContent>
-                <Button
-                  variant="light"
-                  size="xs"
-                  onClick={() => handleEdit(recipe, "recipe")}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginLeft: "10px",
+                    padding: "md",
+                  }}
                 >
-                  Edit
-                </Button>
+                  <ActionIcon
+                    className="item"
+                    variant="light"
+                    radius="md"
+                    size={36}
+                    onClick={() => handleEdit(recipe, "recipes")}
+                  >
+                    <IconEdit className={classes.like} stroke={1.5} />
+                  </ActionIcon>
+                  <ActionIcon
+                    className="item"
+                    variant="light"
+                    radius="md"
+                    size={36}
+                    onClick={() => handleDelete(recipe, "recipes")}
+                  >
+                    <IconX className={classes.delete_icon} stroke={1.5} />
+                  </ActionIcon>
+                </div>
               </Card>
             </Grid.Col>
           ))

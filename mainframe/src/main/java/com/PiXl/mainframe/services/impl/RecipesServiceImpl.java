@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.PiXl.mainframe.dto.RecipeFilter;
 import com.PiXl.mainframe.entities.RecipeEntity;
-import com.PiXl.mainframe.models.Recipe;
 import com.PiXl.mainframe.repositories.RecipesRepository;
 import com.PiXl.mainframe.services.RecipesService;
 
@@ -22,9 +21,6 @@ public class RecipesServiceImpl implements RecipesService {
 	@Override
 	public List<RecipeEntity> getAllRecipes() {
 		return recRepo.findAll();
-//				.stream()
-//				.map(this::convertToRecipeModel)
-//				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -60,11 +56,12 @@ public class RecipesServiceImpl implements RecipesService {
 	}
 
 	@Override
-	public void deleteRecipe(long recipeId) {
+	public boolean deleteRecipe(long recipeId) {
 		if(!recRepo.existsById(recipeId)) {
 			throw new IllegalArgumentException("Recipe does not exist!");
 		}
 		recRepo.deleteById(recipeId);
+		return true;
 	}
 
 	@Override
@@ -83,13 +80,6 @@ public class RecipesServiceImpl implements RecipesService {
 	public List<RecipeEntity> getRecipesFilteredByPrepTime(long minTime, long maxTime) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
-	private Recipe convertToRecipeModel(RecipeEntity re) {
-		return new Recipe(re);
-	}
-	private RecipeEntity convertToRecipeEntity(Recipe re) {
-		return new RecipeEntity(re);
 	}
 
 }

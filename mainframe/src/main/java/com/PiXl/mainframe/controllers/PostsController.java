@@ -61,15 +61,6 @@ public class PostsController {
 			return ResponseEntity.ok(allPosts);
 		}
 	}
-	// private ResponseEntity<Object> getAllPosts(){
-	// List<Posts> allPosts = postService.getAllPosts();
-	// if(allPosts.isEmpty()) {
-	// return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
-	// }else {
-	// return ResponseHandler.generateResponse("All Posts", HttpStatus.OK,
-	// allPosts);
-	// }
-	// }
 
 	/**
      * Retrieves posts by a list of post IDs.
@@ -83,11 +74,7 @@ public class PostsController {
 	@ResponseBody
 	private ResponseEntity<Object> getAllPosts(@RequestBody List<Long> ids) {
 		List<Posts> allPosts = postService.getPostsByIdList(ids);
-		if (allPosts.isEmpty()) {
-			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
-		} else {
-			return ResponseHandler.generateResponse("All Posts by IDs", HttpStatus.OK, allPosts);
-		}
+		return ResponseHandler.generateResponse("All Posts by IDs", HttpStatus.OK, allPosts);
 	}
 
 
@@ -103,11 +90,7 @@ public class PostsController {
 	@ResponseBody
 	private ResponseEntity<Object> getAllPostsForUser(@PathVariable String userId) {
 		List<PostsEntity> allPosts = postService.getAllPostForUser(userId);
-		if (allPosts.isEmpty()) {
-			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
-		} else {
-			return ResponseHandler.generateResponse("All Posts for UserId: " + userId, HttpStatus.OK, allPosts);
-		}
+		return ResponseHandler.generateResponse("All Posts for UserId: " + userId, HttpStatus.OK, allPosts);
 		// return ResponseEntity.ok(allPosts);
 	}
 	
@@ -153,39 +136,6 @@ public class PostsController {
 		}
 	}
 
-	// private ResponseEntity<Object> savePost(@RequestBody Map<String, String>
-	// json){
-	// HashSet<TagsEntity> tagsToSave = new HashSet<>();
-	// PostsEntity postToSave = new PostsEntity();
-	// if(!json.get("tags").equals("")) {
-	// String[] tags = json.get("tags").split(",");
-	// for(String t : tags) {
-	// tagsToSave.add(new TagsEntity(t.strip()));
-	// }
-	// }
-	// postToSave.setUserId(json.get("userId"));
-	// postToSave.setContent(json.get("content"));
-	// postToSave.setMedia(json.get("media"));
-	// postToSave.setCommentsCount(0l);
-	// postToSave.setLikesCount(0l);
-	//
-	// PostsEntity savedPost = postService.saveNewPost(postToSave, tagsToSave);
-	// if(savedPost == null) {
-	// return ResponseHandler.generateResponse("Error saving post.",
-	// HttpStatus.NOT_FOUND);
-	// }else {
-	// return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK,
-	// savedPost);
-	// }
-	// }
-
-	/**
-     * Retrieves a media file (e.g., an image) by filename.
-     *
-     * @param filename The name of the file to retrieve.
-     * @return A ResponseEntity containing the resource if found.
-     * @throws MalformedURLException if the file URL is invalid.
-     */
 	@GetMapping("/media/{filename}")
 	public ResponseEntity<Resource> getMedia(@PathVariable String filename) throws MalformedURLException {
 		Path filePath = Paths.get("uploads/" + filename);
@@ -194,7 +144,6 @@ public class PostsController {
 				.contentType(MediaType.IMAGE_JPEG)
 				.body(resource);
 	}
-
 	 /**
      * Edits an existing post.
      *
@@ -203,14 +152,26 @@ public class PostsController {
      *         - 200 (OK) if the post is successfully edited.
      *         - 404 (Not Found) if the post could not be found or edited.
      */
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "", method = RequestMethod.PUT)
 	@ResponseBody
-	private ResponseEntity<Object> editPost(@RequestBody PostsEntity json) {
-		PostsEntity savedPost = postService.editExistingPost(json);
-		if (savedPost == null) {
-			return ResponseHandler.generateResponse("Error editing post.", HttpStatus.NOT_FOUND);
-		} else {
-			return ResponseHandler.generateResponse("Post Edited!", HttpStatus.OK, savedPost);
+	public ResponseEntity<Object> editPost(@RequestBody Map<String, String> json) {
+		try {
+			PostsEntity postToSave = postService.getPostById(Long.valueOf(json.get("postId")).longValue());
+			HashSet<TagsEntity> tagsToSave = new HashSet<>();
+			if (!(json.get("tag").equals("") || json.get("tag").isEmpty() || json.get("tag").equals(null))) {
+				for (String t : json.get("tag").split(",")) {
+					tagsToSave.add(new TagsEntity(t.strip()));
+				}
+			}
+			postToSave.setContent(json.get("content"));
+			PostsEntity editedPost = postService.editExistingPost(postToSave, tagsToSave);
+			return ResponseHandler.generateResponse("Post Saved!", HttpStatus.OK, editedPost);
+		} catch (FileStorageException e) {
+			return ResponseHandler.generateResponse("Error saving post.", HttpStatus.INTERNAL_SERVER_ERROR,
+					e.getMessage());
+		} catch (Exception e) {
+			return ResponseHandler.generateResponse("Unexpected error occurred.", HttpStatus.INTERNAL_SERVER_ERROR,
+					e.getMessage());
 		}
 	}
 

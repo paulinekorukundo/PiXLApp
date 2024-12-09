@@ -11,7 +11,7 @@ import { notifications } from "@mantine/notifications";
 /**
  * PostForm Component
  *
- * This component provides a modal form for creating and submitting new posts. 
+ * This component provides a modal form for creating and submitting new posts.
  * Users can enter textual content, optionally add a tag, and upload an image file.
  * Once submitted, it sends a POST request to create a new post in the backend system.
  * If successful, it displays a success notification and optionally triggers a re-render
@@ -19,8 +19,8 @@ import { notifications } from "@mantine/notifications";
  *
  * @component
  *
- * @prop {Function} [needsReload] - An optional state setter function from the parent 
- *   component. If provided, it will be called after a successful post creation to 
+ * @prop {Function} [needsReload] - An optional state setter function from the parent
+ *   component. If provided, it will be called after a successful post creation to
  *   request a data reload in the parent.
  *
  * @example
@@ -33,25 +33,50 @@ import { notifications } from "@mantine/notifications";
  *   return (
  *     <div>
  *       <PostForm needsReload={setReload} />
- *       {reload && <PostsList />} 
+ *       {reload && <PostsList />}
  *     </div>
  *   );
  * }
  */
-function PostForm(props) {
+
+function PostForm({ post, needsReload }) {
   // User
   const { userDetails } = useAppContext();
+  const [formData, setFormData] = useState({
+    content: "",
+    media: "",
+  });
 
   // Create a post
   const [opened, { open, close }] = useDisclosure(false);
   const [content, setContent] = useState("");
   const [tag, setTag] = useState("");
   const [media, setMedia] = useState("");
+  const [editMode, setEditMode] = useState(false); // Track create/edit mode
 
   const icon = <IconImageInPicture className="image-icon" stroke={1.5} />;
   const add_icon = <IconPlus className={classes.like} stroke={1.5} />;
 
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (post) {
+      setFormData({
+        content: post.content || "",
+        media: post.media || "",
+      });
+    } else {
+      setFormData({
+        content: "",
+        media: "",
+      });
+    }
+  }, [post]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async () => {
     try {
@@ -77,14 +102,13 @@ function PostForm(props) {
         message: "Post created successfully!",
         color: "green",
       });
-      if (props.needsReload) {
-        props.needsReload((prevState) => !prevState);
+      if (needsReload) {
+        needsReload((prevState) => !prevState);
       }
       close();
     } catch (error) {
       console.error("Error saving post:", error);
       if (error.response) {
-        // setMessage(`Error: ${error.response.data.message}`);
         notifications.show({
           title: "Error",
           message: error.response
@@ -97,7 +121,6 @@ function PostForm(props) {
       }
     }
   };
-
   return (
     <>
       <Button
@@ -105,13 +128,18 @@ function PostForm(props) {
         mt="xl"
         size="md"
         variant="default"
-        onClick={open}
+        onClick={() => {
+          setContent("");
+          setMedia(null);
+          setTag("");
+          open();
+        }}
         leftSection={add_icon}
       >
         Create Post
       </Button>
 
-      <Modal opened={opened} onClose={close} title="Add Post">
+      <Modal opened={opened} onClose={close} title={"Add Post"}>
         <TextInput disabled label="Username" value={userDetails.email} />
         <TextInput
           label="Content"
@@ -134,7 +162,7 @@ function PostForm(props) {
           onChange={(e) => setTag(e.target.value)}
         />
         <Group position="right" mt="md">
-          <Button onClick={handleSubmit}>Save</Button>
+          <Button onClick={handleSubmit}>{editMode ? "Update" : "Save"}</Button>
         </Group>
       </Modal>
     </>

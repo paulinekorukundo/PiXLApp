@@ -22,7 +22,6 @@ public class Recipe {
 	public Recipe(String recipeName, String recipeIngredients, String recipeInstructions, String cusineType,
 			Boolean isVegan, Boolean isVegetarian, Boolean isLactoseFree, Boolean isGlutenFree, Profile profile, Double prepTime) {
 		super();
-//		this.recipeId = recipeId;
 		this.recipeName = recipeName;
 		this.recipeIngredients = recipeIngredients;
 		this.recipeInstructions = recipeInstructions;

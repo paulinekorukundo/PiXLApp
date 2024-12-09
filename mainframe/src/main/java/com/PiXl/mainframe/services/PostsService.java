@@ -15,11 +15,11 @@ public interface PostsService {
 	
 	// GENERAL POSTS
 	List<PostsEntity> getAllPosts();
-    Posts getPostById(Long postId);
-    Posts savePost(Posts post);
+    PostsEntity getPostById(Long postId);
     PostsEntity saveNewPost(PostsEntity post, Set<TagsEntity> tags, MultipartFile file);
-    PostsEntity editExistingPost(PostsEntity post);
     boolean deletePost(Long postId);
+    PostsEntity editExistingPost(PostsEntity post, Set<TagsEntity> tags);
+ 
     
     // USER SPECIFIC POSTS
     List<PostsEntity> getAllPostForUser(String userId);

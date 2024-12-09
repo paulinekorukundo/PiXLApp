@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -88,21 +87,33 @@ public class RecipeController {
 		RecipeEntity savedPost = recServ.saveRecipe(recipeToSave);
 		if(savedPost == null) {
 			return ResponseHandler.generateResponse("Error saving recipe.", HttpStatus.NOT_FOUND);
-//			return ResponseEntity.notFound().build();
 		}else {
 			return ResponseHandler.generateResponse("Recipe Saved!", HttpStatus.OK, savedPost);
-//			return ResponseEntity.ok(savedPost);
 		}
 	}
 
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "", method = RequestMethod.PUT)
 	@ResponseBody
-	private ResponseEntity<Object> editRecipe(@RequestBody RecipeEntity json) {
-		RecipeEntity savedPost = recServ.editRecipe(json);
+	private ResponseEntity<Object> editRecipe(@RequestBody Map<String, String> json) {
+		Profile prof = profileService.getProfile(Long.valueOf(json.get("profileId")).longValue()).get();
+		RecipeEntity recipeToSave = new RecipeEntity(json.get("recipeName"), new ProfileEntity(prof),
+				json.get("recipeIngredients"), json.get("recipeInstructions"), json.get("cusineType"),
+				Boolean.valueOf(json.get("isVegan")), Boolean.valueOf(json.get("isVegetarian")), 
+				Boolean.valueOf(json.get("isLactoseFree")), Boolean.valueOf(json.get("isGlutenFree")), 
+				Double.valueOf(json.get("prepTime")).doubleValue());
+		recipeToSave.setRecipeId(Long.valueOf(json.get("recipeId")).longValue());
+		RecipeEntity savedPost = recServ.editRecipe(recipeToSave);
 		if (savedPost == null) {
 			return ResponseHandler.generateResponse("Error editing recipe.", HttpStatus.NOT_FOUND);
 		} else {
 			return ResponseHandler.generateResponse("Recipe Edited!", HttpStatus.OK, savedPost);
 		}
+	}
+	
+	@RequestMapping(value="/{recipeId}", method=RequestMethod.DELETE)
+	@ResponseBody
+	private ResponseEntity<Object> deleteRecipe(@PathVariable long recipeId) {
+		recServ.deleteRecipe(recipeId);
+		return ResponseHandler.generateResponse("Recipe Deleted!", HttpStatus.OK, true);
 	}
 }

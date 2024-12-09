@@ -1,12 +1,21 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, Text, Loader, Group, Image, Grid } from "@mantine/core";
+import { Card, Text, Loader, Group, Image, Grid, Button } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { useAppContext } from "../../context/AppContext";
 import { API_URL } from "../../config";
+import PostModal from "./PostRecipeModal";
+import {
+  CardContent,
+  Typography,
+  Chip,
+  Grid2,
+  CardHeader,
+  Divider,
+} from "@mui/material";
 
 
 /**
@@ -67,9 +76,17 @@ import { API_URL } from "../../config";
 
 
 function DisplayUserPosts(props) {
+  const [opened, setOpened] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [content, setContent] = useState("");
+  const [tag, setTag] = useState("");
+  const [media, setMedia] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
   const [userPosts, setUserPosts] = useState({});
+  const [userRecipes, setUserRecipes] = useState([]);
+  const [editingPost, setEditingPost] = useState(null); // Track the post being edited
   const { userDetails } = useAppContext();
 
   //View posts
@@ -92,6 +109,31 @@ function DisplayUserPosts(props) {
     };
 
     loadPosts();
+  }, [userDetails.email, props.reload]);
+
+  //View Recipes
+  useEffect(() => {
+    const loadRecipes = async () => {
+      const userId = userDetails.profileId;
+      try {
+        const response = await axios.get(
+          `${API_URL}/api/v1/recipes/profile/${userId}`
+        );
+        console.log(response);
+        setUserRecipes(response.data || []);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setUserRecipes([]);
+          console.log("No Recipes for User");
+        } else {
+          console.error("Error fetching posts:", error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRecipes();
   }, [userDetails.email, props.reload]);
 
   useEffect(() => {
@@ -149,60 +191,205 @@ function DisplayUserPosts(props) {
     loadImages();
   }, [userPosts]);
 
+  const handleOpenCreateModal = () => {
+    setEditMode(false);
+    setContent("");
+    setTag("");
+    setMedia(null);
+    setOpened(true);
+  };
+
+  const handleOpenEditModal = (post) => {
+    setEditMode(true);
+    setSelectedPostId(post.postId);
+    setContent(post.content);
+    setTag(post.tag || "");
+    setMedia(null); // Assume media is not directly editable
+    setOpened(true);
+  };
+
+  // Handle edit button click
+  const handleEditClick = (post) => {
+    setEditingPost(post); // Set the current post in edit mode
+    props.onEditPost(post); // Pass the post to the parent component or form
+  };
+
+  // Cancel edit
+  const handleCancelEdit = () => {
+    setEditingPost(null);
+    props.onEditPost(null); // Clear the form in parent component
+  };
+
+  const chipStyles = (condition) => ({
+    backgroundColor: condition ? "#000411" : "#efcb68",
+    color: "#fff",
+  });
   if (loading) return <Loader />;
 
   return (
-    <Grid gap={10}>
-      {userPosts && userPosts?.length > 0 ? (
-        userPosts.map((post) => (
-          <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
-            <Card
-              withBorder
-              radius="md"
-              p="md"
-              className={classes.card}
-              key={post.postId}
-              shadow="sm"
-              padding="lg"
-            >
-              <Card.Section>
-                <Image
-                  src={
-                    post.media
-                      ? `${API_URL}/api/v1/posts/media/${post.media}`
-                      : "/coming-soon.png"
-                  }
-                  alt={`Post image for ${post.content}`}
-                  h={300}
-                  onError={(e) => {
-                    e.target.src = "/coming-soon.png";
-                  }}
-                />
-              </Card.Section>
-              <Group mt="md" position="apart">
-                <PostActions
-                  postId={post.postId}
-                  likes={post.likesCount}
-                  comments={post.commentsCount}
-                />
-              </Group>
-              <Card.Section className={classes.section}>
-                <Group gap={7} mt={5}>
-                  <Text fw={500} fz="sm" mt="xs">
-                    {post.userId}
-                  </Text>
-                  <Text weight={300} fz="sm" mt="xs">
-                    {post.content}
-                  </Text>
-                </Group>
-              </Card.Section>
-            </Card>
-          </Grid.Col>
-        ))
-      ) : (
-        <Text>No posts available</Text>
-      )}
-    </Grid>
+    <>
+      <div>
+        {/* User Posts Section */}
+        <Text fz="xl" fw={700} mb="md">
+          Posts
+        </Text>
+        <Grid gap={10}>
+          {userPosts && userPosts?.length > 0 ? (
+            userPosts.map((post) => (
+              <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
+                <Card
+                  withBorder
+                  radius="md"
+                  p="md"
+                  className={classes.card}
+                  key={post.postId}
+                  shadow="sm"
+                  padding="lg"
+                >
+                  <Card.Section>
+                    <Image
+                      src={
+                        post.media
+                          ? `${API_URL}/api/v1/posts/media/${post.media}`
+                          : "/coming-soon.png"
+                      }
+                      alt={`Post image for ${post.content}`}
+                      h={300}
+                      onError={(e) => {
+                        e.target.src = "/coming-soon.png";
+                      }}
+                    />
+                  </Card.Section>
+                  <Group mt="md" position="apart">
+                    <PostActions
+                      postId={post.postId}
+                      likes={post.likesCount}
+                      comments={post.commentsCount}
+                    />
+                    <Button
+                      variant="light"
+                      size="xs"
+                      onClick={() => handleEdit(post, "post")}
+                    >
+                      Edit
+                    </Button>
+                  </Group>
+                  <Card.Section className={classes.section}>
+                    <Group gap={7} mt={5}>
+                      <Text fw={500} fz="sm" mt="xs">
+                        {post.userId}
+                      </Text>
+                      <Text weight={300} fz="sm" mt="xs">
+                        {post.content}
+                      </Text>
+                    </Group>
+                  </Card.Section>
+                </Card>
+              </Grid.Col>
+            ))
+          ) : (
+            <Text>No posts available</Text>
+          )}
+        </Grid>
+
+        {/* User Recipes Section */}
+        <Text fz="xl" fw={700} mt="lg" mb="md">
+          Recipes
+        </Text>
+        <Grid gap={10}>
+          {userRecipes && userRecipes?.length > 0 ? (
+            userRecipes.map((recipe) => (
+              <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={recipe.recipeId}>
+                <Card
+                  withBorder
+                  radius="md"
+                  p="md"
+                  className={classes.card}
+                  key={recipe.recipeId}
+                  shadow="sm"
+                  padding="lg"
+                >
+                  <CardHeader
+                    title={`${recipe.recipeName}`}
+                    sx={{
+                      color: "#000411",
+                    }}
+                  />
+                  <CardContent>
+                    <Typography variant="body2" color="#160c28" gutterBottom>
+                      <strong>Cusine Type:</strong> {recipe.cusineType}
+                    </Typography>
+                    <Typography variant="body2" color="#160c28" gutterBottom>
+                      <strong>Ingredients:</strong> {recipe.recipeIngredients}
+                    </Typography>
+                    <Typography variant="body2" color="#160c28" gutterBottom>
+                      <strong>Instructions:</strong> {recipe.recipeInstructions}
+                    </Typography>
+                    <Typography variant="body2" color="#160c28">
+                      <strong>Prep Time:</strong> {recipe.prepTime} minutes
+                    </Typography>
+                    <Divider sx={{ backgroundColor: "#8ea8c3", marginY: 2 }} />
+                    <Grid2 container spacing={1}>
+                      <Grid2 item>
+                        <Chip
+                          label={`Vegan: ${recipe.isVegan ? "Yes" : "No"}`}
+                          sx={chipStyles(recipe.isVegan)}
+                        />
+                      </Grid2>
+                      <Grid2 item>
+                        <Chip
+                          label={`Vegetarian: ${
+                            recipe.isVegetarian ? "Yes" : "No"
+                          }`}
+                          sx={chipStyles(recipe.isVegetarian)}
+                        />
+                      </Grid2>
+                      <Grid2 item>
+                        <Chip
+                          label={`Lactose-Free: ${
+                            recipe.isLactoseFree ? "Yes" : "No"
+                          }`}
+                          sx={chipStyles(recipe.isLactoseFree)}
+                        />
+                      </Grid2>
+                      <Grid2 item>
+                        <Chip
+                          label={`Gluten-Free: ${
+                            recipe.isGlutenFree ? "Yes" : "No"
+                          }`}
+                          sx={chipStyles(recipe.isGlutenFree)}
+                        />
+                      </Grid2>
+                    </Grid2>
+                  </CardContent>
+                  <Button
+                    variant="light"
+                    size="xs"
+                    onClick={() => handleEdit(recipe, "recipe")}
+                  >
+                    Edit
+                  </Button>
+                </Card>
+              </Grid.Col>
+            ))
+          ) : (
+            <Text>No recipes available</Text>
+          )}
+        </Grid>
+      </div>
+      <PostModal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title={editMode ? "Edit Post" : "Add Post"}
+        content={content}
+        tag={tag}
+        media={media}
+        setContent={setContent}
+        setTag={setTag}
+        setMedia={setMedia}
+        // onSubmit={handleSubmit}
+      />
+    </>
   );
 }
 

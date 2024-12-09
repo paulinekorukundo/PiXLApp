@@ -30,8 +30,9 @@ function RecipesList() {
       const response = noFiltersApplied
         ? await axios.get(import.meta.env.VITE_API_URL + `/api/v1/recipes`)
         : await axios.get(
-            import.meta.env.VITE_API_URL + `/api/v1/recipes/filter/${query}`,
+            import.meta.env.VITE_API_URL + `/api/v1/recipes/filter/${query}`
           );
+
       console.log("Response: ", response.data);
       setRecipes(response.data || []);
     } catch (error) {

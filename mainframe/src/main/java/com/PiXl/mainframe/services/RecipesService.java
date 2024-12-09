@@ -13,7 +13,7 @@ public interface RecipesService {
 	
 	RecipeEntity saveRecipe(RecipeEntity recipe);
 	RecipeEntity editRecipe(RecipeEntity recipe);
-	void deleteRecipe(long recipeId);
+	boolean deleteRecipe(long recipeId);
 	
 	// Filter Recipes
 	List<RecipeEntity> getFilteredRecipes(RecipeFilter filter);

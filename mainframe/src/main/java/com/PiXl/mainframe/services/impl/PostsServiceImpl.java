@@ -68,12 +68,12 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public Posts getPostById(Long postId) {
+	public PostsEntity getPostById(Long postId) {
 		Optional<PostsEntity> postE = postRepo.findById(postId);
 		if(postE.isEmpty()) {
 			return null;
 		}
-		return of(postE.get());
+		return postE.get();
 		
 	}
 
@@ -146,29 +146,18 @@ public class PostsServiceImpl implements PostsService {
 			throw new FileStorageException("Could not store file " + file.getOriginalFilename() + ". Please try again!", ex);
 		}
 	}
-	
-	@Override
-	public Posts savePost(Posts post) {
-//	    PostsEntity postEntity = of(post);
-//	    if (post.getTagName() != null) {
-//	        TagsEntity tag = tagsRepo.findByName(post.getTagName())
-//	            .orElseGet(() -> {
-//	                TagsEntity newTag = new TagsEntity();
-//	                newTag.setName(post.getTagName());
-//	                return tagsRepo.save(newTag);
-//	            });
-//	        postEntity.setTags(tag);
-//	    }
-//	    PostsEntity savedPost = postRepo.save(postEntity);
-//	    return of(savedPost);
-		return null;
-	}
 
 	@Override
-	public PostsEntity editExistingPost(PostsEntity post) {
-		if(!postRepo.existsById(post.getPostId())) {
-			throw new IllegalArgumentException("Post does not exist!");
+	public PostsEntity editExistingPost(PostsEntity post, Set<TagsEntity> tags) {
+		HashSet<TagsEntity> tagsToSave = new HashSet<>();
+        if(!tags.isEmpty()) {
+        	for(TagsEntity t : tags) {
+        		tagsToSave.add(tagsServ.findOrCreateTagByName(t.getName()));
+        	}
+        	tagsRepo.saveAll(tagsToSave);
 		}
+        
+		post.setTagsForPost(tagsToSave);
 		PostsEntity savedPost = postRepo.save(post);
 		return savedPost;
 	}
