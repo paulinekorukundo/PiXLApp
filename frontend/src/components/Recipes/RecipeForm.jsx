@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, TextInput, Button, Group } from "@mantine/core";
-import { IconChefHat, IconClock } from "@tabler/icons-react";
+import { IconChefHat } from "@tabler/icons-react";
 import axios from "axios";
 import { useDisclosure } from "@mantine/hooks";
 import classes from "../../assets/BadgeCard.module.css";
 import { useAppContext } from "../../context/AppContext";
-import { notifications, showNotification } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications";
 import {
   Checkbox,
   FormControlLabel,
@@ -14,6 +14,30 @@ import {
   InputAdornment,
   TextField,
 } from "@mui/material";
+
+/**
+ * RecipeForm Component
+ *
+ * This component provides a modal form interface for creating and submitting new recipes.
+ * Users can enter various details such as:
+ * - Recipe name
+ * - Ingredients
+ * - Instructions
+ * - Cuisine type
+ * - Dietary restrictions (vegan, vegetarian, lactose-free, gluten-free)
+ * - Preparation time
+ *
+ * Upon submission, the component sends a POST request to the server to save the recipe.
+ * If the submission is successful, a success notification is shown and the parent component
+ * can optionally trigger a reload of the recipe list. If there's an error, an error notification
+ * is displayed.
+ *
+ * @component
+ *
+ * @prop {Function} [needsReload] - An optional state setter function from the parent component.
+ *   If provided, it will be called after a successful recipe creation to request that the parent
+ *   component reload its data (e.g., a list of recipes).
+ */
 
 function RecipeForm(props) {
   // User
@@ -36,26 +60,9 @@ function RecipeForm(props) {
   const [opened, { open, close }] = useDisclosure(false);
 
   const [recipeData, setRecipeData] = useState(initialRecipeData);
-  // const [recipeData, setRecipeData] = useState({
-  //   recipeName: "",
-  //   recipeIngredients: "",
-  //   recipeInstructions: "",
-  //   cusineType: "",
-  //   isVegan: false,
-  //   isVegetarian: false,
-  //   isLactoseFree: false,
-  //   isGlutenFree: false,
-  //   profileId: userDetails?.profileId || 0,
-  //   prepTime: 0,
-  // });
-
-  const clock_icon = <IconClock className="image-icon" stroke={1.5} />;
   const add_icon = <IconChefHat className={classes.like} stroke={1.5} />;
 
   const [message, setMessage] = useState("");
-
-  // const RECIPE_URL = import.meta.env.VITE_API_URL + "/api/v1/recipes";
-
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     console.log(event.target);
@@ -66,8 +73,8 @@ function RecipeForm(props) {
   };
 
   const handleOpen = () => {
-    setRecipeData(initialRecipeData); // Reset recipeData when modal opens
-    open(); // Open the modal
+    setRecipeData(initialRecipeData); 
+    open(); 
   };
 
   const handleSubmit = async () => {
@@ -203,33 +210,18 @@ function RecipeForm(props) {
             label="Gluten Free"
           />
         </FormGroup>
-
-        {/* <TextInput
-          label="Preparation Time"
-          placeholder="Preparation Time"
-          value={recipeData.prepTime}
-          rightSection={clock_icon}
-          onChange={handleChange}
-          name="prepTime"
-        /> */}
         <TextField
           fullWidth
           id="filled-number"
           label="Preparation Time"
           type="number"
           variant="filled"
-          // slotProps={{
-          //   inputLabel: {
-          //     shrink: true,
-          //   },
-          // }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">minutes</InputAdornment>
             ),
           }}
           value={recipeData.prepTime}
-          // leftSection={clock_icon}
           onChange={handleChange}
           name="prepTime"
         />

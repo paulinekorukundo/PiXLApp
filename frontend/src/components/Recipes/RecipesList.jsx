@@ -3,13 +3,28 @@ import { useEffect, useState } from "react";
 import "../../assets/General.css";
 import RecipeCard from "./RecipeCard";
 import {
-  Grid,
   Typography,
   FormControlLabel,
   Checkbox,
   Box,
   Button,
+  Grid2,
+  Grid,
 } from "@mui/material";
+
+
+/**
+ * RecipesList Component
+ *
+ * This component fetches and displays a list of recipes, allowing users to apply various dietary filters.
+ * Users can filter recipes by properties such as gluten-free, vegan, vegetarian, and lactose-free. The
+ *
+ *
+ * @component
+ * *
+ * @returns {JSX.Element} A list of filtered (or unfiltered) recipes displayed in a responsive grid.
+ *
+ */
 
 function RecipesList() {
   const [recipes, setRecipes] = useState([]);
@@ -171,7 +186,7 @@ function RecipesList() {
             onClick={applyFilters}
             sx={{
               backgroundColor: "#000411",
-              color: "#cbf7ed",
+              color: "whitesmoke",
               "&:hover": { color: "#000411", backgroundColor: "#fff" },
             }}
           >

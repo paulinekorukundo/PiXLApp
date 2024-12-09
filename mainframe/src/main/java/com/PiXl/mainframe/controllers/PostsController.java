@@ -91,7 +91,6 @@ public class PostsController {
 	private ResponseEntity<Object> getAllPostsForUser(@PathVariable String userId) {
 		List<PostsEntity> allPosts = postService.getAllPostForUser(userId);
 		return ResponseHandler.generateResponse("All Posts for UserId: " + userId, HttpStatus.OK, allPosts);
-		// return ResponseEntity.ok(allPosts);
 	}
 	
 	/**
@@ -211,9 +210,8 @@ public class PostsController {
      */
 	@RequestMapping(value = "/topPosts", method = RequestMethod.GET)
 	@ResponseBody
-//	private ResponseEntity<Object> getTopLikedPosts(@RequestBody Map<String, Long> json) {
 	private ResponseEntity<Object> getTopLikedPosts(@RequestParam(defaultValue = "10") Long limit) {
-		List<Posts> topPosts = postService.getPostByMostLikes(limit); //json.get("numPosts")
+		List<Posts> topPosts = postService.getPostByMostLikes(limit); 
 		if (topPosts.isEmpty()) {
 			return ResponseHandler.generateResponse("No Posts", HttpStatus.NOT_FOUND);
 		} else {
@@ -277,9 +275,6 @@ public class PostsController {
 		if (filteredPosts.isEmpty()) {
 			return ResponseHandler.generateResponse("No Posts for given tag", HttpStatus.NOT_FOUND);
 		} else {
-			// return ResponseHandler.generateResponse("Filtered Posts", HttpStatus.OK,
-			// filteredPosts);
-
 			return ResponseEntity.ok(filteredPosts);
 		}
 	}
