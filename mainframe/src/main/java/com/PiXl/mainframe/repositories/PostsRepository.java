@@ -23,8 +23,10 @@ public interface PostsRepository extends CrudRepository<PostsEntity, Long> {
     boolean existsById(Long postId);
     long count();
     
-    @Query("SELECT p FROM PostsEntity p ORDER BY p.likesCount DESC LIMIT :maxNum OFFSET :off")
-    List<PostsEntity> getTopNLikedPosts(@Param("maxNum") Long maxNum, @Param("off") Long off);
+//    @Query("SELECT p FROM PostsEntity p ORDER BY p.likesCount DESC LIMIT :maxNum OFFSET :off")
+//    List<PostsEntity> getTopNLikedPosts(@Param("maxNum") Long maxNum, @Param("off") Long off);
+    
+    List<PostsEntity> findAllByOrderByLikesCountDesc();
  
     
     @Query(value = "SELECT post_id from posts_tags WHERE tag_id = :tagId", nativeQuery = true)

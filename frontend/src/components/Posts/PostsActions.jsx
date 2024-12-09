@@ -149,7 +149,7 @@ function PostActions({
         </Text>
       </div>
 
-      {isAuthor && (
+      {/* {isAuthor && (
         <div className={classes.iconTextWrapper}>
           <ActionIcon
             className="item "
@@ -162,7 +162,7 @@ function PostActions({
             <IconX className={classes.delete_icon} stroke={1.5} />
           </ActionIcon>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

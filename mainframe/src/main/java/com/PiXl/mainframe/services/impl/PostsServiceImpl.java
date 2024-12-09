@@ -144,23 +144,11 @@ public class PostsServiceImpl implements PostsService {
 	private Posts of(PostsEntity post) {
 		return new Posts(post);
 	}
-	
-	private PostsEntity of(Posts post) {
-		return new PostsEntity(post);
-	}
 
 	@Override
-	public List<Posts> getPostByMostLikes(long numOfPosts) {
-		if(numOfPosts < 0) {
-			throw new IllegalArgumentException("Value cannot be less than 0!");
-		}
-		List<PostsEntity> postEntities = postRepo.getTopNLikedPosts(numOfPosts, offset);
-		List<Posts> posts= new ArrayList<>();
-		for(PostsEntity p : postEntities) {
-			posts.add(of(p));
-		}
-		offset = offset + numOfPosts;
-		return posts;
+	public List<PostsEntity> getPostByMostLikes() {
+		List<PostsEntity> postEntities = postRepo.findAllByOrderByLikesCountDesc();
+		return postEntities;
 	}
 
 	@Override

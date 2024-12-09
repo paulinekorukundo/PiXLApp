@@ -25,7 +25,7 @@ public interface PostsService {
     List<PostsEntity> getAllPostForUser(String userId);
     
     // POSTS UTILITY
-    List<Posts> getPostByMostLikes(long numOfPosts);
+    List<PostsEntity> getPostByMostLikes();
     List<Posts> getPostsByIdList(List<Long> ids);
     
     // POST INTERACTION

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Grid,
-  Card,
-  Group,
-  Text,
-  Image,
-  ActionIcon,
-} from "@mantine/core";
+import { Grid, Card, Group, Text, Image, ActionIcon } from "@mantine/core";
 import { IconEdit, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import { useAppContext } from "../../context/AppContext";
@@ -137,11 +130,12 @@ const UserPostsRecipes = (props) => {
   }, [posts]);
 
   const handleEdit = (item, type) => {
+    const tags = item.tagsForPost.map((tag) => tag.name).join(", ");
     setEditMode(true);
     setSelectedItem(item);
     setType(type);
     setContent(item.content);
-    setTag(item.tag || "");
+    setTag(tags || "");
     setMedia(null);
     setPostId(item.postId);
     setRecipeName(item.recipeName);

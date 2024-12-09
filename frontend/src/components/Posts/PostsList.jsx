@@ -1,13 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {
-  Card, Text, Loader, Group, Image, Grid, Box, TextInput, Flex, Switch,
+  Card,
+  Text,
+  Loader,
+  Group,
+  Image,
+  Grid,
+  Box,
+  TextInput,
+  Flex,
+  Switch,
 } from "@mantine/core";
 import PostActions from "./PostsActions";
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { API_URL } from "../../config";
-import debounce from "lodash/debounce"; 
+import debounce from "lodash/debounce";
 
 /**
  * PostsList Component
@@ -41,7 +50,7 @@ function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
-  const [searchTag, setSearchTag] = useState(""); 
+  const [searchTag, setSearchTag] = useState("");
   const [showTopPosts, setShowTopPosts] = useState(false);
 
   //Get Images
@@ -51,7 +60,7 @@ function PostsList() {
       const imagePromises = posts.map(async (post) => {
         try {
           const response = await axios.get(
-            `${API_URL}/api/v1/posts/media/${post.media}`,
+            `${API_URL}/api/v1/posts/media/${post.media}`
           );
           return response.data;
         } catch (error) {
@@ -64,39 +73,37 @@ function PostsList() {
       setLoadedImages(
         loadedImages.reduce(
           (acc, img, index) => ({ ...acc, [posts[index].postId]: img }),
-          {},
-        ),
+          {}
+        )
       );
     };
 
     loadImages();
   }, [posts, API_URL]);
 
-  const loadPosts = async (searchTag = "") => {
+  const loadPosts = async (searchTag = "", toggleTopPosts = false) => {
+    console.log(toggleTopPosts);
     try {
-      // const response = searchTag
-      //   ? await axios.post(
-      //       import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
-      //       {
-      //         tagName: searchTag,
-      //       },
-      //     )
-      //   : await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
       let response;
-      if (searchTag){
-        response = await axios.post(import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
+      if (searchTag) {
+        response = await axios.post(
+          import.meta.env.VITE_API_URL + "/api/v1/posts/findPostsByTag",
           {
             tagName: searchTag,
-          },
-        )
+          }
+        );
+      } else {
+        if (toggleTopPosts) {
+          response = await axios.get(
+            import.meta.env.VITE_API_URL + "/api/v1/posts/topPosts"
+          );
+        } else {
+          response = await axios.get(
+            import.meta.env.VITE_API_URL + "/api/v1/posts/"
+          );
+        }
+        console.log(response);
       }
-      // else if (showTopPosts){
-      //   response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
-      // } 
-      else {
-        response = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
-      }
-      
 
       setPosts(response.data || []);
     } catch (error) {
@@ -120,7 +127,7 @@ function PostsList() {
 
   const handleToggleTopPosts = (checked) => {
     setShowTopPosts(checked);
-    loadPosts(searchTag);
+    loadPosts(searchTag, checked);
   };
 
   const handleLikeUpdate = async () => {
@@ -130,36 +137,6 @@ function PostsList() {
       console.error("Error updating likes:", error);
     }
   };
-
-  const handlePostDeleted = (deletedPostId) => {
-    loadPosts();
-  };
-
-
-  const [editModalOpened, setEditModalOpened] = useState(false);
-  const [editContent, setEditContent] = useState("");
-  const [editPostId, setEditPostId] = useState(null);
-
-  const handleEditPost = (postId) => {
-    const postToEdit = userPosts.find((post) => post.postId === postId);
-    setEditContent(postToEdit.content);
-    setEditPostId(postId);
-    setEditModalOpened(true);
-  };
-
-  const handleSaveEdit = async () => {
-    try {
-      await axios.put(`${API_URL}/api/v1/posts/${editPostId}`, {
-        content: editContent,
-      });
-      setEditModalOpened(false);
-      const response = await axios.get(`${API_URL}/api/v1/posts/${userDetails.email}`);
-      setPosts(response.data.data || []);
-    } catch (error) {
-      console.error("Error saving post:", error);
-    }
-  };
-
 
   // Initial load
   useEffect(() => {
@@ -200,7 +177,9 @@ function PostsList() {
         </Box>
         <Switch
           checked={showTopPosts}
-          onChange={(event) => handleToggleTopPosts(event.currentTarget.checked)}
+          onChange={(event) =>
+            handleToggleTopPosts(event.currentTarget.checked)
+          }
           label="Most Popular"
         />
       </Flex>
@@ -238,9 +217,9 @@ function PostsList() {
                     likes={post.likesCount}
                     comments={post.commentsCount}
                     onLike={handleLikeUpdate}
-                    postUserId={post.userId} 
-                    onEdit={(postId) => handleEditPost(postId)}
-                    onDelete={handlePostDeleted}
+                    postUserId={post.userId}
+                    // onEdit={(postId) => handleEditPost(postId)}
+                    // onDelete={handlePostDeleted}
                   />
                 </Group>
                 <Card.Section className={classes.section}>
@@ -284,4 +263,3 @@ function PostsList() {
 }
 
 export default PostsList;
-
