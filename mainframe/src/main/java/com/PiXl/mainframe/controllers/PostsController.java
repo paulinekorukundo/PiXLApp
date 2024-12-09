@@ -35,7 +35,6 @@ import com.PiXl.mainframe.entities.PostsEntity;
 import com.PiXl.mainframe.entities.TagsEntity;
 import com.PiXl.mainframe.handler.ResponseHandler;
 import com.PiXl.mainframe.models.Posts;
-import com.PiXl.mainframe.models.Profile;
 import com.PiXl.mainframe.services.PostsService;
 
 @RestController
@@ -46,6 +45,12 @@ public class PostsController {
 	@Autowired
 	private PostsService postService;
 
+	/**
+     * Retrieves all posts from the system.
+     *
+     * @return A ResponseEntity containing a list of all PostsEntity objects if found,
+     *         or a 404 (Not Found) status if no posts exist.
+     */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	@ResponseBody
 	private ResponseEntity<List<PostsEntity>> getAllPosts() {
@@ -66,6 +71,14 @@ public class PostsController {
 	// }
 	// }
 
+	/**
+     * Retrieves posts by a list of post IDs.
+     *
+     * @param ids A list of post IDs.
+     * @return A ResponseEntity containing either:
+     *         - A response with the found posts and a 200 (OK) status if posts are found.
+     *         - A response with a 404 (Not Found) status if no posts match the provided IDs.
+     */
 	@RequestMapping(value = "/byIdList", method = RequestMethod.GET)
 	@ResponseBody
 	private ResponseEntity<Object> getAllPosts(@RequestBody List<Long> ids) {
@@ -77,6 +90,15 @@ public class PostsController {
 		}
 	}
 
+
+	/**
+     * Retrieves all posts for a given user.
+     *
+     * @param userId The ID of the user for whom to retrieve posts.
+     * @return A ResponseEntity containing either:
+     *         - A response with the found posts and a 200 (OK) status if posts exist for the user.
+     *         - A response with a 404 (Not Found) status if no posts exist for the given user.
+     */
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	@ResponseBody
 	private ResponseEntity<Object> getAllPostsForUser(@PathVariable String userId) {
@@ -88,7 +110,18 @@ public class PostsController {
 		}
 		// return ResponseEntity.ok(allPosts);
 	}
-
+	
+	/**
+     * Saves a new post to the system.
+     *
+     * @param media   The media file associated with the post (e.g., image).
+     * @param userId  The ID of the user who created the post.
+     * @param content The textual content of the post.
+     * @param tags    A comma-separated list of tags for the post (optional).
+     * @return A ResponseEntity indicating the outcome of the save operation:
+     *         - 200 (OK) if the post is saved successfully.
+     *         - 500 (Internal Server Error) if there is an issue saving the post.
+     */
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<Object> savePost(@RequestParam("media") MultipartFile media,
@@ -146,6 +179,13 @@ public class PostsController {
 	// }
 	// }
 
+	/**
+     * Retrieves a media file (e.g., an image) by filename.
+     *
+     * @param filename The name of the file to retrieve.
+     * @return A ResponseEntity containing the resource if found.
+     * @throws MalformedURLException if the file URL is invalid.
+     */
 	@GetMapping("/media/{filename}")
 	public ResponseEntity<Resource> getMedia(@PathVariable String filename) throws MalformedURLException {
 		Path filePath = Paths.get("uploads/" + filename);
@@ -155,6 +195,14 @@ public class PostsController {
 				.body(resource);
 	}
 
+	 /**
+     * Edits an existing post.
+     *
+     * @param json A PostsEntity object with updated information.
+     * @return A ResponseEntity containing:
+     *         - 200 (OK) if the post is successfully edited.
+     *         - 404 (Not Found) if the post could not be found or edited.
+     */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	@ResponseBody
 	private ResponseEntity<Object> editPost(@RequestBody PostsEntity json) {
@@ -166,23 +214,40 @@ public class PostsController {
 		}
 	}
 
+	/**
+     * Increments the like count on a given post.
+     *
+     * @param post A map containing the key "postId" with the ID of the post to like.
+     * @return A ResponseEntity indicating that the post was liked (200 OK).
+     */
 	@RequestMapping(value = "/likePost", method = RequestMethod.POST)
 	private ResponseEntity<Object> likePost(@RequestBody Map<String, Long> post) {
 		postService.likePost(post.get("postId"));
 		return ResponseHandler.generateResponse("Post Liked!", HttpStatus.OK);
 	}
 
+	/**
+     * Decrements the like count on a given post.
+     *
+     * @param post A map containing the key "postId" with the ID of the post to unlike.
+     * @return A ResponseEntity indicating that the post was unliked (200 OK).
+     */
 	@RequestMapping(value = "/unlikePost", method = RequestMethod.POST)
 	private ResponseEntity<Object> unlikePost(@RequestBody Map<String, Long> post) {
 		postService.unLikePost(post.get("postId"));
 		return ResponseHandler.generateResponse("Post Unliked!", HttpStatus.OK);
 	}
 
-	// Method to show the top k liked posts for pagination.
-	// When a user reaches the end of a page scroll, we call this method to get us
-	// the
-	// next k posts to show to the user. It is a basic implementation of LAZY
-	// LOADING.
+	/**
+     * Retrieves the top liked posts up to a specified limit k. 
+     * When a user reaches the end of a page scroll, we call this method to get us the
+     * next next k posts to show to the user. It is a basic implementation of LAZY LOADING.
+     *
+     * @param limit The maximum number of posts to retrieve. Defaults to 10 if not specified.
+     * @return A ResponseEntity containing either:
+     *         - A list of the top liked posts (200 OK).
+     *         - A 404 (Not Found) if no posts exist.
+     */
 	@RequestMapping(value = "/topPosts", method = RequestMethod.GET)
 	@ResponseBody
 //	private ResponseEntity<Object> getTopLikedPosts(@RequestBody Map<String, Long> json) {
@@ -195,6 +260,14 @@ public class PostsController {
 		}
 	}
 
+	/**
+     * Inserts multiple posts into the system by reading from a CSV file.
+     * The file should be named "batch.csv" and located in the application's working directory.
+     *
+     * @return A ResponseEntity containing either:
+     *         - A list of the inserted posts (200 OK).
+     *         - A 404 (Not Found) if no posts were inserted.
+     */
 	@RequestMapping(value = "/batchInsert", method = RequestMethod.GET)
 	@ResponseBody
 	private ResponseEntity<Object> saveManyPosts() {
@@ -229,6 +302,14 @@ public class PostsController {
 		}
 	}
 
+	/**
+     * Retrieves all posts that contain a specified tag.
+     *
+     * @param post A map containing the key "tagName" which is the name of the tag to filter by.
+     * @return A ResponseEntity containing:
+     *         - A list of posts containing the specified tag (200 OK).
+     *         - A 404 (Not Found) if no posts contain the specified tag.
+     */
 	@RequestMapping(value = "/findPostsByTag", method = RequestMethod.POST)
 	private ResponseEntity<Object> findPostsByTag(@RequestBody Map<String, String> post) {
 		List<PostsEntity> filteredPosts = postService.getAllPostsWithTag(post.get("tagName"));
@@ -247,6 +328,8 @@ public class PostsController {
 	 *
 	 * @param post The post to delete.
 	 * @return A ResponseEntity containing a boolean indicating success or failure.
+	 * - true (200 OK) if the post is successfully deleted.
+     *         - A 404 (Not Found) if the post could not be found.
 	 */
 	@DeleteMapping()
     public ResponseEntity<Boolean> delete(@RequestParam Long postId) {
