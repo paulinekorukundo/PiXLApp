@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import Footer from "./Footer";
 
 /**
- * Provides the general layout used by the Recipes, Profile and Posts components 
+ * Provides the general layout used by the Recipes, Profile and Posts components
  */
 
 export default function Layout() {
@@ -14,6 +14,7 @@ export default function Layout() {
 
   const location = useLocation();
   const isRecipesPage = location.pathname === "/recipes";
+  const isProfilePage = location.pathname === "/profile";
 
   if (!appState.isLoggedIn) {
     return <Navigate to="/auth/login" />;
@@ -27,12 +28,34 @@ export default function Layout() {
               <img width="180" height="130" src="/src/assets/PiXl Logo.png" />
             </Link>
             <Group gap={5} visibleFrom="sm">
-              <Link className="menu-item" to={isRecipesPage ? "/" : "/recipes"}>
-                {isRecipesPage ? "Posts" : "Recipes"}
-              </Link>
-              <Link className="menu-item" to="/profile">
-                Profile
-              </Link>
+              {!isProfilePage && (
+                <Link
+                  className="menu-item"
+                  to={isRecipesPage ? "/" : "/recipes"}
+                >
+                  {isRecipesPage ? "Posts" : "Recipes"}
+                </Link>
+              )}
+              {isProfilePage && (
+                <Link className="menu-item" to="/">
+                  Posts
+                </Link>
+              )}
+              {isProfilePage && (
+                <Link className="menu-item" to="/recipes">
+                  Recipes
+                </Link>
+              )}
+              {!isProfilePage && (
+                <Link className="menu-item" to="/profile">
+                  Profile
+                </Link>
+              )}
+              {/* {isProfilePage && (
+                <Link className="menu-item" to="/etl">
+                  Batch Insert
+                </Link>
+              )} */}
               <Link
                 className="menu-item"
                 onClick={() => {
@@ -57,7 +80,7 @@ export default function Layout() {
       </Container>
       <footer
         style={{
-          marginTop: "100px", 
+          marginTop: "100px",
         }}
       >
         <Container

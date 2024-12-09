@@ -130,8 +130,10 @@ const UserPostsRecipes = (props) => {
   }, [posts]);
 
   const handleEdit = (item, type) => {
-    const tags = item.tagsForPost.map((tag) => tag.name).join(", ");
     setEditMode(true);
+    const tags = item.tagsForPost
+      ? item.tagsForPost.map((tag) => tag.name).join(", ")
+      : null;
     setSelectedItem(item);
     setType(type);
     setContent(item.content);
