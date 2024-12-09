@@ -29,21 +29,24 @@ INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES 
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('janedoe@example.com', 'If chocolate was a language, I’d be fluent by now!', 'food2.jpg', 350, 32);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('janedoe@example.com', 'Mango season: Nature’s way of reminding us that sunshine can be tasted', 'food3.jpg', 290, 1);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('janedoe@example.com', 'One spoonful of homemade soup is like a warm hug from your future self.', 'food4.jpg', 100, 50);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('janedoe@example.com', 'Sourdough bread: Because good things come to those who wait (and knead).', 'salad.jpg', 102, 5);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('janedoe@example.com', 'Sourdough bread: Because good things come to those who wait (and knead).', 'bread.jpg', 102, 5);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'A ripe avocado is like a butter factory run by unicorns', 'one_pot.jpg', 25, 8);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('sparkling.spaceship@example.com', 'Crunchy veggies, zesty dressing—salads are basically your plate’s happy dance.', 'steak.jpg', 125, 3);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('sparkling.spaceship@example.com', 'Life is uncertain, but dessert always brings clarity.', 'pancakes.jpg', 348, 1);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('sparkling.spaceship@example.com', 'Crunchy veggies, zesty dressing—salads are basically your plate’s happy dance.', 'salad.jpg', 125, 3);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('sparkling.spaceship@example.com', 'Life is uncertain, but dessert always brings clarity.', 'food8.jpg', 348, 1);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('cosmic_cookie@fakemail.org', 'Taco Tuesday: Turning ordinary weeks into culinary carnivals since forever.', 'cake.jpg', 100, 50);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('cosmic_cookie@fakemail.org', 'A sprinkle of herbs can transform a dish from ‘meh’ to ‘mmmm.’', 'bacon.jpg', 10, 22);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('cosmic_cookie@fakemail.org', 'Fresh berries: little bursts of nature’s laughter on your tongue.', 'breakfast.jpg', 133, 221);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Dinner parties: Where old friendships get seasoned and new stories get served.', 'cook.jpg', 15, 13);
 INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'A sharp knife is the secret ingredient to stress-free cooking.', 'cookies.jpg', 300, 1);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Homemade pizza: Where creativity meets melted cheese harmony.', 'cooking.jpg', 100, 50);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Ice cream isn’t just a dessert; it’s an edible celebration.', 'cooking.jpg', 100, 50);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('gentle.giraffe@randommail.net', 'The sizzle of garlic hitting hot oil is the soundtrack of comfort cooking.', 'cooking.jpg', 100, 50);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('gentle.giraffe@randommail.net', 'Cooking together: The original recipe for bonding beyond words.', 'cooking.jpg', 100, 50);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('gentle.giraffe@randommail.net', 'Every kitchen experiment is just one delicious ‘oops’ away from genius.', 'cooking.jpg', 100, 50);
-INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('whispering.willow@mailinator.com', 'A handful of nuts and a drizzle of honey: Snacking just got upgraded to gourmet.', 'cooking.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Homemade pizza: Where creativity meets melted cheese harmony.', 'pizza.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('johndoe@example.com', 'Ice cream isn’t just a dessert; it’s an edible celebration.', 'lemon.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('gentle.giraffe@randommail.net', 'The sizzle of garlic hitting hot oil is the soundtrack of comfort cooking.', 'steak.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('gentle.giraffe@randommail.net', 'Cooking together: The original recipe for bonding beyond words.', 'banana.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('gentle.giraffe@randommail.net', 'Every kitchen experiment is just one delicious ‘oops’ away from genius.', 'chocolate.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('whispering.willow@mailinator.com', 'A handful of nuts and a drizzle of honey: Snacking just got upgraded to gourmet.', 'nuts.jpg', 100, 50);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('sparkling.spaceship@example.com', 'Crispy edges, fluffy center—waffles are proof that breakfast is better with a little crunch.', 'pancakes.jpg', 85, 20);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('cosmic_cookie@fakemail.org', 'Mango season: Nature’s way of reminding us that sunshine can be tasted.', 'dessert.jpg', 120, 35);
+INSERT INTO posts (user_id, content, media, likes_count, comments_count) VALUES ('gentle.giraffe@randommail.net', 'The sizzle of garlic hitting hot oil is the soundtrack of comfort cooking.', 'garlic.jpg', 95, 10);
 
 
 
