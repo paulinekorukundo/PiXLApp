@@ -18,6 +18,65 @@ import "../../assets/General.css";
 import { API_URL } from "../../config";
 import debounce from "lodash/debounce"; 
 
+/**
+ * PostsList Component
+ *
+ * This component retrieves, displays, and filters a list of posts. Users can:
+ * - View all posts or posts filtered by a specific tag.
+ * - Toggle to show the top liked posts (future functionality suggested by the code, though commented out).
+ * - Interact with posts via PostActions (like, unlike, edit, delete).
+ *
+ * Features:
+ * - **Data Fetching:** Fetches posts from a backend API. If a search tag is provided, filters posts by that tag.
+ * - **Optimized Searches:** Implements a debounced search to avoid excessive API calls while typing.
+ * - **Image Loading:** Attempts to load and display media associated with each post, falling back to a placeholder image on error.
+ * - **User Interaction:** Includes PostActions, allowing users to like/unlike a post, and if the user is the post author, also edit or delete it.
+ * - **Asynchronous Operations:** Uses async/await for data retrieval, with error handling and loading states.
+ *
+ * @component
+ *
+ * @example
+ * // Simply use the component in a parent component:
+ * function App() {
+ *   return <PostsList />;
+ * }
+ *
+ * @returns {JSX.Element} A rendered list of post cards, each displaying an image, content, tags, and actions.
+ *
+ * Internal Details:
+ * - **State Variables:**
+ *   - `posts` (Array): The array of post objects retrieved from the API.
+ *   - `loading` (boolean): Indicates whether data is being fetched from the API.
+ *   - `loadedImages` (Object): An object mapping post IDs to their loaded images (not currently fully utilized).
+ *   - `searchTag` (string): The current tag being searched for.
+ *   - `showTopPosts` (boolean): Controls whether top-liked posts should be displayed (functionality commented out).
+ *   - `editModalOpened`, `editContent`, `editPostId` (various): For editing posts (currently partially implemented).
+ *
+ * - **Functions:**
+ *   - `loadPosts(searchTag)`: Fetches posts, filtered by a tag if provided. Updates `posts` and `loading` state.
+ *   - `debouncedSearch(value)`: Debounces the search input to minimize excessive fetches.
+ *   - `handleSearchChange(e)`: Updates `searchTag` state and triggers `debouncedSearch`.
+ *   - `handleToggleTopPosts(checked)`: Toggles `showTopPosts` and reloads posts.
+ *   - `handleLikeUpdate()`: Reloads posts to reflect changes in like counts.
+ *   - `handlePostDeleted(deletedPostId)`: Reloads posts after a deletion.
+ *   - `handleEditPost(postId)`: Prepares edit state for a given post (partially implemented).
+ *   - `handleSaveEdit()`: Saves edited content to the server (partially implemented).
+ *
+ * - **Rendering:**
+ *   - Renders a search bar and a switch to toggle showing top posts.
+ *   - Renders a grid of cards (one per post), including:
+ *     - Post image (or placeholder if missing).
+ *     - PostActions component for likes/comments and author-only actions (edit/delete).
+ *     - Post content and tags.
+ *
+ * - **Dependencies:**
+ *   - Uses `axios` for HTTP requests.
+ *   - Uses `@mantine/core` for UI elements like Card, Image, Text, etc.
+ *   - Uses `debounce` from `lodash` to debounce the search handler.
+ *
+ * @see PostActions for the actions available on each post.
+ */
+
 function PostsList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,9 +131,11 @@ function PostsList() {
             tagName: searchTag,
           },
         )
-      }else if (showTopPosts){
-        response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
-      } else {
+      }
+      // else if (showTopPosts){
+      //   response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/posts/topPosts?limit=10`);
+      // } 
+      else {
         response = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/posts/");
       }
       
@@ -111,6 +172,11 @@ function PostsList() {
       console.error("Error updating likes:", error);
     }
   };
+
+  const handlePostDeleted = (deletedPostId) => {
+    loadPosts();
+  };
+
 
   const [editModalOpened, setEditModalOpened] = useState(false);
   const [editContent, setEditContent] = useState("");
@@ -216,6 +282,7 @@ function PostsList() {
                     onLike={handleLikeUpdate}
                     postUserId={post.userId} 
                     onEdit={(postId) => handleEditPost(postId)}
+                    onDelete={handlePostDeleted}
                   />
                 </Group>
                 <Card.Section className={classes.section}>

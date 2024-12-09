@@ -183,11 +183,16 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public void deletePost(Long postId) {
+	public boolean deletePost(Long postId) {
+		boolean isDeletedPost = false;
+		
 		if(!postRepo.existsById(postId)) {
 			throw new IllegalArgumentException("Post does not exist!");
+		}else {
+			postRepo.deleteById(postId);
+			isDeletedPost = true;
 		}
-		postRepo.deleteById(postId);
+		return isDeletedPost;
 	}
 	
 	private Posts of(PostsEntity post) {
