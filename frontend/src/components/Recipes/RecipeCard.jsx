@@ -35,6 +35,10 @@ const RecipeCard = ({ recipe }) => {
         height: 350,
         margin: "auto",
         boxShadow: 3,
+        transition: 'box-shadow 0.3s ease-in-out',
+        ':hover': {
+          boxShadow: 10,
+        },
       }}
     >
       <CardHeader
