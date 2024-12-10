@@ -53,6 +53,7 @@ import {
  *
  * />
  */
+
 const PostRecipeModal = ({
   opened,
   onClose,
@@ -156,7 +157,7 @@ const PostRecipeModal = ({
               <Checkbox
                 name="isVegan"
                 checked={isVegan}
-                onChange={(e) => setIsVegan(e.checked)}
+                onChange={(e) => setIsVegan(e.target.checked)}
               />
             }
             label="Vegan"
@@ -166,7 +167,7 @@ const PostRecipeModal = ({
               <Checkbox
                 name="isLactoseFree"
                 checked={isLactoseFree}
-                onChange={(e) => setIsLactoseFree(e.checked)}
+                onChange={(e) => setIsLactoseFree(e.target.checked)}
               />
             }
             label="Lactose Free"
@@ -176,7 +177,7 @@ const PostRecipeModal = ({
               <Checkbox
                 name="isVegetarian"
                 checked={isVegetarian}
-                onChange={(e) => setIsVegetarian(e.checked)}
+                onChange={(e) => setIsVegetarian(e.target.checked)}
               />
             }
             label="Vegetarian"
@@ -186,7 +187,7 @@ const PostRecipeModal = ({
               <Checkbox
                 name="isGlutenFree"
                 checked={isGlutenFree}
-                onChange={(e) => setIsGlutenFree(e.checked)}
+                onChange={(e) => setIsGlutenFree(e.target.checked)}
               />
             }
             label="Gluten Free"
