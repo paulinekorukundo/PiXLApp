@@ -184,7 +184,7 @@ function PostsList() {
             label="Most Popular"
           />
         </Flex>
-        <Grid gap={10}>
+        <Grid gap={10} justify="flex-start" align="stretch">
           {posts?.length > 0 ? (
             posts.map((post) => (
               <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
@@ -192,10 +192,10 @@ function PostsList() {
                   withBorder
                   radius="md"
                   p="md"
+                  h="100%"
                   className={classes.card}
                   shadow="sm"
                   component="a"
-                  // href=""
                   target="_blank"
                 >
                   <Card.Section>

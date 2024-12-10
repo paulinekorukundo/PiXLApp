@@ -2,7 +2,7 @@ import {
   IconHeart,
   IconMessageChatbot,
   IconHeartBroken,
-  IconX,
+  IconTrash,
 } from "@tabler/icons-react";
 import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
@@ -159,7 +159,7 @@ function PostActions({
             style={{ position: "absolute", right: 50 }}
             onClick={handleDelete}
           >
-            <IconX className={classes.delete_icon} stroke={1.5} />
+            <IconTrash className={classes.delete_icon} stroke={1.5} />
           </ActionIcon>
         </div>
       )} */}

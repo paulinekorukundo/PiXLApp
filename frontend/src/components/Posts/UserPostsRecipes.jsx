@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Card, Group, Text, Image, ActionIcon } from "@mantine/core";
-import { IconEdit, IconX } from "@tabler/icons-react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import axios from "axios";
 import { useAppContext } from "../../context/AppContext";
 import PostRecipeModal from "./PostRecipeModal";
@@ -257,7 +257,7 @@ const UserPostsRecipes = (props) => {
       <Text size="lg" weight={600} mt="lg" mb="md">
         Posts
       </Text>
-      <Grid gap={10}>
+      <Grid gap={10} align="stretch" justify="flex-start">
         {posts && posts?.length > 0 ? (
           posts.map((post) => (
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
@@ -269,6 +269,7 @@ const UserPostsRecipes = (props) => {
                 key={post.postId}
                 shadow="sm"
                 padding="lg"
+                h="100%"
               >
                 <Card.Section>
                   <Image
@@ -317,7 +318,7 @@ const UserPostsRecipes = (props) => {
                       size={36}
                       onClick={() => handleDelete(post, "post")}
                     >
-                      <IconX className={classes.delete_icon} stroke={1.5} />
+                      <IconTrash className={classes.delete_icon} stroke={1.5} />
                     </ActionIcon>
                   </div>
                 </Group>
@@ -360,7 +361,7 @@ const UserPostsRecipes = (props) => {
       <Text size="lg" weight={600} mt="lg" mb="md">
         Recipes
       </Text>
-      <Grid gap={10}>
+      <Grid gap={10} align="stretch" justify="flex-start">
         {recipes && recipes?.length > 0 ? (
           recipes.map((recipe) => (
             <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={recipe.recipeId}>
@@ -372,6 +373,7 @@ const UserPostsRecipes = (props) => {
                 key={recipe.recipeId}
                 shadow="sm"
                 padding="lg"
+                h="100%"
               >
                 <CardHeader
                   title={`${recipe.recipeName}`}
@@ -451,7 +453,7 @@ const UserPostsRecipes = (props) => {
                     size={36}
                     onClick={() => handleDelete(recipe, "recipe")}
                   >
-                    <IconX className={classes.delete_icon} stroke={1.5} />
+                    <IconTrash className={classes.delete_icon} stroke={1.5} />
                   </ActionIcon>
                 </div>
               </Card>
