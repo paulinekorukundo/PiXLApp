@@ -55,7 +55,6 @@ function PostsList() {
 
   //Get Images
   useEffect(() => {
-    setIsLoading(true);
     const loadImages = async () => {
       if (posts.length === 0) return;
       const imagePromises = posts.map(async (post) => {
@@ -77,15 +76,12 @@ function PostsList() {
           {}
         )
       );
-      setIsLoading(false);
     };
 
     loadImages();
   }, [posts, API_URL]);
 
   const loadPosts = async (searchTag = "", toggleTopPosts = false) => {
-    console.log(toggleTopPosts);
-    setIsLoading(true);
     try {
       let response;
       if (searchTag) {
@@ -105,7 +101,6 @@ function PostsList() {
             import.meta.env.VITE_API_URL + "/api/v1/posts/"
           );
         }
-        console.log(response);
       }
 
       setPosts(response.data || []);
@@ -116,8 +111,11 @@ function PostsList() {
 
   // Debounced search handler
   const debouncedSearch = debounce((value) => {
-    if (value.length >= 3) loadPosts(value);
-    else loadPosts();
+    if (value.length >= 3) {
+      loadPosts(value);
+    } else {
+      loadPosts();
+    }
   }, 300);
 
   const handleSearchChange = (e) => {
@@ -141,7 +139,9 @@ function PostsList() {
 
   // Initial load
   useEffect(() => {
+    setIsLoading(true);
     loadPosts();
+    setIsLoading(false);
   }, []);
 
   return (

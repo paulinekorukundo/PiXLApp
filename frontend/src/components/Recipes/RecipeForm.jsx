@@ -73,8 +73,8 @@ function RecipeForm(props) {
   };
 
   const handleOpen = () => {
-    setRecipeData(initialRecipeData); 
-    open(); 
+    setRecipeData(initialRecipeData);
+    open();
   };
 
   const handleSubmit = async () => {
