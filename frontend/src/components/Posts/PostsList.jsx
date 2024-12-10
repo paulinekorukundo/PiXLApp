@@ -17,6 +17,7 @@ import classes from "../../assets/BadgeCard.module.css";
 import "../../assets/General.css";
 import { API_URL } from "../../config";
 import debounce from "lodash/debounce";
+import Loading from "../Loading";
 
 /**
  * PostsList Component
@@ -36,7 +37,6 @@ import debounce from "lodash/debounce";
  * @component
  *
  * @example
- * // Simply use the component in a parent component:
  * function App() {
  *   return <PostsList />;
  * }
@@ -48,13 +48,14 @@ import debounce from "lodash/debounce";
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [loadedImages, setLoadedImages] = useState({});
   const [searchTag, setSearchTag] = useState("");
   const [showTopPosts, setShowTopPosts] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   //Get Images
   useEffect(() => {
+    setIsLoading(true);
     const loadImages = async () => {
       if (posts.length === 0) return;
       const imagePromises = posts.map(async (post) => {
@@ -76,6 +77,7 @@ function PostsList() {
           {}
         )
       );
+      setIsLoading(false);
     };
 
     loadImages();
@@ -83,6 +85,7 @@ function PostsList() {
 
   const loadPosts = async (searchTag = "", toggleTopPosts = false) => {
     console.log(toggleTopPosts);
+    setIsLoading(true);
     try {
       let response;
       if (searchTag) {
@@ -108,8 +111,6 @@ function PostsList() {
       setPosts(response.data || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -143,121 +144,122 @@ function PostsList() {
     loadPosts();
   }, []);
 
-  if (loading) return <Loader />;
-
   return (
     <>
-      <Flex
-        align="center"
-        justify="space-between"
-        mb="md"
-        p="sm"
-        sx={(theme) => ({
-          backgroundColor: theme.colors.gray[1],
-          borderRadius: theme.radius.sm,
-          boxShadow: theme.shadows.xs,
-        })}
-      >
-        <Box sx={{ flex: 1, marginRight: "1rem" }}>
-          <TextInput
-            placeholder="Search By Tag"
-            value={searchTag}
-            onChange={handleSearchChange}
-            styles={{
-              input: {
-                border: "none",
-                borderBottom: "1px solid #ced4da",
-                borderRadius: 0,
-                padding: "10px 0",
-                fontSize: "16px",
-                width: "100%",
-              },
-            }}
+      <div>
+        {isLoading && <Loading />}
+        <Flex
+          align="center"
+          justify="space-between"
+          mb="md"
+          p="sm"
+          sx={(theme) => ({
+            backgroundColor: theme.colors.gray[1],
+            borderRadius: theme.radius.sm,
+            boxShadow: theme.shadows.xs,
+          })}
+        >
+          <Box sx={{ flex: 1, marginRight: "1rem" }}>
+            <TextInput
+              placeholder="Search By Tag"
+              value={searchTag}
+              onChange={handleSearchChange}
+              styles={{
+                input: {
+                  border: "none",
+                  borderBottom: "1px solid #ced4da",
+                  borderRadius: 0,
+                  padding: "10px 0",
+                  fontSize: "16px",
+                  width: "100%",
+                },
+              }}
+            />
+          </Box>
+          <Switch
+            checked={showTopPosts}
+            onChange={(event) =>
+              handleToggleTopPosts(event.currentTarget.checked)
+            }
+            label="Most Popular"
           />
-        </Box>
-        <Switch
-          checked={showTopPosts}
-          onChange={(event) =>
-            handleToggleTopPosts(event.currentTarget.checked)
-          }
-          label="Most Popular"
-        />
-      </Flex>
-      <Grid gap={10}>
-        {posts?.length > 0 ? (
-          posts.map((post) => (
-            <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
-              <Card
-                withBorder
-                radius="md"
-                p="md"
-                className={classes.card}
-                shadow="sm"
-                component="a"
-                // href=""
-                target="_blank"
-              >
-                <Card.Section>
-                  <Image
-                    src={
-                      post.media
-                        ? `${API_URL}/api/v1/posts/media/${post.media}`
-                        : "/coming-soon.png"
-                    }
-                    alt={`Post image for ${post.content}`}
-                    h={300}
-                    onError={(e) => {
-                      e.target.src = "/coming-soon.png";
-                    }}
-                  />
-                </Card.Section>
-                <Group mt="md" position="apart">
-                  <PostActions
-                    postId={post.postId}
-                    likes={post.likesCount}
-                    comments={post.commentsCount}
-                    onLike={handleLikeUpdate}
-                    postUserId={post.userId}
-                    // onEdit={(postId) => handleEditPost(postId)}
-                    // onDelete={handlePostDeleted}
-                  />
-                </Group>
-                <Card.Section className={classes.section}>
-                  <Group gap={7} mt={5}>
-                    <Text fw={500} fz="sm" mt="xs">
-                      {post.userId}
-                    </Text>
-                    <Text weight={300} fz="sm" mt="xs">
-                      {post.content}
-                    </Text>
+        </Flex>
+        <Grid gap={10}>
+          {posts?.length > 0 ? (
+            posts.map((post) => (
+              <Grid.Col span={{ base: 12, md: 6, lg: 4 }} key={post.postId}>
+                <Card
+                  withBorder
+                  radius="md"
+                  p="md"
+                  className={classes.card}
+                  shadow="sm"
+                  component="a"
+                  // href=""
+                  target="_blank"
+                >
+                  <Card.Section>
+                    <Image
+                      src={
+                        post.media
+                          ? `${API_URL}/api/v1/posts/media/${post.media}`
+                          : "/coming-soon.png"
+                      }
+                      alt={`Post image for ${post.content}`}
+                      h={300}
+                      onError={(e) => {
+                        e.target.src = "/coming-soon.png";
+                      }}
+                    />
+                  </Card.Section>
+                  <Group mt="md" position="apart">
+                    <PostActions
+                      postId={post.postId}
+                      likes={post.likesCount}
+                      comments={post.commentsCount}
+                      onLike={handleLikeUpdate}
+                      postUserId={post.userId}
+                      // onEdit={(postId) => handleEditPost(postId)}
+                      // onDelete={handlePostDeleted}
+                    />
                   </Group>
-                  {/* Render tags here */}
-                  {post.tagsForPost?.length > 0 && (
-                    <Group gap={5} mt="sm">
-                      {post.tagsForPost.map((tag, index) => (
-                        <Text
-                          key={index}
-                          size="xs"
-                          color="blue"
-                          sx={(theme) => ({
-                            backgroundColor: theme.colors.blue[0],
-                            padding: "2px 8px",
-                            borderRadius: theme.radius.xs,
-                          })}
-                        >
-                          #{tag.name}
-                        </Text>
-                      ))}
+                  <Card.Section className={classes.section}>
+                    <Group gap={7} mt={5}>
+                      <Text fw={500} fz="sm" mt="xs">
+                        {post.userId}
+                      </Text>
+                      <Text weight={300} fz="sm" mt="xs">
+                        {post.content}
+                      </Text>
                     </Group>
-                  )}
-                </Card.Section>
-              </Card>
-            </Grid.Col>
-          ))
-        ) : (
-          <Text>No posts available</Text>
-        )}
-      </Grid>
+                    {/* Render tags here */}
+                    {post.tagsForPost?.length > 0 && (
+                      <Group gap={5} mt="sm">
+                        {post.tagsForPost.map((tag, index) => (
+                          <Text
+                            key={index}
+                            size="xs"
+                            color="blue"
+                            sx={(theme) => ({
+                              backgroundColor: theme.colors.blue[0],
+                              padding: "2px 8px",
+                              borderRadius: theme.radius.xs,
+                            })}
+                          >
+                            #{tag.name}
+                          </Text>
+                        ))}
+                      </Group>
+                    )}
+                  </Card.Section>
+                </Card>
+              </Grid.Col>
+            ))
+          ) : (
+            <Text>No posts available</Text>
+          )}
+        </Grid>
+      </div>
     </>
   );
 }
