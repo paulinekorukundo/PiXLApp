@@ -3,7 +3,21 @@
     var(--mantine-color-white),
     var(--mantine-color-dark-7)
   );
+  
 }
+
+.card:hover{
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+img{
+  transition: transform 0.3s ease-in-out;
+}
+img:hover{
+  opacity:0.8;
+  transform: scale(1.01);
+}
+
 
 .section {
   border-bottom: rem(1px) solid
