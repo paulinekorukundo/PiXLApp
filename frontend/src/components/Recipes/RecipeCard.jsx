@@ -67,24 +67,28 @@ const RecipeCard = ({ recipe }) => {
           <Grid2 item>
             <Chip
               label={`Vegan: ${isVegan ? "Yes" : "No"}`}
+              size="small"
               sx={chipStyles(isVegan)}
             />
           </Grid2>
           <Grid2 item>
             <Chip
               label={`Vegetarian: ${isVegetarian ? "Yes" : "No"}`}
+              size="small"
               sx={chipStyles(isVegetarian)}
             />
           </Grid2>
           <Grid2 item>
             <Chip
               label={`Lactose-Free: ${isLactoseFree ? "Yes" : "No"}`}
+              size="small"
               sx={chipStyles(isLactoseFree)}
             />
           </Grid2>
           <Grid2 item>
             <Chip
               label={`Gluten-Free: ${isGlutenFree ? "Yes" : "No"}`}
+              size="small"
               sx={chipStyles(isGlutenFree)}
             />
           </Grid2>
