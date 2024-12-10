@@ -25,7 +25,7 @@ const RecipeCard = ({ recipe }) => {
 
   const chipStyles = (condition) => ({
     backgroundColor: condition ? "#000411" : "#efcb68",
-    color: "#fff",
+    color: condition ? "#fff" : "#000",
   });
 
   return (
@@ -35,8 +35,8 @@ const RecipeCard = ({ recipe }) => {
         height: 350,
         margin: "auto",
         boxShadow: 3,
-        transition: 'box-shadow 0.3s ease-in-out',
-        ':hover': {
+        transition: "box-shadow 0.3s ease-in-out",
+        ":hover": {
           boxShadow: 10,
         },
       }}

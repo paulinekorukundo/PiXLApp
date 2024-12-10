@@ -1,3 +1,11 @@
 "userId", "content", "media", "tagName"
-johndoe@example.com, This is the first post for batch insert, food1.jpg, Keto; Test
-johndoe@example.com, This is the second post for batch insert,food3.jpg, Batch; Gluten
+johndoe@example.com,Tried a new keto recipe today! Highly recommend.,batchInsert1.jpg,Keto; Recipe
+johndoe@example.com,Just discovered a gluten-free bakery nearby.,batchInsert2.jpg,Gluten-Free; Discovery
+johndoe@example.com,Delicious breakfast idea: Avocado toast.,batchInsert3.jpg,Breakfast; Healthy
+johndoe@example.com,The best pasta dish I've ever had!,batchInsert4.jpg,Italian; Pasta
+johndoe@example.com,Exploring low-carb snacks. Any suggestions?,batchInsert5.jpg,Low-Carb; Snacks
+johndoe@example.com,Found the perfect vegan chocolate cake recipe!,batchInsert6.jpg,Vegan; Dessert
+johndoe@example.com,Tried making sushi at home. Success!,batchInsert7.jpg,Sushi; Homemade
+johndoe@example.com,Quick and easy smoothie recipes for busy mornings.,batchInsert8.jpg,Smoothie; Quick
+johndoe@example.com,Best coffee shops to work from? Suggestions?,batchInsert9.jpg,Coffee; Work
+johndoe@example.com,Baking tips for beginners! Share your ideas!,batchInsert0.jpg,Baking; Beginner
